@@ -2,6 +2,7 @@ package com.github.anthony_o.swingifts.test;
 
 import com.github.anthony_o.swingifts.util.Base64Utils;
 import com.github.anthony_o.swingifts.util.DbUtils;
+import com.github.anthony_o.swingifts.util.SessionUtils;
 import com.github.anthony_o.swingifts.util.TestUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -46,5 +47,6 @@ public abstract class CreateSampleDbTest {
     @After
     public void tearDown() throws IOException, SQLException {
         DbUtils.deleteSampleDb(sampleDbPath);
+        SessionUtils.clearSession();
     }
 }

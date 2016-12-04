@@ -41,6 +41,10 @@ public class SessionUtils {
         return session;
     }
 
+    public static void clearSession() {
+        sessions.remove();
+    }
+
     public static NewCookie createSessionCookie(long personId, byte[] token) {
         // We will set the cookie to / so that the javascript scripts can retrieve them (by default, they were set to "/api/" and could be retrieved from app.js)
         return new NewCookie(SESSION_COOKIE_NAME, personId + ":" + Base64Utils.convertFromBytesToBase64RFC4648(token), "/", null, null, NewCookie.DEFAULT_MAX_AGE, false);
