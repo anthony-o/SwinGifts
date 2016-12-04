@@ -1,0 +1,28 @@
+<h2>Participants</h2>
+<div class="list-group">
+    <button type="button" ng-repeat-start="person in persons"
+            class="list-group-item" ng-class="{'active': person.id === activePerson.id, 'disabled': !person.id}"
+            ng-click="activate(person)" ng-disabled="!person.id"  ng-if="!person.editing">
+        {{person.name}}
+    </button>
+    <form ng-repeat-end ng-if="person.editing" class="list-group-item">
+        <div class="form-group">
+            <label for="personName"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Nom à afficher</label>
+            <input type="text" class="form-control" id="personName" ng-model="person.name" placeholder="Marie D.">
+        </div>
+        <div class="form-group">
+            <label for="personEmail"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email</label>
+            <input type="email" class="form-control" id="personEmail" ng-model="person.email" placeholder="prenom.nom@monserveur.fr">
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="saveEditedPerson(person)">
+            <span ng-if="!person.id"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter</span>
+            <span ng-if="person.id"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Sauvegarder</span>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancelEditedPerson(person)">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Annuler</span>
+        </button>
+    </form>
+    <button class="list-group-item btn-default" ng-click="addNewPerson()" ng-if="!newPerson.editing && (currentEvent.isOpened || myWishListForCurrentEvent.isPersonEventAdmin)">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Ajouter un nouveau participant
+    </button>
+</div>

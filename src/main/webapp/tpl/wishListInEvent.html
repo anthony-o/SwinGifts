@@ -1,0 +1,32 @@
+<h2>Idées de cadeaux</h2>
+<ul class="list-group">
+    <li ng-repeat-start="wishItem in wishList.wishItems"
+            class="list-group-item" ng-class="{'active': wishItem.id === activeWishItem.id, 'disabled': !wishItem.id, 'list-group-item-warning': wishItem.reservations.length > 0}"
+            ng-click="activate(wishItem)" ng-disabled="!wishItem.id" ng-if="!wishItem.editing && !wishItem.deleting">
+        {{wishItem.name}} <a ng-if="wishItem.url" target="_blank" ng-href="{{wishItem.url}}" title="Lien vers le cadeau"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+        <span class="label label-default pull-right" ng-repeat="reservation in wishItem.reservations">Pris par {{reservation.person.name}}</span>
+        <span class="label label-success pull-right" ng-if="wishItem.person">Proposé par {{wishItem.person.name}}</span>
+        <span class="label label-primary pull-right" ng-if="wishItem.createdByPerson && !wishItem.person">Proposé par {{wishItem.createdByPerson.name}}</span>
+    </li>
+
+    <form ng-repeat-end ng-if="wishItem.editing" class="list-group-item">
+        <div class="form-group">
+            <label for="wishItemName"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> Idée de cadeau</label>
+            <input type="text" class="form-control" id="wishItemName" ng-model="wishItem.name" placeholder="Nouvelle idée de cadeau">
+        </div>
+        <div class="form-group">
+            <label for="wishItemUrl"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lien vers un site web référençant ce cadeau</label>
+            <input type="text" class="form-control" id="wishItemUrl" ng-model="wishItem.url" placeholder="http://unsite.exemple.com/lecadeau">
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="saveEditedWishItem(wishItem)">
+            <span ng-if="!wishItem.id"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter l'idée</span>
+            <span ng-if="wishItem.id"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Sauvegarder</span>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancelEditedWishItem(wishItem)">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Annuler</span>
+        </button>
+    </form>
+    <button class="list-group-item btn-default" ng-click="addNewWishItem()" ng-if="!newWishItem.editing">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> Ajouter une idée de cadeau
+    </button>
+</ul>

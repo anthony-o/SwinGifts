@@ -1,0 +1,26 @@
+/*
+.list-group .list-group-item .btn {
+    white-space: normal;
+}
+
+.list-group .list-group-item[ng-click] {
+    cursor: pointer;
+}
+
+*/
+
+.list-group-item:hover {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+a[ng-click], .list-group-item[ng-click] {
+    cursor: pointer;
+}
+
+button.list-group-item.btn-default:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}

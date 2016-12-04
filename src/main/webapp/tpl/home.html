@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row">
+        <h1>Bienvenue sur SwinGifts</h1>
+        <h2>Liste des événements auxquels je fais partie</h2>
+        <div class="list-group">
+            <button type="button" ng-repeat-start="event in events"
+                    class="list-group-item" ng-class="{'active': event.id === activeEvent.id, 'disabled': !event.id}"
+                    ui-sref="event({eventId: event.id, eventKey: event.key})" ng-disabled="!event.id"  ng-if="!event.editing">
+                {{event.name}}
+            </button>
+            <form ng-repeat-end ng-if="event.editing" class="list-group-item">
+                <div class="form-group">
+                    <label for="eventName"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Nom de l'événement</label>
+                    <input type="text" class="form-control" id="eventName" ng-model="event.name" placeholder="Exemple: Noël en famille">
+                </div>
+                <button type="submit" class="btn btn-default" ng-click="saveEditedEvent(event)">
+                    <span ng-if="!event.id"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Créer</span>
+                    <span ng-if="event.id"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Sauvegarder</span>
+                </button>
+                <button type="button" class="btn btn-default" ng-click="cancelEditedEvent(event)">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Annuler</span>
+                </button>
+            </form>
+            <button class="list-group-item btn-default" ng-click="addNewEvent()" ng-if="!newEvent.editing">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Créer un nouvel événement
+            </button>
+        </div>
+    </div>
+</div>

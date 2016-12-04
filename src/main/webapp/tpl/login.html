@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row">
+        <h1 ng-if="!event.id">Bienvenue sur SwinGifts</h1>
+        <h1 ng-if="event.id">{{event.name}}</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">Veuillez vous identifier</div>
+            <div class="panel-body">
+                <p  ng-if="event" class="col-md-12">Vous êtes (choisissez parmi les participants) :</p>
+                <button ng-if="event" ng-repeat="person in persons" type="button" class="col-md-3 btn btn-default" ng-class="{'active': person.id === activePerson.id}" ng-click="activate(person)">
+                    {{person.name}}
+                </button>
+                <button  ng-if="event && event.isOpened" type="button" class="col-md-3 btn btn-default" ng-class="{'active': activePerson.creating}" ng-click="declareNewPerson()">
+                    Un nouveau participant
+                </button>
+                <div class="col-md-12" ng-if="activePerson || !event.id">
+                    <form name="userForm" ng-submit="login()">
+                        <div class="form-group" ng-class="{'has-error': userForm.userName.$error.required}" ng-if="activePerson.creating">
+                            <label for="userName"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Nom de participant à afficher</label>
+                            <input type="text" class="form-control" id="userName" name="userName" ng-model="user.name" placeholder="Marie D." ng-required="true">
+                            <p class="help-block" ng-if="userForm.userName.$error.required">Le nom de participant est requis</p>
+                            <p class="help-block">Ce nom s'affichera dans la liste des participants des évènements auxquels vous participez.</p>
+                        </div>
+                        <div class="form-group" ng-if="!activePerson.hasLogin" ng-class="{'has-error': userForm.userLogin.$error.required}">
+                            <label for="userLogin">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;
+                                <span ng-if="event.id">Créez votre nom d'utilisateur</span>
+                                <span ng-if="!event.id">Nom d'utilisateur</span>
+                            </label>
+                            <input type="text" class="form-control" id="userLogin" name="userLogin" ng-model="user.login" ng-required="!event.id" placeholder="marie_dupont">
+                            <p class="help-block" ng-if="event.id">Créez votre nom d'utilisateur si vous voulez vous connecter plus tard en dehors de cet évènement ou pour créer des évènements vous-même.</p>
+                        </div>
+                        <div class="form-group" ng-if="(activePerson.id && !activePerson.hasEmail) || activePerson.creating">
+                            <label for="userEmail"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email</label>
+                            <input type="email" class="form-control" id="userEmail" ng-model="user.email" placeholder="prenom.nom@monserveur.fr">
+                        </div>
+                        <div class="form-group" ng-class="{'has-error': userForm.userPassword.$error.required || user.password != user.passwordRepeat}">
+                            <label for="userPassword"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Mot de passe</label>
+                            <input type="password" class="form-control" id="userPassword" name="userPassword" ng-model="user.password" ng-required="true">
+                            <p class="help-block" ng-if="userForm.userPassword.$error.required">Le mot de passe est requis</p>
+                            <p class="help-block" ng-if="(activePerson.creating || (activePerson.id && activePerson.isUser == false)) && user.password != user.passwordRepeat">Les mots de passe doivent être identiques</p>
+                        </div>
+                        <div class="form-group" ng-if="activePerson.creating || (activePerson.id && activePerson.isUser == false)" ng-class="{'has-error': userForm.userPasswordRepeat.$error.required  || user.password != user.passwordRepeat}">
+                            <label for="userPasswordRepeat"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Répétez le mot de passe pour créer votre compte</label>
+                            <input type="password" class="form-control" id="userPasswordRepeat" name="userPasswordRepeat" ng-model="user.passwordRepeat" ng-required="true">
+                            <p class="help-block" ng-if="userForm.userPasswordRepeat.$error.required">Le mot de passe est requis</p>
+                            <p class="help-block" ng-if="user.password != user.passwordRepeat">Les mots de passe doivent être identiques</p>
+                        </div>
+                        <div class="checkbox">
+                            <label for="userRememberMe"><input type="checkbox" ng-model="user.rememberMe" id="userRememberMe"> Se souvenir de moi</label>
+                            <p class="help-block">
+                                Permet de vous connecter automatiquement la prochaine fois que vous accédez à ce site.
+                                <strong>Attention, n'utilisez cette option que si vous êtes le seul parmi la liste de participants à cet événement à accéder à ce site sur cet ordinateur.</strong>
+                            </p>
+                        </div>
+                        <button type="submit" class="btn btn-default" ng-disabled="userForm.$invalid || ((activePerson.creating || (activePerson.id && activePerson.isUser == false)) && user.password != user.passwordRepeat)">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> S'authentifier</span>
+                        </button>
+                        <p class="text-danger" ng-if="loginError">Problème lors de l'authentification ({{loginError}})</p>
+                    </form>
+                    <p class="pull-right">
+                        <a ng-click="declareNewPerson()" ng-if="!activePerson.creating || activePerson.id">Créer un nouveau compte</a>
+                        <a ng-click="cancelNewPerson()" ng-if="activePerson.creating">J'ai déjà un compte</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

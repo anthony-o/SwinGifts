@@ -1,0 +1,9 @@
+*~
+yarn.lock
+*.iml
+.idea
+src/main/webapp/vendor
+node_modules
+target
+*.log
+docker-data

@@ -1,0 +1,15 @@
+<h2>Actions</h2>
+<div class="list-group">
+    <button type="button" class="list-group-item btn-default" ng-click="reserve()" ng-if="!myReservation && !wishItemIsMine" ng-disabled="reserving">
+        <span class="glyphicon glyphicon-ok"></span> Je prends ce cadeau
+    </button>
+    <button type="button" class="list-group-item btn-default" ng-click="deleteReservation()" ng-if="myReservation && !wishItemIsMine" ng-disabled="deletingReservation">
+        <span class="glyphicon glyphicon-remove"></span> Je prends ne prends plus ce cadeau
+    </button>
+    <button type="button" class="list-group-item btn-default" ng-click="edit()" ng-if="(!wishItem.personId || wishItem.personId == myPersonId) && !wishItem.editing">
+        <span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-gift"></span> Modifier l'idée de cadeau
+    </button>
+    <button type="button" class="list-group-item btn-default" ng-click="delete()" ng-if="(!wishItem.personId || wishItem.personId == myPersonId) && !wishItem.editing">
+        <span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-gift"></span> Supprimer l'idée de cadeau
+    </button>
+</div>
