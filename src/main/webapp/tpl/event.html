@@ -3,18 +3,16 @@
         <div class="col-md-12">
             <h1>{{event.name}}</h1>
             <div class="alert alert-warning" ng-if="wishList.circleGiftTargetPerson" role="alert">Le "cadeau tournant" est décidé, vous devrez offrir un cadeau à <strong>{{wishList.circleGiftTargetPerson.name}}</strong> !</div>
-            <div class="panel panel-default" ng-if="!event.isCircleGiftLaunchedOnce">
-                <div class="panel-body">
-                    <p>Le "cadeau tournant" de cet événement n'est pas encore lancé, vous pouvez choisir d'y participer ou pas.</p>
-                    <p>Pour le moment <strong>vous <span ng-if="wishList.isPersonParticipatesInCircleGift">y participez</span><span ng-if="!wishList.isPersonParticipatesInCircleGift">n'y participez pas</span></strong></p>
-                    <form>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" ng-model="wishList.isPersonParticipatesInCircleGift" ng-change="isPersonParticipatesInCircleGiftChanged()"> Je participe au "cadeau tournant"
-                            </label>
-                        </div>
-                    </form>
-                </div>
+            <div class="alert alert-warning" ng-if="!event.isCircleGiftLaunchedOnce">
+                <p>Le "cadeau tournant" de cet événement n'est pas encore lancé, vous pouvez choisir d'y participer ou pas.</p>
+                <p>Pour le moment <strong>vous <span ng-if="wishList.isPersonParticipatesInCircleGift">y participez</span><span ng-if="!wishList.isPersonParticipatesInCircleGift">n'y participez pas</span></strong></p>
+                <form>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="wishList.isPersonParticipatesInCircleGift" ng-change="isPersonParticipatesInCircleGiftChanged()"> Je participe au "cadeau tournant"
+                        </label>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col-md-12" ng-if="wishList.isPersonEventAdmin">

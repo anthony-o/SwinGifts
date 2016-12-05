@@ -24,3 +24,7 @@ button.list-group-item.btn-default:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
+
+.label.pull-right + .label.pull-right {
+    margin-right: 2px;
+}
