@@ -58,8 +58,8 @@
                         <p class="text-danger" ng-if="loginError">Problème lors de l'authentification ({{loginError}})</p>
                     </form>
                     <p class="pull-right">
-                        <a ng-click="declareNewPerson()" ng-if="!activePerson.creating || activePerson.id">Créer un nouveau compte</a>
-                        <a ng-click="cancelNewPerson()" ng-if="activePerson.creating">J'ai déjà un compte</a>
+                        <a ng-click="declareNewPerson()" ng-if="!event.id && !activePerson.creating">Créer un nouveau compte</a>
+                        <a ng-click="cancelNewPerson()" ng-if="!event.id && activePerson.creating">J'ai déjà un compte</a>
                     </p>
                 </div>
             </div>
