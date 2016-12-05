@@ -59,6 +59,9 @@ angular.module('swingifts')
             } else {
                 var wishItemToPut = angular.copy(wishItem);
                 delete wishItemToPut.active;
+                delete wishItemToPut.reservations;
+                delete wishItemToPut.person;
+                delete wishItemToPut.createdByPerson;
 
                 $http.put('api/wishItems/' + wishItem.id, wishItemToPut).then(function (resp) {
                     // do nothing if OK
