@@ -1,6 +1,7 @@
 package com.github.anthony_o.swingifts.api;
 
 import com.github.anthony_o.swingifts.entity.Person;
+import com.github.anthony_o.swingifts.entity.PersonWithWishList;
 import com.github.anthony_o.swingifts.service.PersonService;
 import com.github.anthony_o.swingifts.service.SessionService;
 import com.github.anthony_o.swingifts.util.Base64Utils;
@@ -39,19 +40,26 @@ public class PersonResource {
     public Response createWithPersonAndEventIdAndEventKeyThenCreateSession(Person person, @QueryParam("eventId") Long eventId, @QueryParam("eventKey") String eventKey, @QueryParam("authenticate") Boolean authenticate) throws Exception {
         return ServiceUtils.inTransaction(() -> {
             PersonService personService = getPersonService();
+            PersonWithWishList personWithWishList = null;
             Long personId = null;
             if (eventKey != null) {
-                personId = personService.createWithPersonThenCreateWishListWithEventIdAndEventKey(person, eventId, Base64Utils.convertFromBase64RFC4648ToBytes(eventKey));
+                personWithWishList = personService.createWithPersonThenCreateWishListWithEventIdAndEventKey(person, eventId, Base64Utils.convertFromBase64RFC4648ToBytes(eventKey));
             } else {
                 // We do not have any eventKey, must be authenticated and in that case, be a part of the event
                 if (eventId != null) {
-                    personId = personService.createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(person, eventId, SessionUtils.getSessionOrFail().getPersonId());
+                    personWithWishList = personService.createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(person, eventId, SessionUtils.getSessionOrFail().getPersonId());
                 } else {
                     // We do not have eventId so it's a user creation without event
                     personId = personService.createWithPerson(person);
                 }
             }
-            ResponseBuilder responseBuilder = Response.ok(person.getId());
+            ResponseBuilder responseBuilder = Response.ok();
+            if (personWithWishList != null) {
+                responseBuilder.entity(personWithWishList);
+                personId = personWithWishList.getId();
+            } else {
+                responseBuilder.entity(personId);
+            }
             if (BooleanUtils.isTrue(authenticate)) {
                 // the user wants to log in as well as creating its own account
                 byte[] token = InjectUtils.getInstance(SessionService.class).createWithPersonReturningToken(person);

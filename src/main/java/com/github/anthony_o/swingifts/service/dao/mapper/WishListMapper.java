@@ -38,6 +38,9 @@ public class WishListMapper implements ResultSetMapper<WishList> {
                 case "IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ":
                     wishList.setIsCircleGiftTargetPersonIdRead(r.getObject(i, Boolean.class));
                     break;
+                case "WISH_ITEMS_COUNT":
+                    wishList.setWishItemsCount(r.getObject(i, Integer.class));
+                    break;
             }
         }
         return wishList;

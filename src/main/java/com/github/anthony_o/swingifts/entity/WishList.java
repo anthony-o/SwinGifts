@@ -13,6 +13,7 @@ public class WishList {
     private Boolean isPersonParticipatesInCircleGift;
     private Long circleGiftTargetPersonId;
     private Boolean isCircleGiftTargetPersonIdRead;
+    private Integer wishItemsCount;
 
     public Long getId() {
         return id;
@@ -84,5 +85,13 @@ public class WishList {
 
     public void setIsCircleGiftTargetPersonIdRead(Boolean isCircleGiftTargetPersonIdRead) {
         this.isCircleGiftTargetPersonIdRead = isCircleGiftTargetPersonIdRead;
+    }
+
+    public Integer getWishItemsCount() {
+        return wishItemsCount;
+    }
+
+    public void setWishItemsCount(Integer wishItemsCount) {
+        this.wishItemsCount = wishItemsCount;
     }
 }

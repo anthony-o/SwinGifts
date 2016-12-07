@@ -1,6 +1,7 @@
 package com.github.anthony_o.swingifts.service;
 
 import com.github.anthony_o.swingifts.entity.Person;
+import com.github.anthony_o.swingifts.entity.PersonWithWishList;
 import com.github.anthony_o.swingifts.service.dao.EventDao;
 import com.github.anthony_o.swingifts.service.dao.PersonDao;
 import com.github.anthony_o.swingifts.service.dao.WishListDao;
@@ -41,17 +42,20 @@ public class PersonService {
         return getPersonDao().findWithEventIdAndEventKeyOrderByName(eventId, eventKey);
     }
 
-    public long createWithPersonThenCreateWishListWithEventIdAndEventKey(Person person, Long eventId, byte[] eventKey) throws Exception {
+    public PersonWithWishList createWithPersonThenCreateWishListWithEventIdAndEventKey(Person person, Long eventId, byte[] eventKey) throws Exception {
         return ServiceUtils.inTransaction(() -> {
-
+            PersonWithWishList personWithWishList = new PersonWithWishList();
             // Must first create the person and then create its wishList
-            long personId = createWithPerson(person);
+            long id = createWithPerson(person);
+            personWithWishList.setId(id);
 
             if (getEventDao().countOpenedWithIdAndKey(eventId, eventKey) != 1) {
                 throw new ForbiddenException("This eventKey and eventId don't match or the event is not opened.");
             }
 
-            return getWishListDao().createWithEventIdAndPersonId(eventId, personId);
+            personWithWishList.setWishListId(getWishListDao().createWithEventIdAndPersonId(eventId, id));
+
+            return personWithWishList;
         });
     }
 
@@ -75,17 +79,20 @@ public class PersonService {
         return persons;
     }
 
-    public long createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(Person person, long eventId, long askerPersonId) throws Exception {
+    public PersonWithWishList createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(Person person, long eventId, long askerPersonId) throws Exception {
         return ServiceUtils.inTransaction(() -> {
             WishListDao wishListDao = getWishListDao();
 
+            PersonWithWishList personWithWishList = new PersonWithWishList();
+
             // assert that the asker is in the event
             ServiceUtils.checkThatAskerIsAdminWithEventIdAndAskerPersonId(eventId, askerPersonId, wishListDao);
-            long personId = createWithPerson(person);
+            long id = createWithPerson(person);
+            personWithWishList.setId(id);
 
-            wishListDao.createWithEventIdAndPersonId(eventId, personId);
+            personWithWishList.setWishListId(wishListDao.createWithEventIdAndPersonId(eventId, id));
 
-            return personId;
+            return personWithWishList;
         });
     }
 

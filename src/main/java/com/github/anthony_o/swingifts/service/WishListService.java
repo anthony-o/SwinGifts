@@ -1,7 +1,9 @@
 package com.github.anthony_o.swingifts.service;
 
+import com.github.anthony_o.swingifts.entity.Person;
 import com.github.anthony_o.swingifts.entity.WishItem;
 import com.github.anthony_o.swingifts.entity.WishList;
+import com.github.anthony_o.swingifts.service.dao.PersonDao;
 import com.github.anthony_o.swingifts.service.dao.ReservationDao;
 import com.github.anthony_o.swingifts.service.dao.WishItemDao;
 import com.github.anthony_o.swingifts.service.dao.WishListDao;
@@ -25,6 +27,10 @@ public class WishListService {
 
     private ReservationDao getReservationDao() {
         return ServiceUtils.attachIfTransactionElseOnDemand(ReservationDao.class);
+    }
+
+    private PersonDao getPersonDao() {
+        return ServiceUtils.attachIfTransactionElseOnDemand(PersonDao.class);
     }
 
 
@@ -80,4 +86,22 @@ public class WishListService {
         }
     }
 
+    public List<WishList> findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(long eventId, long askerPersonId) {
+        WishListDao wishListDao = getWishListDao();
+        PersonDao personDao = getPersonDao();
+
+        ServiceUtils.checkThatAskerIsInEventWithEventIdAndAskerPersonId(eventId, askerPersonId, wishListDao);
+        List<WishList> wishLists = wishListDao.findWithEventIdAndAskerPersonIdCountingWishItemsOrderByPersonName(eventId, askerPersonId);
+        for (WishList wishList : wishLists) {
+            Long personId = wishList.getPersonId();
+            Person person;
+            if (personId == askerPersonId) {
+                person = personDao.findOneUsingPrivateProjection(personId);
+            } else {
+                person = personDao.findOneUsingPupblicProjection(personId);
+            }
+            wishList.setPerson(person);
+        }
+        return wishLists;
+    }
 }

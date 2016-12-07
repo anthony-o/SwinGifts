@@ -15,6 +15,8 @@ import java.util.List;
 @RegisterMapper(WishListMapper.class)
 public interface WishListDao extends GetHandle {
 
+    String PUBLIC_PROJECTION_USING_WL_ALIAS = "wl.ID, wl.PERSON_ID, wl.EVENT_ID, wl.IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT";
+
     String PUBLIC_PROJECTION = "ID, PERSON_ID, EVENT_ID, IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT";
     String PRIVATE_PROJECTION = PUBLIC_PROJECTION + ", IS_PERSON_EVENT_ADMIN, CIRCLE_GIFT_TARGET_PERSON_ID, IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ";
 
@@ -78,4 +80,10 @@ public interface WishListDao extends GetHandle {
 
     @SqlQuery("select * from WISH_LIST where ID = :id")
     WishList findOne(@Bind("id") long id);
+
+    @SqlQuery("select " + PUBLIC_PROJECTION_USING_WL_ALIAS + ", case when wl.PERSON_ID <> :askerPersonId then (select count(1) from WISH_ITEM where WISH_LIST_ID = wl.ID) else 0 end + (select count(1) from WISH_ITEM where PERSON_ID = wl.PERSON_ID) as WISH_ITEMS_COUNT" +
+            " from WISH_LIST wl join PERSON p on wl.PERSON_ID = p.ID" +
+            " where EVENT_ID = :eventId" +
+            " order by p.NAME")
+    List<WishList> findWithEventIdAndAskerPersonIdCountingWishItemsOrderByPersonName(@Bind("eventId") long eventId, @Bind("askerPersonId") long askerPersonId);
 }

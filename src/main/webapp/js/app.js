@@ -16,7 +16,12 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                     return $q(function (resolve, reject) {
                         function onSuccess(resp) {
                             if (!user.id && (eventId || create)) { // corresponds to "post"s cases
-                                user.id = parseInt(resp.data);
+                                if (eventId) {
+                                    // the user was created on an event, so the server must have returned an id and a wishListId
+                                    user.id = parseInt(resp.data.id);
+                                } else {
+                                    user.id = parseInt(resp.data);
+                                }
                             } else {
                                 angular.copy(resp.data, user);
                             }
@@ -162,6 +167,10 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                             resolve(currentPersonsById[id]);
                         }, reject);
                     });
+                },
+                addNewPersonToCurrentPerson: function(person) {
+                    $rootScope.currentPersons.push(person);
+                    $rootScope.currentPersonsById[person.id] = person;
                 }
             }
             ;
@@ -189,22 +198,41 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
     })
 
     .factory('wishListService', function ($rootScope, personService) {
+        var wishListService = {
+                setMyWishListForCurrentEvent: function (wishList) {
+                    $rootScope.myWishListForCurrentEvent = wishList;
+                    var circleGiftTargetPersonId = wishList.circleGiftTargetPersonId;
+                    if (circleGiftTargetPersonId && (!wishList.circleGiftTargetPerson || wishList.circleGiftTargetPerson.id != circleGiftTargetPersonId)) {
+                        personService.getCurrentPersonWithIdPromise(circleGiftTargetPersonId).then(function (person) {
+                            wishList.circleGiftTargetPerson = person;
+                        });
+                    }
+                },
+                setCurrentWishLists: function (wishLists) {
+                    $rootScope.currentWishLists = wishLists;
+                    $rootScope.currentWishListsByPersonId = wishLists.reduce(function (wishListsByPersonId, wishList) {
+                        wishListsByPersonId[wishList.person.id] = wishList;
+                        return wishListsByPersonId;
+                    }, {});
+                    personService.setCurrentPersons(wishLists.map(function (wishList) {
+                        return wishList.person;
+                    }));
+                },
+                addNewWishListToCurrentWishLists: function (wishList) {
+                    $rootScope.currentWishLists.push(wishList);
+                    $rootScope.currentWishListsByPersonId[wishList.person.id] = wishList;
+                    personService.addNewPersonToCurrentPerson(wishList.person);
+                }
+            }
+            ;
 
         $rootScope.$on('logout', function () {
             delete $rootScope.myWishListForCurrentEvent;
+            delete $rootScope.currentWishLists;
+            delete $rootScope.currentWishListsByPersonId;
         });
 
-        return {
-            setMyWishListForCurrentEvent: function (wishList) {
-                $rootScope.myWishListForCurrentEvent = wishList;
-                var circleGiftTargetPersonId = wishList.circleGiftTargetPersonId;
-                if (circleGiftTargetPersonId && (!wishList.circleGiftTargetPerson || wishList.circleGiftTargetPerson.id != circleGiftTargetPersonId)) {
-                    personService.getCurrentPersonWithIdPromise(circleGiftTargetPersonId).then(function (person) {
-                        wishList.circleGiftTargetPerson = person;
-                    });
-                }
-            }
-        }
+        return wishListService;
     })
 ;
 

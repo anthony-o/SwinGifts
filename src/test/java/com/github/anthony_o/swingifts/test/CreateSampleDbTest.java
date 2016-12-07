@@ -36,6 +36,9 @@ public abstract class CreateSampleDbTest {
     protected int numberOfEventsThatBobIsIn = 3;
 
     protected int numberOfPersonsInBobSEvent = 2;
+    protected int numberOfPersonsInFirstEvent = 2;
+    protected int numberOfWishItemsInAliceSWishListInFirstEventVisibleByAlice = 2;
+    protected int numberOfWishItemsInAliceSWishListInFirstEventVisibleByBob = 4;
 
     protected long aliceWishListIdInCharlieSEvent = 6;
 

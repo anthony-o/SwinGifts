@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('swingifts')
-    .controller('HomeCtrl', function ($scope, $http, $location, $rootScope, personService, securityService) {
+    .controller('HomeCtrl', function ($scope, $http) {
         
         $scope.addNewEvent = function() {
             var newEvent = {

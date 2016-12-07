@@ -1,6 +1,7 @@
 package com.github.anthony_o.swingifts.service;
 
 import com.github.anthony_o.swingifts.entity.Person;
+import com.github.anthony_o.swingifts.entity.PersonWithWishList;
 import com.github.anthony_o.swingifts.service.dao.PersonDao;
 import com.github.anthony_o.swingifts.test.CreateSampleDbTest;
 import com.github.anthony_o.swingifts.util.InjectUtils;
@@ -69,8 +70,9 @@ public class PersonServiceTest extends CreateSampleDbTest {
     public void createWithPersonThenCreateWishListWithEventIdAndAskerPersonIdTest() throws Exception {
         Person person = new Person();
         person.setName("Test");
-        long id = getPersonService().createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(person, firstEventId, alicePersonId);
-        assertThat(id).isNotEqualTo(0);
+        PersonWithWishList personWithWishList = getPersonService().createWithPersonThenCreateWishListWithEventIdAndAskerPersonId(person, firstEventId, alicePersonId);
+        assertThat(personWithWishList.getId()).isNotNull();
+        assertThat(personWithWishList.getWishListId()).isNotNull();
     }
 
     @Test

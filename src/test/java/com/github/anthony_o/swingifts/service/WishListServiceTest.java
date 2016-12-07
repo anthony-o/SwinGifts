@@ -1,5 +1,6 @@
 package com.github.anthony_o.swingifts.service;
 
+import com.github.anthony_o.swingifts.entity.Person;
 import com.github.anthony_o.swingifts.entity.Reservation;
 import com.github.anthony_o.swingifts.entity.WishItem;
 import com.github.anthony_o.swingifts.entity.WishList;
@@ -83,5 +84,31 @@ public class WishListServiceTest extends CreateSampleDbTest {
         wishList.setId(aliceWishListIdInCharlieSEvent);
         wishList.setIsPersonParticipatesInCircleGift(true);
         wishListService.updateWithWishListAndAskerPersonId(wishList, bobPersonId);
+    }
+
+    @Test
+    public void findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonNameTest() {
+        WishListService wishListService = getWishListService();
+        List<WishList> wishLists = wishListService.findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(firstEventId, alicePersonId);
+        assertThat(wishLists).hasSize(numberOfPersonsInFirstEvent);
+        WishList aliceSWishList = wishLists.get(0);
+        assertThat(aliceSWishList.getWishItemsCount()).isEqualTo(numberOfWishItemsInAliceSWishListInFirstEventVisibleByAlice);
+        Person alice = aliceSWishList.getPerson();
+        assertThat(alice).isNotNull();
+        assertThat(alice.getName()).isEqualTo("Alice");
+
+        wishLists = wishListService.findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(firstEventId, bobPersonId);
+        assertThat(wishLists).hasSize(numberOfPersonsInFirstEvent);
+        aliceSWishList = wishLists.get(0);
+        assertThat(aliceSWishList.getWishItemsCount()).isEqualTo(numberOfWishItemsInAliceSWishListInFirstEventVisibleByBob);
+        alice = aliceSWishList.getPerson();
+        assertThat(alice).isNotNull();
+        assertThat(alice.getName()).isEqualTo("Alice");
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonNameWhenAskerNotInEventTest() {
+        WishListService wishListService = getWishListService();
+        wishListService.findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(firstEventId, charliePersonId);
     }
 }
