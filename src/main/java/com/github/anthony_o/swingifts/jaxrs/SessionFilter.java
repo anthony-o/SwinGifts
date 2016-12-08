@@ -47,7 +47,7 @@ public class SessionFilter implements ContainerRequestFilter  {
                 throw new NotAuthorizedException("Missing the session cookie");
             }
         } else {
-            String[] sessionCookieParts = cookie.getValue().split(":");
+            String[] sessionCookieParts = cookie.getValue().split("~");
             long personId = Long.parseLong(sessionCookieParts[0]);
             byte[] token = Base64Utils.convertFromBase64RFC4648ToBytes(sessionCookieParts[1]);
             if (InjectUtils.getInstance(SessionService.class).touchSession(personId, token)) {

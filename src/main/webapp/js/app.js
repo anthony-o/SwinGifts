@@ -72,7 +72,7 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                     var token = $cookies.get('SWINGIFTS_TOKEN');
 
                     if (token) {
-                        var tokenParts = token.split(':'),
+                        var tokenParts = token.split('~'),
                             personId = tokenParts[0],
                             sessionToken = tokenParts[1];
                         $http.delete('api/sessions/?personId=' + personId + '&token=' + sessionToken).then(reallyLogout, reallyLogout);
@@ -118,12 +118,16 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
 
                 tryLoginUsingTokenPromise: function (token) {
                     return $q(function (resolve, reject) {
-                        var tokenParts = token.split(':'),
+                        var tokenParts = token.split('~'),
                             personId = tokenParts[0],
                             sessionToken = tokenParts[1];
                         $http.get('api/persons/' + personId + '?sessionToken=' + sessionToken).then(function (resp) {
                             var authenticatedUser = resp.data;
                             if (authenticatedUser) {
+                                if (!$cookies.get('SWINGIFTS_TOKEN')) {
+                                    // restore cookie
+                                    $cookies.put('SWINGIFTS_TOKEN', token);
+                                }
                                 securityService.setAuthenticatedUser(authenticatedUser);
                                 resolve(securityService.authenticatedUser);
                             } else {
