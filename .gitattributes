@@ -1,0 +1,2 @@
+# Forcing UNIX LF EOL on .sh files thanks to http://stackoverflow.com/a/9977954/535203
+*.sh binary
