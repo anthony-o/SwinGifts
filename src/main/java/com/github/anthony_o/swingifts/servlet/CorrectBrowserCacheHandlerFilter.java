@@ -16,14 +16,27 @@ import java.io.PrintWriter;
 import java.util.*;
 
 @WebFilter(
-        filterName = "CacheKillerFilter",
+        filterName = "CorrectBrowserCacheHandlerFilter",
         urlPatterns = {
                 "*.html",
                 "*.css",
                 "*.js",
-                "*.woff2"
+                "*.woff2",
+                "*.ico"
         })
-public class CacheKillerFilter implements Filter {
+/**
+ * This is a Java Servlet Filter which aims to correctly handle browser cache, especially for Single Page Applications.
+ * All the static resources requested by the browser will ends up in a <code>302</code> temporary redirection to the
+ * same file with a query parameter which includes a hash of this file (for instance "?v=eRtF_"). That is to say that if
+ * the content of the file does not change, the browser cache will be used when it will request the file with the
+ * correct hash version (the server will respond with a 304 Not changed, at least Tomcat does this).
+ *
+ * In development mode, one can use <code>-DcorrectBrowserCacheHandlerFilter.resourcesCanChange=true</code> Java JVM
+ * property in order for this filter to check everytime if the target resource has changed. This is not necessary in
+ * production if you consider that the "static files" targeted by this filter (described in the urlPatterns list) will
+ * not change until the next version deployment.
+ */
+public class CorrectBrowserCacheHandlerFilter implements Filter {
 
     private Map<String, String> uriToHashMap = new HashMap<>();
     private boolean resourcesCanChange;
