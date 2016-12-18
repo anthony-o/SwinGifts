@@ -18,14 +18,13 @@ angular.module('swingifts')
             }
             var reservations = wishItem.reservations;
             if (reservations) {
-                for (var i = 0; i < reservations.length; i++) {
-                    var reservation = reservations[i];
+                angular.forEach(reservations, function(reservation) {
                     if (!reservation.person && reservation.personId) {
                         personService.getCurrentPersonWithIdPromise(reservation.personId).then(function (person) {
                             reservation.person = person;
                         });
                     }
-                }
+                });
             }
         }
 
