@@ -39,7 +39,7 @@ BASE_DIR="${BASE_DIR:-/opt/SwinGifts}"
 SRC_DIR="$(readlink -f `dirname $0`)"
 
 VAR_DIR="$BASE_DIR/var"
-BACKUPS_DIR="$BASE_DIR/backups"
+BACKUPS_DIR="$VAR_DIR/backups"
 CACHE_DIR="$VAR_DIR/cache"
 CONTAINER_NAME=${CONTAINER_NAME:-SwinGifts}
 # Use current date thanks to http://stackoverflow.com/a/1401495/535203
