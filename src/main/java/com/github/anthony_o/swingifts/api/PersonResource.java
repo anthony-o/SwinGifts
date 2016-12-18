@@ -62,7 +62,7 @@ public class PersonResource {
             }
             if (BooleanUtils.isTrue(authenticate)) {
                 // the user wants to log in as well as creating its own account
-                byte[] token = InjectUtils.getInstance(SessionService.class).createWithPersonReturningToken(person);
+                byte[] token = InjectUtils.getInstance(SessionService.class).createWithPersonIdReturningToken(person.getId());
                 responseBuilder.cookie(SessionUtils.createSessionCookie(personId, token));
             }
             return responseBuilder.build();
@@ -89,7 +89,7 @@ public class PersonResource {
         person.setId(id);
 
         personService.checkOrCreatePasswordThenUpdateWithPerson(person);
-        byte[] token = InjectUtils.getInstance(SessionService.class).createWithPersonReturningToken(person);
+        byte[] token = InjectUtils.getInstance(SessionService.class).createWithPersonIdReturningToken(person.getId());
         person = personService.findOneWithId(person.getId());
         return Response.ok().entity(person).cookie(SessionUtils.createSessionCookie(id, token)).build();
     }

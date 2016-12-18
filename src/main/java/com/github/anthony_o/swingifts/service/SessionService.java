@@ -17,13 +17,13 @@ public class SessionService {
     }
 
 
-    public byte[] createWithPersonReturningToken(Person person) throws Exception {
+    public byte[] createWithPersonIdReturningToken(long personId) throws Exception {
         return ServiceUtils.inTransaction(() -> {
             byte[] token = new byte[TOKEN_LENGTH];
             new SecureRandom().nextBytes(token); // not using getInstanceStrong() because it was too long and useless according to https://tersesystems.com/2015/12/17/the-right-way-to-use-securerandom/
             SessionDao sessionDao = getSessionDao();
-            sessionDao.createWithPersonIdAndToken(person.getId(), token);
-            sessionDao.deleteOld();
+            sessionDao.createWithPersonIdAndToken(personId, token);
+            sessionDao.deleteOldWithPersonId(personId);
             return token;
         });
     }

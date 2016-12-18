@@ -1,0 +1,8 @@
+--liquibase formatted sql
+
+--changeset anthony-o:2
+
+DROP INDEX SESSION_TOKEN;
+
+CREATE INDEX SESSION_PERSON_ID_AND_TOKEN
+  ON SESSION(PERSON_ID, TOKEN);

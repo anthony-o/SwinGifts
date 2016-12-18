@@ -8,4 +8,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="db_schema/V1__Base.sql" />
+    <include file="db_schema/V2__SessionIndex.sql" />
 </databaseChangeLog>

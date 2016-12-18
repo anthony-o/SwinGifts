@@ -77,9 +77,7 @@ public class PersonServiceTest extends CreateSampleDbTest {
 
     @Test
     public void findWithIdAndSessionTokenTest() throws Exception {
-        Person alice = new Person();
-        alice.setId(alicePersonId);
-        byte[] token = getSessionService().createWithPersonReturningToken(alice);
+        byte[] token = getSessionService().createWithPersonIdReturningToken(alicePersonId);
         Person foundAlice = getPersonService().findWithIdAndSessionToken(alicePersonId, token);
         assertThat(foundAlice.getName()).isEqualTo("Alice");
         assertThat(foundAlice.getLogin()).isEqualTo("alice");

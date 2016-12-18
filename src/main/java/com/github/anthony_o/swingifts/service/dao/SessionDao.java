@@ -10,8 +10,8 @@ public interface SessionDao {
     @GetGeneratedKeys
     long createWithPersonIdAndToken(@Bind("personId") long personId, @Bind("token") byte[] token);
 
-    @SqlUpdate("delete from SESSION where ID not in (select top 5 ID from SESSION order by LAST_USE desc)")
-    void deleteOld();
+    @SqlUpdate("delete from SESSION where PERSON_ID = :personId and ID not in (select top 5 ID from SESSION where PERSON_ID = :personId order by LAST_USE desc)")
+    void deleteOldWithPersonId(@Bind("personId") long personId);
 
     @SqlUpdate("update SESSION set LAST_USE = CURRENT_TIMESTAMP() where PERSON_ID = :personId and TOKEN = :token")
     int updateLastUseWithPersonIdAndToken(@Bind("personId") long personId, @Bind("token") byte[] token);
