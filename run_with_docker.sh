@@ -8,7 +8,9 @@ $0 [-h | --help] [[-b | --base-dir] <path>] [[-n | --container-name] <name>]
   [-h | --help]                    Print this usage help
   [-b | --base-dir] <path>         Sets the base directory where this script will its data. Defaults to /opt/SwinGifts
   [-n | --container-name] <name>   Sets the Docker container name that will be used to run SwinGifts in Tomcat
+  [-r | --run-tomcat-as-root]      Runs Tomcat as root if you're on an old platform with the following aufs bug https://github.com/docker/docker/issues/24660
 EOF
+    #' comment used to trick bugged IntelliJ syntax coloring
     exit $1
 }
 
@@ -24,6 +26,9 @@ while [ "$KNOWN_ARG" = true ]; do
     elif [ "$1" = "-n" ] || [ "$1" = "--container-name" ]; then
         CONTAINER_NAME=$2
         shift
+        shift
+    elif [ "$1" = "-r" ] || [ "$1" = "--run-tomcat-as-root" ]; then
+        RUN_TOMCAT_AS_ROOT=true
         shift
     elif [ "$#" != "0" ]; then
         echo "Unknown argument: $1" >&2
@@ -64,7 +69,7 @@ docker run -it --rm -v "$SRC_DIR:/workspace" -v "$CACHE_DIR/m2:/.m2" -w /workspa
 
 if docker ps | egrep " $CONTAINER_NAME\$" >/dev/null ; then
         # The container exists, we must ask him to shutdown properly
-        docker stop --time 30 $CONTAINER_NAME
+        docker stop --time 20 $CONTAINER_NAME
 fi
 if docker ps -a | egrep " $CONTAINER_NAME\$" >/dev/null ; then
         # Now we can remove it in order to restart it
@@ -80,6 +85,8 @@ else
     mkdir -p "$VAR_DIR/db"
 fi
 
-# When [this bug](https://github.com/docker/docker/issues/24660) will be fixed, one should better use the following command to run SwinGifts in order for Tomcat not to run as root
-#docker run -itd -p 8080:8080 -p 9092:9092 --name "$CONTAINER_NAME" --restart "always" -v "$VAR_DIR/db:/var/local/swingifts" -v "$SRC_DIR:/workspace" tomcat:8.5-alpine sh -c "adduser -D -g '' -u $UID user && chown -R user \$CATALINA_HOME /var/local/swingifts && rm -rf \$CATALINA_HOME/webapps/* && cp /workspace/target/*.war \$CATALINA_HOME/webapps/ROOT.war && su user -c 'catalina.sh run'"
-docker run -itd -p 8080:8080 -p 9092:9092 --name "$CONTAINER_NAME" --restart "always" -v "$VAR_DIR/db:/var/local/swingifts" -v "$SRC_DIR:/workspace" tomcat:8.5-alpine sh -c "adduser -D -g '' -u $UID user && chown -R user \$CATALINA_HOME /var/local/swingifts && rm -rf \$CATALINA_HOME/webapps/* && cp /workspace/target/*.war \$CATALINA_HOME/webapps/ROOT.war && catalina.sh run"
+TOMCAT_RUN_CMD="catalina.sh run"
+if [ "$RUN_TOMCAT_AS_ROOT" != "true" ]; then
+    TOMCAT_RUN_CMD="su user -c '$TOMCAT_RUN_CMD'"
+fi
+docker run -itd -p 8080:8080 -p 9092:9092 --name "$CONTAINER_NAME" --restart "always" -v "$VAR_DIR/db:/var/local/swingifts" -v "$SRC_DIR:/workspace:ro" tomcat:8.5-alpine sh -c "if ! id -u user ; then adduser -D -g '' -u $UID user && chown -R user:user \$CATALINA_HOME /var/local/swingifts && rm -rf \$CATALINA_HOME/webapps/* && cp /workspace/target/*.war \$CATALINA_HOME/webapps/ROOT.war ; fi && $TOMCAT_RUN_CMD"
