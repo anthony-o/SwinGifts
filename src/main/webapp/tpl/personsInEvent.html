@@ -2,11 +2,11 @@
 <div class="list-group">
     <li ng-repeat-start="wishList in wishLists" ng-init="person = wishList.person"
             class="list-group-item" ng-class="{'active': person.id === activePerson.id, 'disabled': !person.id, 'list-group-item-warning': wishList.isPersonParticipatesInCircleGift}"
-            ng-click="activate(person)" ng-disabled="!person.id"  ng-if="!person.editing">
+            ng-click="activate(person)" ng-disabled="!person.id"  ng-show="!person.editing">
         {{person.name}}
         <span class="badge" ng-if="wishList.wishItemsCount > 0">{{wishList.wishItemsCount}}</span>
     </li>
-    <form ng-repeat-end ng-if="person.editing" class="list-group-item">
+    <form ng-repeat-end ng-show="person.editing" class="list-group-item">
         <div class="form-group">
             <label for="personName"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Nom à afficher</label>
             <input type="text" class="form-control" id="personName" ng-model="person.name" placeholder="Marie D.">
