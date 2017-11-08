@@ -35,7 +35,7 @@ public class DatabaseModule extends AbstractModule {
         Connection connection = connectionPool.getConnection();
         Liquibase liquibase = new Liquibase("db_schema/db.changelog-master.xml", new ClassLoaderResourceAccessor(), new JdbcConnection(connection));
         liquibase.update(new Contexts());
-        // start the server, one can remotely connect on it with the following uri: jdbc:h2:tcp://<host>:9092/<swingifts.dbH2Path property or /var/local/swingifts/db>
+        // start the server, one can remotely connect on it with the following uri: jdbc:h2:tcp://<host>:9092/<swingifts.dbH2Path property or /var/local/swingifts/db> . Typically jdbc:h2:tcp://localhost:9092/var/local/swingifts/db when using the Docker installation.
         server = Server.createTcpServer("-tcpAllowOthers");
         server.start();
         return connectionPool;
