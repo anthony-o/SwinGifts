@@ -10,6 +10,7 @@ Now you can compile & run SwinGifts using the following command:
 ```bash
 ./run_with_docker.sh --base-dir ./docker-data
 ```
+On Windows, add `--run-as-default-user` switch to the previous command.
 
 More information on how to use this script can be found by running `./run_with_docker.sh --help`.
 
