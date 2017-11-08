@@ -54,7 +54,7 @@ public interface PersonDao {
     Person findOneUsingPrivateProjection(@Bind("id") long id);
 
     @SqlQuery("select " + PUBLIC_PROJECTION + " from PERSON p where p.ID = :id")
-    Person findOneUsingPupblicProjection(@Bind("id") long id);
+    Person findOneUsingPublicProjection(@Bind("id") long id);
 
     @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN) values (:person.name, :person.email, :person.login)")
     @GetGeneratedKeys

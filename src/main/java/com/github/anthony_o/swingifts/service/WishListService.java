@@ -98,7 +98,7 @@ public class WishListService {
             if (personId == askerPersonId) {
                 person = personDao.findOneUsingPrivateProjection(personId);
             } else {
-                person = personDao.findOneUsingPupblicProjection(personId);
+                person = personDao.findOneUsingPublicProjection(personId);
             }
             wishList.setPerson(person);
         }
