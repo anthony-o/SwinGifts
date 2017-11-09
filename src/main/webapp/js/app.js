@@ -223,7 +223,10 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                     }));
                 },
                 addNewWishListToCurrentWishLists: function (wishList) {
-                    $rootScope.currentWishLists.push(wishList);
+                    // only add if not currently already in the list
+                    if ($rootScope.currentWishLists.indexOf(wishList) === -1) {
+                        $rootScope.currentWishLists.push(wishList);
+                    }
                     $rootScope.currentWishListsByPersonId[wishList.person.id] = wishList;
                     personService.addNewPersonToCurrentPerson(wishList.person);
                 }
