@@ -43,4 +43,10 @@ public class WishListResource {
         wishList.setId(id);
         getWishListService().updateWithWishListAndAskerPersonId(wishList, SessionUtils.getSessionOrFail().getPersonId());
     }
+
+    @DELETE
+    @Path("/{id}")
+    public void deleteWithId(@PathParam("id") long id) throws Exception {
+        getWishListService().deleteWishItemsThenWishListThenPersonIfNotAUserWithIdAndAskerPersonId(id, SessionUtils.getSessionOrFail().getPersonId());
+    }
 }

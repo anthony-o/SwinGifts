@@ -86,4 +86,7 @@ public interface WishListDao extends GetHandle {
             " where EVENT_ID = :eventId" +
             " order by p.NAME")
     List<WishList> findWithEventIdAndAskerPersonIdCountingWishItemsOrderByPersonName(@Bind("eventId") long eventId, @Bind("askerPersonId") long askerPersonId);
+
+    @SqlUpdate("delete WISH_LIST where ID = :id")
+    int delete(@Bind("id") long id);
 }

@@ -58,6 +58,21 @@ angular.module('swingifts')
             $scope.wishLists.push(newWishList);
         };
 
+        $scope.deleteActiveWishList = function () {
+            angular.element('#deleteActiveWishListModal').modal('hide');
+            var wishListToDelete = null;
+            angular.forEach($scope.wishLists, function(wishList) {
+                if (wishList.person.id == $scope.activePerson.id) {
+                    wishListToDelete = wishList;
+                }
+            });
+            $http.delete('api/wishLists/' + wishListToDelete.id).then(function () {
+                $scope.activePerson = null;
+                wishListService.removeWishListFromCurrentWishLists(wishListToDelete);
+                $state.go('event', {eventId: eventId});
+            });
+        };
+
 
         $http.get('api/wishLists?eventId=' + eventId).then(function (resp) {
             wishListService.setCurrentWishLists($scope.wishLists = resp.data);

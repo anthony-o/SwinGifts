@@ -61,4 +61,7 @@ public interface WishItemDao {
                 " (event_wls.PERSON_ID = :askerPersonId" +
                     " or exists(select 1 from WISH_LIST asker_wls, WISH_LIST owner_wls where asker_wls.PERSON_ID = :askerPersonId and owner_wls.PERSON_ID = wi.PERSON_ID and asker_wls.EVENT_ID = owner_wls.EVENT_ID))") // check if the asker shares an event with the wishItem owner
     int countAskerIsInEventOrShareEventWithWishItemOwnerWithIdAndAskerPersonId(@Bind("id") long id, @Bind("askerPersonId") long askerPersonId);
+
+    @SqlUpdate("delete WISH_ITEM where WISH_LIST_ID = :wishListId")
+    int deleteWithWishListId(@Bind("wishListId") long wishListId);
 }

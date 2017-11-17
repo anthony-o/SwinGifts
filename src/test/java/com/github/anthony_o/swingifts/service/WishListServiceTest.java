@@ -4,6 +4,7 @@ import com.github.anthony_o.swingifts.entity.Person;
 import com.github.anthony_o.swingifts.entity.Reservation;
 import com.github.anthony_o.swingifts.entity.WishItem;
 import com.github.anthony_o.swingifts.entity.WishList;
+import com.github.anthony_o.swingifts.service.dao.PersonDao;
 import com.github.anthony_o.swingifts.service.dao.WishListDao;
 import com.github.anthony_o.swingifts.test.CreateSampleDbTest;
 import com.github.anthony_o.swingifts.util.InjectUtils;
@@ -23,6 +24,10 @@ public class WishListServiceTest extends CreateSampleDbTest {
 
     private WishListDao getWishListDao() {
         return ServiceUtils.attachIfTransactionElseOnDemand(WishListDao.class);
+    }
+
+    private PersonDao getPersonDao() {
+        return ServiceUtils.attachIfTransactionElseOnDemand(PersonDao.class);
     }
 
 
@@ -110,5 +115,26 @@ public class WishListServiceTest extends CreateSampleDbTest {
     public void findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonNameWhenAskerNotInEventTest() {
         WishListService wishListService = getWishListService();
         wishListService.findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(firstEventId, charliePersonId);
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void deleteWithIdAndAskerPersonIdWhenAskerNotInEventTest() throws Exception {
+        WishListService wishListService = getWishListService();
+        wishListService.deleteWishItemsThenWishListThenPersonIfNotAUserWithIdAndAskerPersonId(bobWishListId, charliePersonId);
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void deleteWithIdAndAskerPersonIdWhenNotOwnerTest() throws Exception {
+        WishListService wishListService = getWishListService();
+        wishListService.deleteWishItemsThenWishListThenPersonIfNotAUserWithIdAndAskerPersonId(aliceWishListId, bobPersonId);
+    }
+
+    @Test
+    public void deleteWithIdAndAskerPersonIdTest() throws Exception {
+        WishListService wishListService = getWishListService();
+        wishListService.deleteWishItemsThenWishListThenPersonIfNotAUserWithIdAndAskerPersonId(daveWishListIdInCharliSEvent, charliePersonId);
+
+        assertThat(getWishListDao().findOne(daveWishListIdInCharliSEvent)).isNull();
+        assertThat(getPersonDao().findOne(davePersonId)).isNull();
     }
 }

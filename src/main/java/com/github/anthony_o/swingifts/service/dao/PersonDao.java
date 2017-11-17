@@ -59,4 +59,7 @@ public interface PersonDao {
     @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN) values (:person.name, :person.email, :person.login)")
     @GetGeneratedKeys
     long createWithPerson(@BindBean("person") Person person);
+
+    @SqlUpdate("delete PERSON where ID = :id and PASSWORD_HASH is null")
+    int deleteIfNotAUser(@Bind("id") long id);
 }

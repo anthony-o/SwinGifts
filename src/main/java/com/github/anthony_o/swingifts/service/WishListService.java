@@ -73,7 +73,7 @@ public class WishListService {
 
     private void checkThatAskerOwnsThisWishListWithAskerPersonIdAndId(long askerPersonId, long id, WishListDao wishListDao) {
         if (wishListDao.countWithIdAndPersonId(id, askerPersonId) < 1) {
-            throw new ForbiddenException("Only the one who possess this wishlist can modify circleGiftTargetPersonIdRead");
+            throw new ForbiddenException("The user does not possess this wishlist");
         }
     }
 
@@ -103,5 +103,29 @@ public class WishListService {
             wishList.setPerson(person);
         }
         return wishLists;
+    }
+
+    public void deleteWishItemsThenWishListThenPersonIfNotAUserWithIdAndAskerPersonId(long id, long askerPersonId) throws Exception {
+        ServiceUtils.inTransaction(() -> {
+            WishListDao wishListDao = getWishListDao();
+            WishItemDao wishItemDao = getWishItemDao();
+            PersonDao personDao = getPersonDao();
+
+            WishList wishList = wishListDao.findOne(id);
+
+            ServiceUtils.checkThatAskerIsAdminWithEventIdAndAskerPersonId(wishList.getEventId(), askerPersonId, wishListDao);
+
+            // First delete all the WishItems if exist
+            wishItemDao.deleteWithWishListId(id);
+            // Then delete the WishList (remember first the personId)
+
+            if (wishListDao.delete(id) != 1) {
+                throw new IllegalStateException("Problem happened while deleting the wishList");
+            }
+            // Now if the user "is not a user" (that is to say if he/she did not set a password), we delete he/she
+            personDao.deleteIfNotAUser(wishList.getPersonId());
+
+            return null;
+        });
     }
 }

@@ -26,4 +26,24 @@
     <button class="list-group-item btn-default" ng-click="addNewPerson()" ng-if="!newPerson.editing && (currentEvent.isOpened || myWishListForCurrentEvent.isPersonEventAdmin)">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Ajouter un nouveau participant
     </button>
+    <button class="list-group-item btn-default" data-toggle="modal" data-target="#deleteActiveWishListModal" ng-if="activePerson && (currentEvent.isOpened || myWishListForCurrentEvent.isPersonEventAdmin)">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Supprimer le participant sélectionné...
+    </button>
+    <div class="modal fade" id="deleteActiveWishListModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Suppression du participant</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vraiment supprimer {{activePerson.name}} de cet événement ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" ng-click="deleteActiveWishList()">Oui</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div>

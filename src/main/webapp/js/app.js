@@ -175,6 +175,10 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                 addNewPersonToCurrentPerson: function(person) {
                     $rootScope.currentPersons.push(person);
                     $rootScope.currentPersonsById[person.id] = person;
+                },
+                removePersonFromCurrentPerson: function(person) {
+                    $rootScope.currentPersons.splice($rootScope.currentPersons.indexOf(person), 1);
+                    delete $rootScope.currentPersonsById[person.id];
                 }
             }
             ;
@@ -229,6 +233,11 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                     }
                     $rootScope.currentWishListsByPersonId[wishList.person.id] = wishList;
                     personService.addNewPersonToCurrentPerson(wishList.person);
+                },
+                removeWishListFromCurrentWishLists: function (wishList) {
+                    $rootScope.currentWishLists.splice($rootScope.currentWishLists.indexOf(wishList), 1);
+                    delete $rootScope.currentWishListsByPersonId[wishList.person.id];
+                    personService.removePersonFromCurrentPerson(wishList.person);
                 }
             }
             ;
