@@ -36,7 +36,11 @@ angular.module('swingifts')
                 $scope.loginError = null;
             }, function(resp) {
                 // error while loging
-                $scope.loginError = resp.statusText + " - " + resp.status;
+                if (resp.status == '400') {
+                    $scope.loginError = $scope.event ? 'Mot de passe incorrect' : 'Login ou mot de passe incorrect';
+                } else {
+                    $scope.loginError = resp.statusText + " - " + resp.status;
+                }
             });
         };
 

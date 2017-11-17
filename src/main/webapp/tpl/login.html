@@ -5,7 +5,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Veuillez vous identifier</div>
             <div class="panel-body">
-                <p  ng-if="event" class="col-md-12">Vous êtes (choisissez parmi les participants) :</p>
+                <p ng-if="event" class="col-md-12">Vous êtes (choisissez parmi les participants) :</p>
                 <button ng-if="event" ng-repeat="person in persons" type="button" class="col-md-3 btn btn-default" ng-class="{'active': person.id === activePerson.id}" ng-click="activate(person)">
                     {{person.name}}
                 </button>

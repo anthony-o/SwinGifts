@@ -1,4 +1,8 @@
-<h2>Idées de cadeaux</h2>
+<h2>
+    Idées de cadeaux pour
+    <span ng-if="!selfWishList">{{wishListPerson.name}}</span>
+    <span ng-if="selfWishList">vous</span>
+</h2>
 <ul class="list-group">
     <li ng-repeat-start="wishItem in wishList.wishItems"
             class="list-group-item" ng-class="{'active': wishItem.id === activeWishItem.id, 'disabled': !wishItem.id, 'list-group-item-warning': wishItem.reservations.length > 0}"
@@ -30,3 +34,5 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> Ajouter une idée de cadeau
     </button>
 </ul>
+<p ng-if="!selfWishList" class="help-block">Si vous ajoutez une idée de cadeau (<span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-gift" aria-hidden="true"></span>)<span ng-if="activeWishItem.id"> ou déclarez que vous "prenez" ce cadeau (<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>)</span>, <strong>{{wishListPerson.name}} ne le verra pas.</strong></p>
+<p ng-if="selfWishList" class="help-block">Ceci est votre liste personnelle d'idées de cadeaux. Tous les participants peuvent voir les idées que vous y créez, mais vous ne pouvez pas voir celles que les participants y créent.</p>

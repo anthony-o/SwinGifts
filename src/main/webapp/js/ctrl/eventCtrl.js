@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('swingifts')
-    .controller('EventCtrl', function ($scope, $http, $stateParams, eventService, wishListService, securityService, $timeout) {
+    .controller('EventCtrl', function ($scope, $http, $stateParams, eventService, wishListService, securityService, $timeout, $location) {
         var eventId = $stateParams.eventId,
+            eventKey = $stateParams.eventKey,
             timeoutPromise;
 
         $scope.launchCircleGift = function () {
@@ -15,6 +16,21 @@ angular.module('swingifts')
         $scope.isPersonParticipatesInCircleGiftChanged = function () {
             var wishList = $scope.wishList;
             $http.put('api/wishLists/' + wishList.id, {isPersonParticipatesInCircleGift: wishList.isPersonParticipatesInCircleGift}); // TODO user feedback
+        };
+
+        $scope.selectText = function($event) {
+            var element = $event.target;
+            // Select the text thanks to https://stackoverflow.com/a/1173319/535203
+            if (document.selection) {
+                var range = document.body.createTextRange();
+                range.moveToElementText(element);
+                range.select();
+            } else if (window.getSelection) {
+                var range = document.createRange();
+                range.selectNode(element);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+            }
         };
 
 
@@ -40,5 +56,10 @@ angular.module('swingifts')
                 $timeout.cancel(timeoutPromise);
             }
         });
+
+        var protocol = $location.protocol(),
+            port = $location.port(),
+            defaultPort = (protocol == 'https' && port == 443) || (protocol == 'http' && port == 80);
+        $scope.sharingUrl = protocol + '://' + $location.host() + (!defaultPort ? ':' + port : '') + window.location.pathname + '#/e/' + eventId + '/' + eventKey;
     })
 ;

@@ -1,7 +1,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1>{{event.name}}</h1>
             <div class="alert alert-warning" ng-if="wishList.circleGiftTargetPerson" role="alert">Le "cadeau tournant" est décidé, vous devrez offrir un cadeau à <strong>{{wishList.circleGiftTargetPerson.name}}</strong> !</div>
             <div class="alert alert-warning" ng-if="!event.isCircleGiftLaunchedOnce">
                 <p>Le "cadeau tournant" de cet événement n'est pas encore lancé, vous pouvez choisir d'y participer ou pas.</p>
@@ -18,6 +17,9 @@
         <div class="col-md-12" ng-if="wishList.isPersonEventAdmin">
             <p>Vous êtes l'administrateur de cet événement, vous pouvez donc lancer ou relancer le "cadeau tournant".</p>
             <button type="button" class="btn btn-default" ng-click="launchCircleGift()">Lancer ou relancer le cadeau tournant</button>
+        </div>
+        <div class="col-md-12" ng-if="wishList.isPersonEventAdmin">
+            <p>Vous pouvez également <strong>partager l'événement</strong> avec cette adresse : <code ng-click="selectText($event)">{{sharingUrl}}</code></p>
         </div>
     </div>
 </div>

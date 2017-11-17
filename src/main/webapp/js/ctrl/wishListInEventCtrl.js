@@ -105,6 +105,11 @@ angular.module('swingifts')
             deleteWishItem(wishItem);
         });
 
+        personService.getCurrentPersonWithIdPromise(personId).then(function(person) {
+            $scope.wishListPerson = person;
+            $scope.selfWishList = person.id == $scope.authenticatedUser.id;
+        });
+
 
         $http.get('api/wishLists?eventId=' + eventId + '&personId=' + personId).then(function (resp) {
             var wishList = $scope.wishList = resp.data;
