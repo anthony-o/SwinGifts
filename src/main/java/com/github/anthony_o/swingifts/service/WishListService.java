@@ -123,7 +123,7 @@ public class WishListService {
                 throw new IllegalStateException("Problem happened while deleting the wishList");
             }
             // Now if the user "is not a user" (that is to say if he/she did not set a password), we delete he/she
-            personDao.deleteIfNotAUser(wishList.getPersonId());
+            personDao.deleteIfIsNotUser(wishList.getPersonId());
 
             return null;
         });

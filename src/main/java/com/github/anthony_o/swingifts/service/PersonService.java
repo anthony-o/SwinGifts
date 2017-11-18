@@ -185,4 +185,19 @@ public class PersonService {
     public Person findOneWithId(long personId) {
         return getPersonDao().findOneUsingPrivateProjection(personId);
     }
+
+    public boolean resetPasswordWithIdAndEventIdAndAskerPersonId(long id, long eventId, long askerPersonId) {
+        PersonDao personDao = getPersonDao();
+        ServiceUtils.checkThatAskerIsAdminWithEventIdAndAskerPersonId(eventId, askerPersonId, getWishListDao());
+        Person person = personDao.findOneUsingPublicProjection(id);
+        if (BooleanUtils.isTrue(person.getIsUser()) && BooleanUtils.isFalse(person.getHasEmail())) {
+            if (personDao.resetPasswordAndSaltWithIdIfIsUserAndNotHaveEmail(id) == 1) {
+                return true;
+            } else {
+                throw new IllegalStateException("Problem while resetting the password");
+            }
+        } else {
+            return false;
+        }
+    }
 }

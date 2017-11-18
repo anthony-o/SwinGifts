@@ -73,6 +73,15 @@ angular.module('swingifts')
             });
         };
 
+        $scope.resetActivePersonPassword = function() {
+            var activePersonToResetPassword = $scope.activePerson;
+            $http.delete('api/persons/' + activePersonToResetPassword.id + '?resetPassword=true' + '&eventId=' +eventId).then(function (resp) {
+                if (resp.data) {
+                    activePersonToResetPassword.isUser = false;
+                }
+            });
+        };
+
 
         $http.get('api/wishLists?eventId=' + eventId).then(function (resp) {
             wishListService.setCurrentWishLists($scope.wishLists = resp.data);

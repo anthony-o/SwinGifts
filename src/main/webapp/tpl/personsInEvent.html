@@ -26,7 +26,7 @@
     <button class="list-group-item btn-default" ng-click="addNewPerson()" ng-if="!newPerson.editing && (currentEvent.isOpened || myWishListForCurrentEvent.isPersonEventAdmin)">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Ajouter un nouveau participant
     </button>
-    <button class="list-group-item btn-default" data-toggle="modal" data-target="#deleteActiveWishListModal" ng-if="activePerson && (currentEvent.isOpened || myWishListForCurrentEvent.isPersonEventAdmin)">
+    <button class="list-group-item btn-default" data-toggle="modal" data-target="#deleteActiveWishListModal" ng-if="activePerson && myWishListForCurrentEvent.isPersonEventAdmin">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Supprimer le participant sélectionné...
     </button>
     <div class="modal fade" id="deleteActiveWishListModal" tabindex="-1" role="dialog">
@@ -43,7 +43,10 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                     <button type="button" class="btn btn-primary" ng-click="deleteActiveWishList()">Oui</button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+    <button class="list-group-item btn-default" ng-click="resetActivePersonPassword()" ng-if="activePerson && activePerson.isUser && !activePerson.hasEmail && myWishListForCurrentEvent.isPersonEventAdmin">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Réinitialiser le mot de passe du participant sélectionné
+    </button>
 </div>

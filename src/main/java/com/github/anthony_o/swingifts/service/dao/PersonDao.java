@@ -61,5 +61,8 @@ public interface PersonDao {
     long createWithPerson(@BindBean("person") Person person);
 
     @SqlUpdate("delete PERSON where ID = :id and PASSWORD_HASH is null")
-    int deleteIfNotAUser(@Bind("id") long id);
+    int deleteIfIsNotUser(@Bind("id") long id);
+
+    @SqlUpdate("update PERSON set PASSWORD_HASH = null, SALT = null where ID = :id and PASSWORD_HASH is not null and EMAIL is null")
+    int resetPasswordAndSaltWithIdIfIsUserAndNotHaveEmail(@Bind("id") long id);
 }

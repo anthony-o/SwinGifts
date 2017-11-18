@@ -129,4 +129,14 @@ public class PersonResource {
         return getPersonService().findWithIdAndSessionToken(id, Base64Utils.convertFromBase64RFC4648ToBytes(sessionToken));
     }
 
+    @Path("/{id}")
+    @DELETE
+    public boolean delete(@PathParam("id") long id, @QueryParam("resetPassword") Boolean resetPassword, @QueryParam("eventId") Long eventId) {
+        if (BooleanUtils.isTrue(resetPassword)) {
+            return getPersonService().resetPasswordWithIdAndEventIdAndAskerPersonId(id, eventId, SessionUtils.getSessionOrFail().getPersonId());
+        } else {
+            throw new BadRequestException("Unimplemented feature: delete a person");
+        }
+    }
+
 }

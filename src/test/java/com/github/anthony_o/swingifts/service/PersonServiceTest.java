@@ -9,6 +9,7 @@ import com.github.anthony_o.swingifts.util.ServiceUtils;
 import org.junit.Test;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ForbiddenException;
 import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -88,5 +89,20 @@ public class PersonServiceTest extends CreateSampleDbTest {
         Person alice = getPersonService().findOneWithId(alicePersonId);
         assertThat(alice.getLogin()).isEqualTo("alice");
         assertThat(alice.getPasswordHash()).isNull();
+        assertThat(alice.getIsUser()).isTrue();
+
+        assertThat(getPersonService().findOneWithId(davePersonId).getIsUser()).isFalse();
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void resetPasswordWithIdAndEventIdAndAskerPersonIdWhenNotAdminTest() {
+        getPersonService().resetPasswordWithIdAndEventIdAndAskerPersonId(charliePersonId, charlieSEventId, alicePersonId);
+    }
+
+    @Test
+    public void resetPasswordWithIdAndEventIdAndAskerPersonIdTest() {
+        assertThat(getPersonService().resetPasswordWithIdAndEventIdAndAskerPersonId(alicePersonId, charlieSEventId, charliePersonId)).isTrue();
+
+        assertThat(getPersonService().findOneWithId(alicePersonId).getIsUser()).isFalse();
     }
 }

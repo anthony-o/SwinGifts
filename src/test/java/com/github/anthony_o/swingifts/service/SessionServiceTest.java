@@ -1,6 +1,5 @@
 package com.github.anthony_o.swingifts.service;
 
-import com.github.anthony_o.swingifts.entity.Person;
 import com.github.anthony_o.swingifts.test.CreateSampleDbTest;
 import com.github.anthony_o.swingifts.util.InjectUtils;
 import org.junit.Test;
@@ -31,6 +30,8 @@ public class SessionServiceTest extends CreateSampleDbTest {
         bobTokens[3] = sessionService.createWithPersonIdReturningToken(bobPersonId);
         bobTokens[4] = sessionService.createWithPersonIdReturningToken(bobPersonId);
         bobTokens[5] = sessionService.createWithPersonIdReturningToken(bobPersonId);
+
+        Thread.sleep(10); // Pause in order to correctly save the DB? The two following lines were failing without this.
 
         assertThat(sessionService.touchSession(alicePersonId, aliceTokens[0])).isFalse();
         assertThat(sessionService.touchSession(bobPersonId, bobTokens[0])).isFalse();
