@@ -13,7 +13,7 @@ public interface WishItemDao {
     @SqlQuery("select ID, NAME, URL, CREATED_BY_PERSON_ID from WISH_ITEM where WISH_LIST_ID = :wishListId")
     List<WishItem> findWithWishListId(@Bind("wishListId") long wishListId);
 
-    @SqlUpdate("insert into WISH_ITEM(WISH_LIST_ID, PERSON_ID, CREATED_BY_PERSON_ID, NAME, URL) values (:wishItem.wishListId, :wishItem.personId, :wishItem.createdByPersonId, :wishItem.name, :wishItem.url)")
+    @SqlUpdate("insert into WISH_ITEM(WISH_LIST_ID, PERSON_ID, CREATED_BY_PERSON_ID, NAME, URL, CREATION_DATE) values (:wishItem.wishListId, :wishItem.personId, :wishItem.createdByPersonId, :wishItem.name, :wishItem.url, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long create(@BindBean("wishItem") WishItem wishItem);
 
@@ -32,7 +32,7 @@ public interface WishItemDao {
     @SqlQuery("select PERSON_ID from WISH_ITEM where ID = :id")
     Long findOnePersonId(@Bind("id") long id);
 
-    @SqlUpdate("update WISH_ITEM set NAME = :wishItem.name, URL = :wishItem.url where ID = :wishItem.id")
+    @SqlUpdate("update WISH_ITEM set NAME = :wishItem.name, URL = :wishItem.url, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :wishItem.id")
     int update(@BindBean("wishItem") WishItem wishItem);
 
     @SqlUpdate("delete WISH_ITEM where ID = :id")

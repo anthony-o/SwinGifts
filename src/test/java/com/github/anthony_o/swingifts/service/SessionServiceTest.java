@@ -31,7 +31,7 @@ public class SessionServiceTest extends CreateSampleDbTest {
         bobTokens[4] = sessionService.createWithPersonIdReturningToken(bobPersonId);
         bobTokens[5] = sessionService.createWithPersonIdReturningToken(bobPersonId);
 
-        Thread.sleep(10); // Pause in order to correctly save the DB? The two following lines were failing without this.
+        Thread.sleep(100); // Pause in order to correctly save the DB? The two following lines were failing without this.
 
         assertThat(sessionService.touchSession(alicePersonId, aliceTokens[0])).isFalse();
         assertThat(sessionService.touchSession(bobPersonId, bobTokens[0])).isFalse();

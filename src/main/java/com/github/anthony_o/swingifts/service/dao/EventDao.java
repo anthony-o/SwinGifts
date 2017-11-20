@@ -21,10 +21,10 @@ public interface EventDao {
     @SqlQuery("select e.ID, e.NAME, e.KEY, e.IS_OPENED from EVENT e join WISH_LIST w on e.ID = w.EVENT_ID where w.PERSON_ID = :askerPersonId")
     List<Event> findWithAskerPersonId(@Bind("askerPersonId") long askerPersonId);
 
-    @SqlUpdate("insert into EVENT(NAME, KEY) values (:event.name, :key)")
+    @SqlUpdate("insert into EVENT(NAME, KEY, CREATION_DATE) values (:event.name, :key, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long createWithEventAndKey(@BindBean("event") Event event, @Bind("key") byte[] key);
 
-    @SqlUpdate("update EVENT set IS_CIRCLE_GIFT_LAUNCHED_ONCE = :isCircleGiftLaunchedOnce where ID = :id")
+    @SqlUpdate("update EVENT set IS_CIRCLE_GIFT_LAUNCHED_ONCE = :isCircleGiftLaunchedOnce, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateIsCircleGiftLaunchedOnceWithIdAndCircleGiftLaunchedOnce(@Bind("id") long id, @Bind("isCircleGiftLaunchedOnce") boolean isCircleGiftLaunchedOnce);
 }

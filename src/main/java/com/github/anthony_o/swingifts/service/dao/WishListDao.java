@@ -20,11 +20,11 @@ public interface WishListDao extends GetHandle {
     String PUBLIC_PROJECTION = "ID, PERSON_ID, EVENT_ID, IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT";
     String PRIVATE_PROJECTION = PUBLIC_PROJECTION + ", IS_PERSON_EVENT_ADMIN, CIRCLE_GIFT_TARGET_PERSON_ID, IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ";
 
-    @SqlUpdate("insert into WISH_LIST(EVENT_ID, PERSON_ID) values (:eventId, :personId)")
+    @SqlUpdate("insert into WISH_LIST(EVENT_ID, PERSON_ID, CREATION_DATE) values (:eventId, :personId, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long createWithEventIdAndPersonId(@Bind("eventId") long eventId, @Bind("personId") long personId);
 
-    @SqlUpdate("insert into WISH_LIST(EVENT_ID, PERSON_ID, IS_PERSON_EVENT_ADMIN) values (:eventId, :personId, true)")
+    @SqlUpdate("insert into WISH_LIST(EVENT_ID, PERSON_ID, IS_PERSON_EVENT_ADMIN, CREATION_DATE) values (:eventId, :personId, true, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long createAdminWithEventIdAndPersonId(@Bind("eventId") long eventId, @Bind("personId") long personId);
 
@@ -57,13 +57,13 @@ public interface WishListDao extends GetHandle {
     @SqlQuery("select PERSON_ID from WISH_LIST where IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT = true and EVENT_ID = :eventId")
     List<Long> findPersonsParticipatingInCircleGiftWithEventIdReturningPersonId(@Bind("eventId") long eventId);
 
-    @SqlUpdate("update WISH_LIST set CIRCLE_GIFT_TARGET_PERSON_ID = :circleGiftTargetPersonId where EVENT_ID = :eventId and PERSON_ID = :personId")
+    @SqlUpdate("update WISH_LIST set CIRCLE_GIFT_TARGET_PERSON_ID = :circleGiftTargetPersonId, MODIFICATION_DATE = CURRENT_TIMESTAMP where EVENT_ID = :eventId and PERSON_ID = :personId")
     int updateCircleGiftTargetPersonIdWithEventIdAndPersonIdAndCircleGiftTargetPersonId(@Bind("eventId") long eventId, @Bind("personId") long personId, @Bind("circleGiftTargetPersonId") long circleGiftTargetPersonId);
 
     @SqlQuery("select * from WISH_LIST where EVENT_ID = :eventId")
     List<WishList> findWithEventId(@Bind("eventId") long eventId);
 
-    @SqlUpdate("update WISH_LIST set IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ = :isCircleGiftTargetPersonIdRead where ID = :id")
+    @SqlUpdate("update WISH_LIST set IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ = :isCircleGiftTargetPersonIdRead, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateIsCircleGiftTargetPersonIdReadWithIdAndIsCircleGiftTargetPersonIdRead(@Bind("id") long id, @Bind("isCircleGiftTargetPersonIdRead") boolean isCircleGiftTargetPersonIdRead);
 
     default int update(WishList wishList) {
@@ -71,7 +71,7 @@ public interface WishListDao extends GetHandle {
         if (wishList.getIsPersonParticipatesInCircleGift() != null) {
             updateQuery.append(" IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT = :isPersonParticipatesInCircleGift");
         }
-        updateQuery.append(" where ID = :id");
+        updateQuery.append(", MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id");
         return withHandle((handle) -> handle
             .createStatement(updateQuery.toString())
             .bindFromProperties(wishList)

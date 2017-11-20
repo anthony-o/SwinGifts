@@ -9,4 +9,5 @@
 
     <include file="db_schema/V1__Base.sql" />
     <include file="db_schema/V2__SessionIndex.sql" />
+    <include file="db_schema/V3__Dates.sql" />
 </databaseChangeLog>

@@ -10,7 +10,7 @@ import java.util.List;
 @RegisterMapper(ReservationMapper.class)
 public interface ReservationDao {
 
-    @SqlUpdate("insert into RESERVATION(PERSON_ID, WISH_ITEM_ID) values (:reservation.personId, :reservation.wishItemId)")
+    @SqlUpdate("insert into RESERVATION(PERSON_ID, WISH_ITEM_ID, CREATION_DATE) values (:reservation.personId, :reservation.wishItemId, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long create(@BindBean("reservation") Reservation reservation);
 

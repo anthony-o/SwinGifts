@@ -16,7 +16,7 @@ public interface PersonDao {
     @SqlQuery("select " + PUBLIC_PROJECTION + " from WISH_LIST w INNER JOIN PERSON p ON w.PERSON_ID = p.ID INNER JOIN EVENT e ON w.EVENT_ID = e.ID where w.EVENT_ID = :eventId and e.KEY = :eventKey order by p.NAME")
     List<Person> findWithEventIdAndEventKeyOrderByName(@Bind("eventId") long eventId, @Bind("eventKey") byte[] eventKey);
 
-    @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN, PASSWORD_HASH, SALT) values (:person.name, :person.email, :person.login, :passwordHash, :salt)")
+    @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN, PASSWORD_HASH, SALT, CREATION_DATE) values (:person.name, :person.email, :person.login, :passwordHash, :salt, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long createWithPersonAndPasswordHashAndSalt(@BindBean("person") Person person, @Bind("passwordHash") byte[] passwordHash, @Bind("salt") byte[] salt);
 
@@ -29,13 +29,13 @@ public interface PersonDao {
     @SqlQuery("select PASSWORD_HASH, SALT from PERSON where ID = :id")
     Person findOnePasswordHashAndSaltWithId(@Bind("id") long id);
 
-    @SqlUpdate("update PERSON set NAME = :name where ID = :id")
+    @SqlUpdate("update PERSON set NAME = :name, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateWithName(@Bind("id") long id, @Bind("name") String name);
 
-    @SqlUpdate("update PERSON set LOGIN = :login where ID = :id")
+    @SqlUpdate("update PERSON set LOGIN = :login, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateWithLogin(@Bind("id") long id, @Bind("login") String login);
 
-    @SqlUpdate("update PERSON set PASSWORD_HASH = :passwordHash, SALT = :salt where ID = :id")
+    @SqlUpdate("update PERSON set PASSWORD_HASH = :passwordHash, SALT = :salt, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateWithPasswordHashAndSalt(@Bind("id") long id, @Bind("passwordHash") byte[] passwordHash, @Bind("salt") byte[] salt);
 
     @SqlQuery("select ID from PERSON where login = :login")
@@ -44,7 +44,7 @@ public interface PersonDao {
     @SqlQuery("select " + PRIVATE_PROJECTION + " from PERSON p where p.login = :login")
     Person findOneWithLogin(@Bind("login") String login);
 
-    @SqlUpdate("update PERSON set EMAIL = :email where ID = :id")
+    @SqlUpdate("update PERSON set EMAIL = :email, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id")
     int updateWithEmail(@Bind("id") long id, @Bind("email") String email);
 
     @SqlQuery("select * from PERSON where ID = :id")
@@ -56,13 +56,13 @@ public interface PersonDao {
     @SqlQuery("select " + PUBLIC_PROJECTION + " from PERSON p where p.ID = :id")
     Person findOneUsingPublicProjection(@Bind("id") long id);
 
-    @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN) values (:person.name, :person.email, :person.login)")
+    @SqlUpdate("insert into PERSON(NAME, EMAIL, LOGIN, CREATION_DATE) values (:person.name, :person.email, :person.login, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long createWithPerson(@BindBean("person") Person person);
 
     @SqlUpdate("delete PERSON where ID = :id and PASSWORD_HASH is null")
     int deleteIfIsNotUser(@Bind("id") long id);
 
-    @SqlUpdate("update PERSON set PASSWORD_HASH = null, SALT = null where ID = :id and PASSWORD_HASH is not null and EMAIL is null")
+    @SqlUpdate("update PERSON set PASSWORD_HASH = null, SALT = null, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id and PASSWORD_HASH is not null and EMAIL is null")
     int resetPasswordAndSaltWithIdIfIsUserAndNotHaveEmail(@Bind("id") long id);
 }
