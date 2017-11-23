@@ -92,4 +92,19 @@ public class EventService {
             return wishList;
         });
     }
+
+    public boolean cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(long id, long askerPersonId) throws Exception {
+        return ServiceUtils.inTransaction(() -> {
+            // first check if asker is admin
+            WishListDao wishListDao = getWishListDao();
+            ServiceUtils.checkThatAskerIsAdminWithEventIdAndAskerPersonId(id, askerPersonId, wishListDao);
+
+            wishListDao.cancelCircleGiftWithEventId(id);
+            if (getEventDao().updateIsCircleGiftLaunchedOnceWithIdAndCircleGiftLaunchedOnce(id, false) != 1) {
+                throw new IllegalStateException("Couldn't update the event to set the CircleGiftLaunchedOnce to false.");
+            }
+
+            return true;
+        });
+    }
 }

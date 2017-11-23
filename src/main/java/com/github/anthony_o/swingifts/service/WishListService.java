@@ -77,13 +77,14 @@ public class WishListService {
         }
     }
 
-    public void updateWithWishListAndAskerPersonId(WishList wishList, long askerPersonId) {
+    public boolean updateWithWishListAndAskerPersonId(WishList wishList, long askerPersonId) {
         WishListDao wishListDao = getWishListDao();
         Long id = wishList.getId();
         checkThatAskerOwnsThisWishListWithAskerPersonIdAndId(askerPersonId, id, wishListDao);
         if (wishListDao.update(wishList) != 1) {
             throw new IllegalStateException("Problem happened while updating the wishList");
         }
+        return true;
     }
 
     public List<WishList> findWithEventIdAndAskerPersonIdLoadingPersonAndCountingWishItemsOrderByPersonName(long eventId, long askerPersonId) {

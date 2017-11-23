@@ -89,4 +89,7 @@ public interface WishListDao extends GetHandle {
 
     @SqlUpdate("delete WISH_LIST where ID = :id")
     int delete(@Bind("id") long id);
+
+    @SqlUpdate("update WISH_LIST set CIRCLE_GIFT_TARGET_PERSON_ID = null, IS_CIRCLE_GIFT_TARGET_PERSON_ID_READ = FALSE, MODIFICATION_DATE = CURRENT_TIMESTAMP where EVENT_ID = :eventId")
+    int cancelCircleGiftWithEventId(@Bind("eventId") long eventId);
 }

@@ -44,6 +44,12 @@ public class EventResource {
         return getEventService().launchCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(id, SessionUtils.getSessionOrFail().getPersonId());
     }
 
+    @DELETE
+    @Path("/{id}/circleGift")
+    public boolean deleteCircleGiftWithId(@PathParam("id") long id) throws Exception {
+        return getEventService().cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(id, SessionUtils.getSessionOrFail().getPersonId());
+    }
+
     private EventService getEventService() {
         return InjectUtils.getInstance(EventService.class);
     }

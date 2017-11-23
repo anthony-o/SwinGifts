@@ -76,7 +76,7 @@ public class WishListServiceTest extends CreateSampleDbTest {
         WishList wishList = new WishList();
         wishList.setId(aliceWishListIdInCharlieSEvent);
         wishList.setIsPersonParticipatesInCircleGift(true);
-        wishListService.updateWithWishListAndAskerPersonId(wishList, alicePersonId);
+        assertThat(wishListService.updateWithWishListAndAskerPersonId(wishList, alicePersonId)).isTrue();
 
         wishListInDb = wishListDao.findOne(aliceWishListIdInCharlieSEvent);
         assertThat(wishListInDb.getIsPersonParticipatesInCircleGift()).isTrue();
@@ -136,5 +136,13 @@ public class WishListServiceTest extends CreateSampleDbTest {
 
         assertThat(getWishListDao().findOne(daveWishListIdInCharliSEvent)).isNull();
         assertThat(getPersonDao().findOne(davePersonId)).isNull();
+    }
+
+    @Test
+    public void updateIsCircleGiftTargetPersonIdReadWithIdAndIsCircleGiftTargetPersonIdReadTest() {
+        WishListDao wishListDao = getWishListDao();
+        assertThat(wishListDao.findOne(aliceWishListId).getIsCircleGiftTargetPersonIdRead()).isFalse();
+        wishListDao.updateIsCircleGiftTargetPersonIdReadWithIdAndIsCircleGiftTargetPersonIdRead(aliceWishListId, true);
+        assertThat(wishListDao.findOne(aliceWishListId).getIsCircleGiftTargetPersonIdRead()).isTrue();
     }
 }

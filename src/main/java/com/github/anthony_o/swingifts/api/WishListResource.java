@@ -39,9 +39,9 @@ public class WishListResource {
 
     @PUT
     @Path("/{id}")
-    public void updateWithWishListAndId(WishList wishList, @PathParam("id") long id) {
+    public boolean updateWithWishListAndId(WishList wishList, @PathParam("id") long id) {
         wishList.setId(id);
-        getWishListService().updateWithWishListAndAskerPersonId(wishList, SessionUtils.getSessionOrFail().getPersonId());
+        return getWishListService().updateWithWishListAndAskerPersonId(wishList, SessionUtils.getSessionOrFail().getPersonId());
     }
 
     @DELETE

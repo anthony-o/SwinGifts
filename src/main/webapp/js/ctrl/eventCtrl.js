@@ -10,12 +10,30 @@ angular.module('swingifts')
             $http.post('api/events/' + eventId + '/launchCircleGift', {}).then(function (resp) {
                 $scope.wishList.circleGiftTargetPersonId = resp.data.circleGiftTargetPersonId;
                 wishListService.setMyWishListForCurrentEvent($scope.wishList);
+                $scope.event.isCircleGiftLaunchedOnce = true;
             });
         };
 
-        $scope.isPersonParticipatesInCircleGiftChanged = function () {
+        $scope.cancelCircleGift = function() {
+            $http.delete('api/events/' + eventId + '/circleGift').then(function (resp) {
+                if (resp.data) {
+                    $scope.wishList.circleGiftTargetPersonId = null;
+                    $scope.wishList.circleGiftTargetPerson = null;
+                    $scope.event.isCircleGiftLaunchedOnce = false;
+                }
+            });
+        };
+
+        $scope.isPersonParticipatesInCircleGiftChanged = function (previousIsPersonParticipatesInCircleGift) {
             var wishList = $scope.wishList;
-            $http.put('api/wishLists/' + wishList.id, {isPersonParticipatesInCircleGift: wishList.isPersonParticipatesInCircleGift}); // TODO user feedback
+            $http.put('api/wishLists/' + wishList.id, {isPersonParticipatesInCircleGift: wishList.isPersonParticipatesInCircleGift})
+                .then(function (resp) {
+                    if (!resp.data) {
+                        wishList.isPersonParticipatesInCircleGift = previousIsPersonParticipatesInCircleGift;
+                    }
+                }, function () {
+                    wishList.isPersonParticipatesInCircleGift = previousIsPersonParticipatesInCircleGift;
+                });
         };
 
         $scope.selectText = function($event) {

@@ -218,7 +218,12 @@ angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
                 },
                 setCurrentWishLists: function (wishLists) {
                     $rootScope.currentWishLists = wishLists;
-                    $rootScope.currentWishListsByPersonId = wishLists.reduce(function (wishListsByPersonId, wishList) {
+                    $rootScope.currentWishListsByPersonId = wishLists.reduce(function (wishListsByPersonId, wishList, i) {
+                        if (wishList.person.id == $rootScope.authenticatedUser.id) {
+                            // that's me, taking the "myWishList" instead of the one retrieved from the server but retrieve its values
+                            angular.copy(wishList, $rootScope.myWishListForCurrentEvent);
+                            wishList = wishLists[i] = $rootScope.myWishListForCurrentEvent;
+                        }
                         wishListsByPersonId[wishList.person.id] = wishList;
                         return wishListsByPersonId;
                     }, {});

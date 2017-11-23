@@ -80,4 +80,23 @@ public class EventServiceTest extends CreateSampleDbTest {
     public void launchCircleGiftWithIdAndAskerPersonIdReturningAskersWishListByNotAdminPersonTest() throws Exception {
         getEventService().launchCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(charlieSEventId, alicePersonId);
     }
+
+    @Test(expected = ForbiddenException.class)
+    public void cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishListByNotAdminPersonTest() throws Exception {
+        getEventService().cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(charlieSEventId, alicePersonId);
+    }
+
+    @Test
+    public void cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishList() throws Exception {
+        WishListDao wishListDao = getWishListDao();
+        wishListDao.updateIsCircleGiftTargetPersonIdReadWithIdAndIsCircleGiftTargetPersonIdRead(aliceWishListId, true);
+
+        getEventService().cancelCircleGiftWithIdAndAskerPersonIdReturningAskersWishList(firstEventId, alicePersonId);
+        WishList aliceWishList = wishListDao.findOne(aliceWishListId);
+        assertThat(aliceWishList.getCircleGiftTargetPersonId()).isNull();
+        assertThat(aliceWishList.getIsCircleGiftTargetPersonIdRead()).isFalse();
+
+        assertThat(getEventDao().findOneWithId(firstEventId).getIsCircleGiftLaunchedOnce()).isFalse();
+    }
+
 }
