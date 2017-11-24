@@ -98,6 +98,9 @@ public class WishListServiceTest extends CreateSampleDbTest {
         assertThat(wishLists).hasSize(numberOfPersonsInFirstEvent);
         WishList aliceSWishList = wishLists.get(0);
         assertThat(aliceSWishList.getWishItemsCount()).isEqualTo(numberOfWishItemsInAliceSWishListInFirstEventVisibleByAlice);
+        assertThat(aliceSWishList.getIsPersonEventAdmin()).isTrue();
+        assertThat(aliceSWishList.getIsCircleGiftTargetPersonIdRead()).isFalse();
+        assertThat(aliceSWishList.getCircleGiftTargetPersonId()).isEqualTo(bobPersonId);
         Person alice = aliceSWishList.getPerson();
         assertThat(alice).isNotNull();
         assertThat(alice.getName()).isEqualTo("Alice");

@@ -98,6 +98,11 @@ public class WishListService {
             Person person;
             if (personId == askerPersonId) {
                 person = personDao.findOneUsingPrivateProjection(personId);
+                // Also load private wishList fields
+                WishList privateWishList = wishListDao.findOneWithIdUsingPrivateProjection(wishList.getId());
+                wishList.setIsPersonEventAdmin(privateWishList.getIsPersonEventAdmin());
+                wishList.setCircleGiftTargetPersonId(privateWishList.getCircleGiftTargetPersonId());
+                wishList.setIsCircleGiftTargetPersonIdRead(privateWishList.getIsCircleGiftTargetPersonIdRead());
             } else {
                 person = personDao.findOneUsingPublicProjection(personId);
             }
