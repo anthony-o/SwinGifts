@@ -5,6 +5,7 @@ angular.module('swingifts')
         var authenticatedUser = securityService.authenticatedUser,
             wishItem = $stateParams.wishItem,
             wishItemId = $stateParams.wishItemId,
+            currentWishListPersonId = $stateParams.personId,
             myPersonId = authenticatedUser.id;
 
         function searchMyReservationInReservations(reservations) {
@@ -71,11 +72,7 @@ angular.module('swingifts')
         };
 
         $scope.delete = function() {
-            if (wishItem.personId) {
-                $state.go('event.personWishList', {personId: wishItem.personId});
-            } else {
-                $state.go('event.personWishList', {personId: myPersonId});
-            }
+            $state.go('event.personWishList', {personId: currentWishListPersonId});
             $rootScope.$broadcast('wishItem.deleting', wishItem);
             $http.delete('api/wishItems/' + wishItemId).then(function () {
                 $rootScope.$broadcast('wishItem.deleted', wishItem);

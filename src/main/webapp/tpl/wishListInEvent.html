@@ -8,9 +8,9 @@
             class="list-group-item" ng-class="{'active': wishItem.id === activeWishItem.id, 'disabled': !wishItem.id, 'list-group-item-warning': wishItem.reservations.length > 0}"
             ng-click="activate(wishItem)" ng-disabled="!wishItem.id" ng-if="!wishItem.editing && !wishItem.deleting">
         {{wishItem.name}} <a ng-if="wishItem.url" target="_blank" ng-href="{{wishItem.url}}" title="Lien vers le cadeau"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-        <span class="label label-default pull-right" ng-repeat="reservation in wishItem.reservations">Pris par {{reservation.person.name || "quelqu'un"}}</span>
-        <span class="label label-success pull-right" ng-if="wishItem.person">Proposé par {{wishItem.person.name}}</span>
-        <span class="label label-primary pull-right" ng-if="wishItem.createdByPerson && !wishItem.person">Proposé par {{wishItem.createdByPerson.name}}</span>
+        <span class="label label-default pull-right" ng-repeat="reservation in wishItem.reservations" title="{{reservation.datesInfo}}">Pris par {{reservation.person.name || "quelqu'un"}}</span>
+        <span class="label label-success pull-right" title="{{wishItem.datesInfo}}" ng-if="wishItem.person">Proposé par {{wishItem.person.name}}</span>
+        <span class="label label-primary pull-right" title="{{wishItem.datesInfo}}" ng-if="wishItem.createdByPerson && !wishItem.person">Proposé par {{wishItem.createdByPerson.name}}</span>
     </li>
 
     <form ng-repeat-end ng-if="wishItem.editing" class="list-group-item">

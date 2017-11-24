@@ -24,6 +24,9 @@ public class ReservationMapper implements ResultSetMapper<Reservation> {
                     Long personId = r.getObject(i, Long.class);
                     reservation.setPersonId(personId);
                     break;
+                case "CREATION_DATE":
+                    reservation.setCreationDate(r.getTimestamp(i));
+                    break;
             }
         }
         return reservation;

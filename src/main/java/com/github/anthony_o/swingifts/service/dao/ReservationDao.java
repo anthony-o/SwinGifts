@@ -20,7 +20,7 @@ public interface ReservationDao {
     @SqlUpdate("delete from RESERVATION where ID = :id")
     int delete(@Bind("id") long id);
 
-    @SqlQuery("select ID, PERSON_ID from RESERVATION where WISH_ITEM_ID = :wishItemId")
+    @SqlQuery("select ID, PERSON_ID, CREATION_DATE from RESERVATION where WISH_ITEM_ID = :wishItemId")
     List<Reservation> findWithWishItemId(@Bind("wishItemId") long wishItemId);
 
     @SqlUpdate("delete RESERVATION where WISH_ITEM_ID = :wishItemId")

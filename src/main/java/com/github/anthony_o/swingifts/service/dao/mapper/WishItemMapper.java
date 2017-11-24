@@ -35,6 +35,12 @@ public class WishItemMapper implements ResultSetMapper<WishItem> {
                 case "CREATED_BY_PERSON_ID":
                     wishItem.setCreatedByPersonId(r.getObject(i, Long.class));
                     break;
+                case "CREATION_DATE":
+                    wishItem.setCreationDate(r.getTimestamp(i));
+                    break;
+                case "MODIFICATION_DATE":
+                    wishItem.setModificationDate(r.getTimestamp(i));
+                    break;
             }
         }
         return wishItem;

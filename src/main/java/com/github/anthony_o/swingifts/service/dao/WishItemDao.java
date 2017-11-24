@@ -10,27 +10,26 @@ import java.util.List;
 
 @RegisterMapper(WishItemMapper.class)
 public interface WishItemDao {
-    @SqlQuery("select ID, NAME, URL, CREATED_BY_PERSON_ID from WISH_ITEM where WISH_LIST_ID = :wishListId")
+    String PUBLIC_PROJECTION = "ID, NAME, URL, PERSON_ID, CREATED_BY_PERSON_ID, CREATION_DATE, MODIFICATION_DATE";
+
+    @SqlQuery("select " + PUBLIC_PROJECTION + " from WISH_ITEM where WISH_LIST_ID = :wishListId")
     List<WishItem> findWithWishListId(@Bind("wishListId") long wishListId);
 
     @SqlUpdate("insert into WISH_ITEM(WISH_LIST_ID, PERSON_ID, CREATED_BY_PERSON_ID, NAME, URL, CREATION_DATE) values (:wishItem.wishListId, :wishItem.personId, :wishItem.createdByPersonId, :wishItem.name, :wishItem.url, CURRENT_TIMESTAMP)")
     @GetGeneratedKeys
     long create(@BindBean("wishItem") WishItem wishItem);
 
-    @SqlQuery("select ID, NAME, URL, PERSON_ID, CREATED_BY_PERSON_ID from WISH_ITEM where PERSON_ID = :personId")
+    @SqlQuery("select " + PUBLIC_PROJECTION + " from WISH_ITEM where PERSON_ID = :personId")
     List<WishItem> findWithPersonId(@Bind("personId") long personId);
 
     @SqlQuery("select * from WISH_ITEM where ID = :id")
     WishItem findOne(@Bind("id") long id);
 
-    @SqlQuery("select ID, NAME, URL, PERSON_ID, CREATED_BY_PERSON_ID from WISH_ITEM where ID = :id")
+    @SqlQuery("select " + PUBLIC_PROJECTION + " from WISH_ITEM where ID = :id")
     WishItem findOneForUI(@Bind("id") long id);
 
     @SqlQuery("select case when wi.PERSON_ID is not null then wi.PERSON_ID else wl.PERSON_ID end from WISH_ITEM wi left join WISH_LIST wl on wi.WISH_LIST_ID = wl.ID where wi.ID = :id")
     Long findOnePersonIdSearchingUpToWishListIfNull(@Bind("id") long id);
-
-    @SqlQuery("select PERSON_ID from WISH_ITEM where ID = :id")
-    Long findOnePersonId(@Bind("id") long id);
 
     @SqlUpdate("update WISH_ITEM set NAME = :wishItem.name, URL = :wishItem.url, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :wishItem.id")
     int update(@BindBean("wishItem") WishItem wishItem);

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('swingifts')
-    .controller('WishListInEventCtrl', function ($scope, $http, $stateParams, $state, personService) {
+    .controller('WishListInEventCtrl', function ($scope, $http, $stateParams, $state, personService, $filter) {
         var eventId = $stateParams.eventId,
             personId = $stateParams.personId;
 
@@ -61,6 +61,7 @@ angular.module('swingifts')
                 delete wishItemToPut.reservations;
                 delete wishItemToPut.person;
                 delete wishItemToPut.createdByPerson;
+                delete wishItemToPut.datesInfo;
 
                 $http.put('api/wishItems/' + wishItem.id, wishItemToPut).then(function (resp) {
                     // do nothing if OK
@@ -74,7 +75,7 @@ angular.module('swingifts')
         $scope.cancelEditedWishItem = function (wishItem) {
             delete wishItem.editing; // in order to active "new wishItem" button
             if (!wishItem.id) {
-                // cancel new wishItem = remove him/her from the list
+                // cancel new wishItem = remove it from the list
                 deleteWishItem(wishItem);
             } else {
                 // reload this wishItem from DB
@@ -113,9 +114,23 @@ angular.module('swingifts')
 
         $http.get('api/wishLists?eventId=' + eventId + '&personId=' + personId).then(function (resp) {
             var wishList = $scope.wishList = resp.data;
-            for (var i = 0; i < wishList.wishItems.length; i++) {
-                remapPersonsName(wishList.wishItems[i]);
-            }
+            angular.forEach(wishList.wishItems, function(wishItem) {
+                remapPersonsName(wishItem);
+                // Taking care of dates
+                var datesInfo = '';
+                if (wishItem.creationDate) {
+                    datesInfo = 'Créé le ' + $filter('date')(wishItem.creationDate, 'short');
+                }
+                if (wishItem.modificationDate) {
+                    datesInfo += (datesInfo ? ', modifié le ' : 'Modifié le ') + $filter('date')(wishItem.modificationDate, 'short');
+                }
+                wishItem.datesInfo = datesInfo;
+                angular.forEach(wishItem.reservations, function(reservation) {
+                    if (reservation.creationDate) {
+                        reservation.datesInfo = 'Créé le ' + $filter('date')(reservation.creationDate, 'short');
+                    }
+                });
+            });
         });
     })
 ;

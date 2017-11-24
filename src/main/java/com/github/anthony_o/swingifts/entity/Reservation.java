@@ -1,9 +1,12 @@
 package com.github.anthony_o.swingifts.entity;
 
+import java.util.Date;
+
 public class Reservation {
     private Long id;
     private Long personId;
     private Long wishItemId;
+    private Date creationDate;
 
     public Long getId() {
         return id;
@@ -29,4 +32,11 @@ public class Reservation {
         this.wishItemId = wishItemId;
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 }
