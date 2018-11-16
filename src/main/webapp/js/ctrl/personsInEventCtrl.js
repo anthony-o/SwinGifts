@@ -118,18 +118,29 @@ angular.module('swingifts')
                 });
                 var persons = [];
                 for (var personId in personsById) {
-                    persons.push(personsById[personId]);
+                    var person = personsById[personId];
+                    person.renderLabel = person.name + (person.login ? ' ('+person.login+')' : '');
+                    persons.push(person);
+                }
+                persons.sort(function(personA, personB) { return personA.renderLabel.localeCompare(personB.renderLabel); });
+                for (var i = 0 ; i < persons.length ; i++) {
+                    var person = persons[i];
+                    var nextPerson = null, sameLabel = null;
+                    for (++i ; i < persons.length && (nextPerson = persons[i]).renderLabel == person.renderLabel; i++) {
+                        sameLabel = true;
+                        nextPerson.renderLabel += ' #' + nextPerson.id;
+                    }
+                    if (sameLabel) {
+                        person.renderLabel += ' #' + person.id;
+                    }
                 }
                 callback(persons);
             },
             valueField: 'id',
-            labelField: 'name',
-            searchField: ['name', 'login'],
+            labelField: 'renderLabel',
+            searchField: ['renderLabel'],
             maxOptions: 10,
-            preload: true,
-            render: function(person, escape) {
-                return person.name + (person.login ? ' ('+person.login+')' : '')
-            }
+            preload: true
         };
 
 
