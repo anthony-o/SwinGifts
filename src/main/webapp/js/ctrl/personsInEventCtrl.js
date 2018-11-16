@@ -126,7 +126,7 @@ angular.module('swingifts')
                 for (var i = 0 ; i < persons.length ; i++) {
                     var person = persons[i];
                     var nextPerson = null, sameLabel = null;
-                    for (++i ; i < persons.length && (nextPerson = persons[i]).renderLabel == person.renderLabel; i++) {
+                    for (; i + 1 < persons.length && (nextPerson = persons[i + 1]).renderLabel == person.renderLabel; i++) {
                         sameLabel = true;
                         nextPerson.renderLabel += ' #' + nextPerson.id;
                     }
