@@ -30,7 +30,12 @@ public class PersonResource {
             if (askerPersonId == null) {
                 throw new ForbiddenException("Must be authenticated");
             }
-            return getPersonService().findWithEventIdAndAskerPersonIdOrderByName(eventId, askerPersonId);
+            if (eventKey != null) {
+                return getPersonService().findWithEventIdAndAskerPersonIdOrderByName(eventId, askerPersonId);
+            } else {
+                // Return every persons that the asker shares events with
+                return getPersonService().findSharingEventsWithAskerPersonIdOrderByName(askerPersonId);
+            }
         }
     }
 

@@ -148,4 +148,19 @@ public class WishListServiceTest extends CreateSampleDbTest {
         wishListDao.updateIsCircleGiftTargetPersonIdReadWithIdAndIsCircleGiftTargetPersonIdRead(aliceWishListId, true);
         assertThat(wishListDao.findOne(aliceWishListId).getIsCircleGiftTargetPersonIdRead()).isTrue();
     }
+
+    @Test(expected = ForbiddenException.class)
+    public void createWithEventIdAndPersonIdAndAskerPersonIdWhenNotOwnerTest() {
+        getWishListService().createWithEventIdAndPersonIdAndAskerPersonId(bobSEventId, charliePersonId, charliePersonId);
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void createWithEventIdAndPersonIdAndAskerPersonIdWhenNotSharingEventTest() {
+        getWishListService().createWithEventIdAndPersonIdAndAskerPersonId(bobSEventId, evePersonId, bobPersonId);
+    }
+
+    @Test
+    public void createWithEventIdAndPersonIdAndAskerPersonIdTest() {
+        getWishListService().createWithEventIdAndPersonIdAndAskerPersonId(bobSEventId, charliePersonId, bobPersonId);
+    }
 }

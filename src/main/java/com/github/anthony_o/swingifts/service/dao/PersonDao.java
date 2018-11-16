@@ -11,7 +11,8 @@ import java.util.List;
 public interface PersonDao {
 
     String PUBLIC_PROJECTION = "p.NAME, p.ID, p.PASSWORD_HASH is not null as IS_USER, p.LOGIN is not null as HAS_LOGIN, p.EMAIL is not null as HAS_EMAIL";
-    String PRIVATE_PROJECTION = "p.NAME, p.ID, p.PASSWORD_HASH is not null as IS_USER, p.LOGIN is not null as HAS_LOGIN, p.LOGIN, p.EMAIL is not null as HAS_EMAIL, p.EMAIL";
+    String AUTHENTICATED_PROJECTION = PUBLIC_PROJECTION + ", p.LOGIN";
+    String PRIVATE_PROJECTION = AUTHENTICATED_PROJECTION + ", p.EMAIL";
 
     @SqlQuery("select " + PUBLIC_PROJECTION + " from WISH_LIST w INNER JOIN PERSON p ON w.PERSON_ID = p.ID INNER JOIN EVENT e ON w.EVENT_ID = e.ID where w.EVENT_ID = :eventId and e.KEY = :eventKey order by p.NAME")
     List<Person> findWithEventIdAndEventKeyOrderByName(@Bind("eventId") long eventId, @Bind("eventKey") byte[] eventKey);
@@ -65,4 +66,7 @@ public interface PersonDao {
 
     @SqlUpdate("update PERSON set PASSWORD_HASH = null, SALT = null, MODIFICATION_DATE = CURRENT_TIMESTAMP where ID = :id and PASSWORD_HASH is not null and EMAIL is null")
     int resetPasswordAndSaltWithIdIfIsUserAndNotHaveEmail(@Bind("id") long id);
+
+    @SqlQuery("select distinct " + AUTHENTICATED_PROJECTION + " from WISH_LIST w INNER JOIN PERSON p ON w.PERSON_ID = p.ID where w.EVENT_ID IN (select EVENT_ID from WISH_LIST where PERSON_ID = :askerId) order by p.NAME")
+    List<Person> findSharingEventsWithAskerIdOrderByName(@Bind("askerId") long askerId);
 }

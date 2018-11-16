@@ -45,6 +45,9 @@ public abstract class CreateSampleDbTest {
     protected long daveWishListIdInCharliSEvent = 8;
     protected long davePersonId = 4;
 
+    protected long evePersonId = 5;
+    protected long eveSEventId = 4;
+
     @Before
     public void setUp() throws Exception {
         sampleDbPath = TestUtils.createSampleDb();

@@ -82,6 +82,69 @@ angular.module('swingifts')
             });
         };
 
+        $scope.addNewExistingPersons = function() {
+            $scope.newExistingPersons = true;
+        };
+
+        $scope.cancelNewExistingPersons = function() {
+            $scope.newExistingPersons = false;
+            $scope.newExistingPersonsIds = '';
+        };
+
+        $scope.saveNewExistingPersons = function() {
+            var newExistingPersonsIdsArray = $scope.newExistingPersonsIds.split(',');
+            angular.forEach(newExistingPersonsIdsArray, function(personId) {
+                $http.post('api/wishLists?eventId=' + eventId + '&personId=' + personId).then(function (resp) {
+                    if (resp.data) {
+                        var newWishList = {
+                                id: resp.data,
+                                person: $scope.personsIShareEventsWithById[parseInt(personId)]
+                            };
+                        $scope.wishLists.push(newWishList);
+                    }
+                });
+            });
+            $scope.cancelNewExistingPersons();
+        };
+
+        $scope.newExistingPersonsSelectizeConfig = {
+            load: function(query, callback) {
+                var personsById = angular.copy($scope.personsIShareEventsWithById);
+                // remove persons already present in the event
+                angular.forEach($scope.wishLists, function(wishList) {
+                    if (wishList && wishList.person.id) {
+                        delete personsById[wishList.person.id];
+                    }
+                });
+                var persons = [];
+                for (var personId in personsById) {
+                    persons.push(personsById[personId]);
+                }
+                callback(persons);
+            },
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name', 'login'],
+            maxOptions: 10,
+            preload: true,
+            render: function(person, escape) {
+                return person.name + (person.login ? ' ('+person.login+')' : '')
+            }
+        };
+
+
+        $http.get('api/persons').then(function (resp) {
+            if (resp.data) {
+                var personsIShareEventsWith = resp.data.filter(function(person) { return person.id !== $scope.authenticatedUser.id });
+                var personsIShareEventsWithById = {};
+                angular.forEach(personsIShareEventsWith, function(person) {
+                    if (person.id !== $scope.authenticatedUser.id) {
+                        personsIShareEventsWithById[person.id] = person;
+                    }
+                });
+                $scope.personsIShareEventsWithById = personsIShareEventsWithById;
+            }
+        });
 
         $http.get('api/wishLists?eventId=' + eventId).then(function (resp) {
             wishListService.setCurrentWishLists($scope.wishLists = resp.data);

@@ -200,4 +200,13 @@ public class PersonService {
             return false;
         }
     }
+
+    /**
+     *
+     * @param askerPersonId
+     * @return every <code>Person</code> that the asker share events with
+     */
+    public List<Person> findSharingEventsWithAskerPersonIdOrderByName(long askerPersonId) {
+        return getPersonDao().findSharingEventsWithAskerIdOrderByName(askerPersonId);
+    }
 }

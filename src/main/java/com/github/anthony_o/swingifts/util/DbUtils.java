@@ -62,6 +62,10 @@ public class DbUtils {
             handle.execute("INSERT INTO WISH_LIST (ID, PERSON_ID, EVENT_ID, IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT) VALUES (6, 1, 3, false)");
             handle.execute("INSERT INTO WISH_LIST (ID, PERSON_ID, EVENT_ID, IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT) VALUES (7, 2, 3, true)");
             handle.execute("INSERT INTO WISH_LIST (ID, PERSON_ID, EVENT_ID, IS_PERSON_PARTICIPATES_IN_CIRCLE_GIFT) VALUES (8, 4, 3, true)");
+            handle.execute("INSERT INTO PERSON (ID, NAME) VALUES (5, 'Eve')");
+            handle.execute("INSERT INTO EVENT (ID, NAME, KEY) VALUES (4, 'Eve''s event', X'000000000000000000000000000000000000000000000000000000000000000003')");
+            handle.execute("INSERT INTO WISH_LIST (ID, PERSON_ID, EVENT_ID, IS_PERSON_EVENT_ADMIN) VALUES (9, 5, 4, true)");
+            handle.execute("INSERT INTO WISH_LIST (ID, PERSON_ID, EVENT_ID) VALUES (10, 3, 4)");
             return null;
         });
         LOG.info("Sample DB created at {}", tempDirectory);

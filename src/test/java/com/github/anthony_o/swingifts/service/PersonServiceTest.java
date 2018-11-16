@@ -105,4 +105,13 @@ public class PersonServiceTest extends CreateSampleDbTest {
 
         assertThat(getPersonService().findOneWithId(alicePersonId).getIsUser()).isFalse();
     }
+
+    @Test
+    public void findSharingEventsWithAskerPersonIdOrderByNameTest() {
+        List<Person> personsSharingEventsWithAlice = getPersonService().findSharingEventsWithAskerPersonIdOrderByName(alicePersonId);
+        assertThat(personsSharingEventsWithAlice).extracting("id", long.class).containsExactly(alicePersonId, bobPersonId, charliePersonId, davePersonId);
+
+        List<Person> personsSharingEventsWithEve = getPersonService().findSharingEventsWithAskerPersonIdOrderByName(evePersonId);
+        assertThat(personsSharingEventsWithEve).extracting("id", long.class).containsExactly(charliePersonId, evePersonId);
+    }
 }

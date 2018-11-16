@@ -134,4 +134,24 @@ public class WishListService {
             return null;
         });
     }
+
+    public long createWithEventIdAndPersonIdAndAskerPersonId(long eventId, long personId, Long askerPersonId) {
+        // Assert that the asker already share an event with this person
+        PersonDao personDao = getPersonDao();
+        List<Person> personsSharingEventsWithAsker = personDao.findSharingEventsWithAskerIdOrderByName(askerPersonId);
+        boolean realySharesAnEvent = false;
+        for (Person person : personsSharingEventsWithAsker) {
+            if (person.getId() == personId) {
+                realySharesAnEvent = true;
+            }
+        }
+        if (realySharesAnEvent) {
+            // Assert that the asker is admin
+            WishListDao wishListDao = getWishListDao();
+            ServiceUtils.checkThatAskerIsAdminWithEventIdAndAskerPersonId(eventId, askerPersonId, wishListDao);
+            return wishListDao.createWithEventIdAndPersonId(eventId, personId);
+        } else {
+            throw new ForbiddenException("The user does not share any event with the given personId");
+        }
+    }
 }

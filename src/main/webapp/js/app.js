@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar'])
+angular.module('swingifts', ['ui.router', 'ngCookies', 'angular-loading-bar', 'ng-selectize'])
     .factory('securityService', function ($q, $cookies, $state, $http, $window, $rootScope) {
         var statesToReloadAfterLogin = [],
             securityService = {
