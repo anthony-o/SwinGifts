@@ -1,0 +1,66 @@
+application {
+	config {
+    	baseName SwinGifts
+        packageName com.github.anthonyo.swingifts
+        cacheProvider no
+        enableHibernateCache false
+        jhiPrefix swg
+        nativeLanguage fr
+        testFrameworks [protractor]
+        skipUserManagement false
+    }
+	entities *
+}
+
+entity Event {
+	name String required
+}
+relationship ManyToOne {
+	Event{admin(login) required} to User
+}
+
+entity Participation {
+	nbOfGiftToReceive Integer,
+    nbOfGiftToDonate Integer,
+    userAlias String required
+}
+relationship ManyToOne {
+	Participation{user(login) required} to User
+}
+relationship OneToMany {
+	Event{participations(userAlias)} to Participation{event(name) required}
+}
+
+entity GiftIdea {
+	description String required,
+    url String,
+    creationDate Instant required,
+    modificationDate Instant
+}
+relationship OneToMany {
+	Event{giftIdeas(description)} to GiftIdea{event(name) required}
+}
+relationship ManyToOne {
+	GiftIdea{creator(userAlias) required} to Participation,
+    GiftIdea{recipient(userAlias) required} to Participation,
+    GiftIdea{taker(userAlias)} to Participation
+}
+
+entity GiftDrawing {
+}
+relationship OneToMany {
+	Event{giftDrawings} to GiftDrawing{event(name) required}
+}
+relationship ManyToOne {
+	GiftDrawing{donor(userAlias) required} to Participation,
+    GiftDrawing{recipient(userAlias) required} to Participation
+}
+
+entity DrawingExclusionGroup {
+}
+relationship OneToMany {
+	Event to DrawingExclusionGroup{event(name) required}
+}
+relationship ManyToMany {
+	DrawingExclusionGroup to Participation
+}
