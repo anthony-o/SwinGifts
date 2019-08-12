@@ -20,8 +20,8 @@ relationship ManyToOne {
 }
 
 entity Participation {
-	nbOfGiftToReceive Integer,
-    nbOfGiftToDonate Integer,
+	nbOfGiftToReceive Integer min(0),
+    nbOfGiftToDonate Integer min(0),
     userAlias String required
 }
 relationship ManyToOne {
@@ -29,6 +29,9 @@ relationship ManyToOne {
 }
 relationship OneToMany {
 	Event{participations(userAlias)} to Participation{event(name) required}
+}
+relationship ManyToMany {
+    Participation{recipient(userAlias)} to Participation{donor(userAlias)}
 }
 
 entity GiftIdea {
@@ -38,22 +41,11 @@ entity GiftIdea {
     modificationDate Instant
 }
 relationship OneToMany {
-	Event{giftIdeas(description)} to GiftIdea{event(name) required}
+    Participation to GiftIdea{recipient(userAlias) required}
 }
 relationship ManyToOne {
 	GiftIdea{creator(userAlias) required} to Participation,
-    GiftIdea{recipient(userAlias) required} to Participation,
     GiftIdea{taker(userAlias)} to Participation
-}
-
-entity GiftDrawing {
-}
-relationship OneToMany {
-	Event{giftDrawings} to GiftDrawing{event(name) required}
-}
-relationship ManyToOne {
-	GiftDrawing{donor(userAlias) required} to Participation,
-    GiftDrawing{recipient(userAlias) required} to Participation
 }
 
 entity DrawingExclusionGroup {
@@ -62,5 +54,5 @@ relationship OneToMany {
 	Event to DrawingExclusionGroup{event(name) required}
 }
 relationship ManyToMany {
-	DrawingExclusionGroup to Participation
+	DrawingExclusionGroup{participation(userAlias)} to Participation
 }
