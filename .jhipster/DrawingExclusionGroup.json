@@ -1,0 +1,33 @@
+{
+    "name": "DrawingExclusionGroup",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "drawingExclusionGroup",
+            "relationshipName": "participation",
+            "otherEntityField": "userAlias",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "drawingExclusionGroup",
+            "relationshipValidateRules": "required",
+            "relationshipName": "event",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20190812131712",
+    "entityTableName": "drawing_exclusion_group",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "SwinGifts"
+    ]
+}

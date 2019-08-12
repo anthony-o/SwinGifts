@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity DrawingExclusionGroup.
+    -->
+    <changeSet id="20190812131712-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="drawing_exclusion_group_id"
+                                 baseTableName="drawing_exclusion_group_participation"
+                                 constraintName="drawing_exclusion_group_partici_drawing_exclusion_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="drawing_exclusion_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="participation_id"
+                                 baseTableName="drawing_exclusion_group_participation"
+                                 constraintName="fk_drawing_exclusion_group_participation_participation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participation"/>
+        
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="drawing_exclusion_group"
+                                 constraintName="fk_drawing_exclusion_group_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+
+    </changeSet>
+</databaseChangeLog>

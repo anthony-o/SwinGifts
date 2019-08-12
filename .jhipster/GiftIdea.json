@@ -1,0 +1,63 @@
+{
+    "name": "GiftIdea",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "url",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "modificationDate",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftIdea",
+            "relationshipValidateRules": "required",
+            "relationshipName": "creator",
+            "otherEntityField": "userAlias"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftIdea",
+            "relationshipName": "taker",
+            "otherEntityField": "userAlias"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftIdea",
+            "relationshipValidateRules": "required",
+            "relationshipName": "recipient",
+            "otherEntityField": "userAlias"
+        }
+    ],
+    "changelogDate": "20190812131711",
+    "entityTableName": "gift_idea",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "SwinGifts"
+    ]
+}

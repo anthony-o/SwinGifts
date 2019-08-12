@@ -1,0 +1,28 @@
+{
+  "swinGiftsApp": {
+    "giftIdea": {
+      "home": {
+        "title": "GiftIdeas",
+        "createLabel": "Créer un nouveau Gift Idea",
+        "createOrEditLabel": "Créer ou éditer un Gift Idea",
+        "notFound": "Aucun Gift Idea trouvé"
+      },
+      "created": "Un nouveau Gift Idea a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Gift Idea avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Gift Idea avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Gift Idea {{ id }} ?"
+      },
+      "detail": {
+        "title": "Gift Idea"
+      },
+      "description": "Description",
+      "url": "Url",
+      "creationDate": "Creation Date",
+      "modificationDate": "Modification Date",
+      "creator": "Creator",
+      "taker": "Taker",
+      "recipient": "Recipient"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="giftIdea">
+            <h2><span jhiTranslate="swinGiftsApp.giftIdea.detail.title">Gift Idea</span> {{giftIdea.id}}</h2>
+            <hr>
+            <swg-alert-error></swg-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.description">Description</span></dt>
+                <dd>
+                    <span>{{giftIdea.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></dt>
+                <dd>
+                    <span>{{giftIdea.url}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{giftIdea.creationDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></dt>
+                <dd>
+                    <span>{{giftIdea.modificationDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></dt>
+                <dd>
+                    <div *ngIf="giftIdea.creator">
+                        <a [routerLink]="['/participation', giftIdea.creator?.id, 'view']">{{giftIdea.creator?.userAlias}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></dt>
+                <dd>
+                    <div *ngIf="giftIdea.taker">
+                        <a [routerLink]="['/participation', giftIdea.taker?.id, 'view']">{{giftIdea.taker?.userAlias}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></dt>
+                <dd>
+                    <div *ngIf="giftIdea.recipient">
+                        <a [routerLink]="['/participation', giftIdea.recipient?.id, 'view']">{{giftIdea.recipient?.userAlias}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/gift-idea', giftIdea.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

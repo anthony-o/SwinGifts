@@ -1,0 +1,29 @@
+{
+  "swinGiftsApp": {
+    "participation": {
+      "home": {
+        "title": "Participations",
+        "createLabel": "Créer un nouveau Participation",
+        "createOrEditLabel": "Créer ou éditer un Participation",
+        "notFound": "Aucun Participation trouvé"
+      },
+      "created": "Un nouveau Participation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Participation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Participation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Participation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Participation"
+      },
+      "nbOfGiftToReceive": "Nb Of Gift To Receive",
+      "nbOfGiftToDonate": "Nb Of Gift To Donate",
+      "userAlias": "User Alias",
+      "giftIdea": "Gift Idea",
+      "user": "User",
+      "recipient": "Recipient",
+      "event": "Event",
+      "donor": "Donor"
+    }
+  }
+}

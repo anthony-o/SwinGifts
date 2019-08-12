@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="participation">
+            <h2><span jhiTranslate="swinGiftsApp.participation.detail.title">Participation</span> {{participation.id}}</h2>
+            <hr>
+            <swg-alert-error></swg-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></dt>
+                <dd>
+                    <span>{{participation.nbOfGiftToReceive}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></dt>
+                <dd>
+                    <span>{{participation.nbOfGiftToDonate}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></dt>
+                <dd>
+                    <span>{{participation.userAlias}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.participation.user">User</span></dt>
+                <dd>
+                    {{participation.user?.login}}
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></dt>
+                <dd>
+                    <span *ngFor="let recipient of participation.recipients; let last = last">
+                        <a [routerLink]="['/participation', recipient?.id, 'view' ]">{{recipient.userAlias}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.participation.event">Event</span></dt>
+                <dd>
+                    <div *ngIf="participation.event">
+                        <a [routerLink]="['/event', participation.event?.id, 'view']">{{participation.event?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/participation', participation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

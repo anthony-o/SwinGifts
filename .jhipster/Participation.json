@@ -1,0 +1,79 @@
+{
+    "name": "Participation",
+    "fields": [
+        {
+            "fieldName": "nbOfGiftToReceive",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "nbOfGiftToDonate",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "userAlias",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "giftIdea",
+            "otherEntityRelationshipName": "recipient",
+            "relationshipName": "giftIdea"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "participation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "user",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "donor",
+            "relationshipName": "recipient",
+            "otherEntityField": "userAlias",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "participations",
+            "relationshipValidateRules": "required",
+            "relationshipName": "event",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "recipient",
+            "relationshipName": "donor",
+            "otherEntityField": "userAlias",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190812131710",
+    "entityTableName": "participation",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "SwinGifts"
+    ]
+}

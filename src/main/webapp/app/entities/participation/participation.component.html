@@ -1,0 +1,77 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="swinGiftsApp.participation.home.title">Participations</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-participation" [routerLink]="['/participation/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="swinGiftsApp.participation.home.createLabel">
+            Create a new Participation
+            </span>
+        </button>
+    </h2>
+    <swg-alert></swg-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="participations?.length === 0">
+        <span jhiTranslate="swinGiftsApp.participation.home.notFound">No participations found</span>
+    </div>
+    <div class="table-responsive" *ngIf="participations?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.user">User</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></th>
+            <th><span jhiTranslate="swinGiftsApp.participation.event">Event</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let participation of participations ;trackBy: trackId">
+                <td><a [routerLink]="['/participation', participation.id, 'view' ]">{{participation.id}}</a></td>
+                <td>{{participation.nbOfGiftToReceive}}</td>
+                <td>{{participation.nbOfGiftToDonate}}</td>
+                <td>{{participation.userAlias}}</td>
+                <td>
+                    {{participation.user?.login}}
+                </td>
+                <td>
+                    <span *ngFor="let recipient of participation.recipients; let last = last">
+                            <a class="form-control-static" [routerLink]="['/participation', recipient?.id, 'view' ]">{{recipient.userAlias}}</a>{{last ? '' : ', '}}
+                        </span>
+                </td>
+                <td>
+                    <div *ngIf="participation.event">
+                        <a [routerLink]="['/event', participation.event?.id, 'view' ]" >{{participation.event?.name}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/participation', participation.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/participation', participation.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/participation', { outlets: { popup: participation.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

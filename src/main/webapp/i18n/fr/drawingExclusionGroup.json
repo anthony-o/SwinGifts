@@ -1,0 +1,23 @@
+{
+  "swinGiftsApp": {
+    "drawingExclusionGroup": {
+      "home": {
+        "title": "DrawingExclusionGroups",
+        "createLabel": "Créer un nouveau Drawing Exclusion Group",
+        "createOrEditLabel": "Créer ou éditer un Drawing Exclusion Group",
+        "notFound": "Aucun Drawing Exclusion Group trouvé"
+      },
+      "created": "Un nouveau Drawing Exclusion Group a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Drawing Exclusion Group avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Drawing Exclusion Group avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Drawing Exclusion Group {{ id }} ?"
+      },
+      "detail": {
+        "title": "Drawing Exclusion Group"
+      },
+      "participation": "Participation",
+      "event": "Event"
+    }
+  }
+}

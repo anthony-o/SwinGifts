@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Participation.
+    -->
+    <changeSet id="20190812131710-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="participation"
+                                 constraintName="fk_participation_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="swg_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="participation_id"
+                                 baseTableName="participation_recipient"
+                                 constraintName="fk_participation_recipient_participation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participation"/>
+
+        <addForeignKeyConstraint baseColumnNames="recipient_id"
+                                 baseTableName="participation_recipient"
+                                 constraintName="fk_participation_recipient_recipient_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participation"/>
+        
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="participation"
+                                 constraintName="fk_participation_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+
+    </changeSet>
+</databaseChangeLog>

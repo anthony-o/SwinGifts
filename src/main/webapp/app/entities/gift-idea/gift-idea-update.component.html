@@ -1,0 +1,95 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="swg-gift-idea-heading" jhiTranslate="swinGiftsApp.giftIdea.home.createOrEditLabel">Create or edit a Gift Idea</h2>
+            <div>
+                <swg-alert-error></swg-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.description" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
+                    <div *ngIf="editForm.get('description').invalid && (editForm.get('description').dirty || editForm.get('description').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('description').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.url" for="field_url">Url</label>
+                    <input type="text" class="form-control" name="url" id="field_url"
+                           formControlName="url"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.creationDate" for="field_creationDate">Creation Date</label>
+                    <div class="d-flex">
+                        <input id="field_creationDate" type="datetime-local" class="form-control" name="creationDate" formControlName="creationDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('creationDate').invalid && (editForm.get('creationDate').dirty || editForm.get('creationDate').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('creationDate').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('creationDate').errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.modificationDate" for="field_modificationDate">Modification Date</label>
+                    <div class="d-flex">
+                        <input id="field_modificationDate" type="datetime-local" class="form-control" name="modificationDate" formControlName="modificationDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.creator" for="field_creator">Creator</label>
+                    <select class="form-control" id="field_creator" name="creator" formControlName="creator">
+                        <option *ngIf="!editForm.get('creator').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="participationOption.id === editForm.get('creator').value?.id ? editForm.get('creator').value : participationOption" *ngFor="let participationOption of participations; trackBy: trackParticipationById">{{participationOption.userAlias}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('creator').invalid && (editForm.get('creator').dirty || editForm.get('creator').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('creator').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.taker" for="field_taker">Taker</label>
+                    <select class="form-control" id="field_taker" name="taker" formControlName="taker">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="participationOption.id === editForm.get('taker').value?.id ? editForm.get('taker').value : participationOption" *ngFor="let participationOption of participations; trackBy: trackParticipationById">{{participationOption.userAlias}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.giftIdea.recipient" for="field_recipient">Recipient</label>
+                    <select class="form-control" id="field_recipient" name="recipient" formControlName="recipient">
+                        <option *ngIf="!editForm.get('recipient').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="participationOption.id === editForm.get('recipient').value?.id ? editForm.get('recipient').value : participationOption" *ngFor="let participationOption of participations; trackBy: trackParticipationById">{{participationOption.userAlias}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('recipient').invalid && (editForm.get('recipient').dirty || editForm.get('recipient').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('recipient').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

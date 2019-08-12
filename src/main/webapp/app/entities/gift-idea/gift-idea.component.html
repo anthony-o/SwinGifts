@@ -1,0 +1,81 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="swinGiftsApp.giftIdea.home.title">Gift Ideas</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-gift-idea" [routerLink]="['/gift-idea/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="swinGiftsApp.giftIdea.home.createLabel">
+            Create a new Gift Idea
+            </span>
+        </button>
+    </h2>
+    <swg-alert></swg-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="giftIdeas?.length === 0">
+        <span jhiTranslate="swinGiftsApp.giftIdea.home.notFound">No giftIdeas found</span>
+    </div>
+    <div class="table-responsive" *ngIf="giftIdeas?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.description">Description</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></th>
+            <th><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let giftIdea of giftIdeas ;trackBy: trackId">
+                <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.id}}</a></td>
+                <td>{{giftIdea.description}}</td>
+                <td>{{giftIdea.url}}</td>
+                <td>{{giftIdea.creationDate | date:'medium'}}</td>
+                <td>{{giftIdea.modificationDate | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="giftIdea.creator">
+                        <a [routerLink]="['/participation', giftIdea.creator?.id, 'view' ]" >{{giftIdea.creator?.userAlias}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="giftIdea.taker">
+                        <a [routerLink]="['/participation', giftIdea.taker?.id, 'view' ]" >{{giftIdea.taker?.userAlias}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="giftIdea.recipient">
+                        <a [routerLink]="['/participation', giftIdea.recipient?.id, 'view' ]" >{{giftIdea.recipient?.userAlias}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/gift-idea', giftIdea.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/gift-idea', giftIdea.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/gift-idea', { outlets: { popup: giftIdea.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
