@@ -4,6 +4,7 @@ application {
         packageName com.github.anthonyo.swingifts
         cacheProvider no
         enableHibernateCache false
+        clientTheme materia
         jhiPrefix swg
         nativeLanguage fr
         testFrameworks [protractor]
@@ -11,6 +12,8 @@ application {
     }
 	entities *
 }
+
+service * with serviceClass
 
 entity Event {
 	name String required
@@ -48,11 +51,10 @@ relationship ManyToOne {
     GiftIdea{taker(userAlias)} to Participation
 }
 
-entity DrawingExclusionGroup {
-}
+entity DrawingExclusionGroup
 relationship OneToMany {
 	Event to DrawingExclusionGroup{event(name) required}
 }
 relationship ManyToMany {
-	DrawingExclusionGroup{participation(userAlias)} to Participation
+	DrawingExclusionGroup{participation(userAlias)} to Participation{drawingExclusionGroup}
 }

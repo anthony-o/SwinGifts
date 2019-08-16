@@ -4,6 +4,7 @@ import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.GiftIdea;
 import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.repository.GiftIdeaRepository;
+import com.github.anthonyo.swingifts.service.GiftIdeaService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,9 @@ public class GiftIdeaResourceIT {
     private GiftIdeaRepository giftIdeaRepository;
 
     @Autowired
+    private GiftIdeaService giftIdeaService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +79,7 @@ public class GiftIdeaResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final GiftIdeaResource giftIdeaResource = new GiftIdeaResource(giftIdeaRepository);
+        final GiftIdeaResource giftIdeaResource = new GiftIdeaResource(giftIdeaService);
         this.restGiftIdeaMockMvc = MockMvcBuilders.standaloneSetup(giftIdeaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -265,7 +269,7 @@ public class GiftIdeaResourceIT {
     @Transactional
     public void updateGiftIdea() throws Exception {
         // Initialize the database
-        giftIdeaRepository.saveAndFlush(giftIdea);
+        giftIdeaService.save(giftIdea);
 
         int databaseSizeBeforeUpdate = giftIdeaRepository.findAll().size();
 
@@ -316,7 +320,7 @@ public class GiftIdeaResourceIT {
     @Transactional
     public void deleteGiftIdea() throws Exception {
         // Initialize the database
-        giftIdeaRepository.saveAndFlush(giftIdea);
+        giftIdeaService.save(giftIdea);
 
         int databaseSizeBeforeDelete = giftIdeaRepository.findAll().size();
 

@@ -1,7 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.Event;
-import com.github.anthonyo.swingifts.repository.EventRepository;
+import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -33,10 +33,10 @@ public class EventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final EventRepository eventRepository;
+    private final EventService eventService;
 
-    public EventResource(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public EventResource(EventService eventService) {
+        this.eventService = eventService;
     }
 
     /**
@@ -52,7 +52,7 @@ public class EventResource {
         if (event.getId() != null) {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Event result = eventRepository.save(event);
+        Event result = eventService.save(event);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +73,7 @@ public class EventResource {
         if (event.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Event result = eventRepository.save(event);
+        Event result = eventService.save(event);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, event.getId().toString()))
             .body(result);
@@ -88,7 +88,7 @@ public class EventResource {
     @GetMapping("/events")
     public List<Event> getAllEvents() {
         log.debug("REST request to get all Events");
-        return eventRepository.findAll();
+        return eventService.findAll();
     }
 
     /**
@@ -100,7 +100,7 @@ public class EventResource {
     @GetMapping("/events/{id}")
     public ResponseEntity<Event> getEvent(@PathVariable Long id) {
         log.debug("REST request to get Event : {}", id);
-        Optional<Event> event = eventRepository.findById(id);
+        Optional<Event> event = eventService.findOne(id);
         return ResponseUtil.wrapOrNotFound(event);
     }
 
@@ -113,7 +113,7 @@ public class EventResource {
     @DeleteMapping("/events/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         log.debug("REST request to delete Event : {}", id);
-        eventRepository.deleteById(id);
+        eventService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

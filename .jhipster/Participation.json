@@ -63,13 +63,21 @@
             "relationshipName": "donor",
             "otherEntityField": "userAlias",
             "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "drawingExclusionGroup",
+            "otherEntityRelationshipName": "participation",
+            "relationshipName": "drawingExclusionGroup",
+            "otherEntityField": "id",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20190812131710",
     "entityTableName": "participation",
     "dto": "no",
     "pagination": "no",
-    "service": "no",
+    "service": "serviceClass",
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",

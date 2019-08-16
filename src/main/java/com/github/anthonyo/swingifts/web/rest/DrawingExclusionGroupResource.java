@@ -1,7 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.DrawingExclusionGroup;
-import com.github.anthonyo.swingifts.repository.DrawingExclusionGroupRepository;
+import com.github.anthonyo.swingifts.service.DrawingExclusionGroupService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -33,10 +33,10 @@ public class DrawingExclusionGroupResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final DrawingExclusionGroupRepository drawingExclusionGroupRepository;
+    private final DrawingExclusionGroupService drawingExclusionGroupService;
 
-    public DrawingExclusionGroupResource(DrawingExclusionGroupRepository drawingExclusionGroupRepository) {
-        this.drawingExclusionGroupRepository = drawingExclusionGroupRepository;
+    public DrawingExclusionGroupResource(DrawingExclusionGroupService drawingExclusionGroupService) {
+        this.drawingExclusionGroupService = drawingExclusionGroupService;
     }
 
     /**
@@ -52,7 +52,7 @@ public class DrawingExclusionGroupResource {
         if (drawingExclusionGroup.getId() != null) {
             throw new BadRequestAlertException("A new drawingExclusionGroup cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DrawingExclusionGroup result = drawingExclusionGroupRepository.save(drawingExclusionGroup);
+        DrawingExclusionGroup result = drawingExclusionGroupService.save(drawingExclusionGroup);
         return ResponseEntity.created(new URI("/api/drawing-exclusion-groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +73,7 @@ public class DrawingExclusionGroupResource {
         if (drawingExclusionGroup.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        DrawingExclusionGroup result = drawingExclusionGroupRepository.save(drawingExclusionGroup);
+        DrawingExclusionGroup result = drawingExclusionGroupService.save(drawingExclusionGroup);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, drawingExclusionGroup.getId().toString()))
             .body(result);
@@ -88,7 +88,7 @@ public class DrawingExclusionGroupResource {
     @GetMapping("/drawing-exclusion-groups")
     public List<DrawingExclusionGroup> getAllDrawingExclusionGroups(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all DrawingExclusionGroups");
-        return drawingExclusionGroupRepository.findAllWithEagerRelationships();
+        return drawingExclusionGroupService.findAll();
     }
 
     /**
@@ -100,7 +100,7 @@ public class DrawingExclusionGroupResource {
     @GetMapping("/drawing-exclusion-groups/{id}")
     public ResponseEntity<DrawingExclusionGroup> getDrawingExclusionGroup(@PathVariable Long id) {
         log.debug("REST request to get DrawingExclusionGroup : {}", id);
-        Optional<DrawingExclusionGroup> drawingExclusionGroup = drawingExclusionGroupRepository.findOneWithEagerRelationships(id);
+        Optional<DrawingExclusionGroup> drawingExclusionGroup = drawingExclusionGroupService.findOne(id);
         return ResponseUtil.wrapOrNotFound(drawingExclusionGroup);
     }
 
@@ -113,7 +113,7 @@ public class DrawingExclusionGroupResource {
     @DeleteMapping("/drawing-exclusion-groups/{id}")
     public ResponseEntity<Void> deleteDrawingExclusionGroup(@PathVariable Long id) {
         log.debug("REST request to delete DrawingExclusionGroup : {}", id);
-        drawingExclusionGroupRepository.deleteById(id);
+        drawingExclusionGroupService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

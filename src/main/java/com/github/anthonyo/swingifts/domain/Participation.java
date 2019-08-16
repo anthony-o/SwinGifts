@@ -57,10 +57,8 @@ public class Participation implements Serializable {
     @JsonIgnore
     private Set<Participation> donors = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "drawing_exclusion_group_participation",
-               joinColumns = @JoinColumn(name = "participation_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "drawing_exclusion_group_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "participations")
+    @JsonIgnore
     private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -216,10 +214,26 @@ public class Participation implements Serializable {
         return drawingExclusionGroups;
     }
 
+    public Participation drawingExclusionGroups(Set<DrawingExclusionGroup> drawingExclusionGroups) {
+        this.drawingExclusionGroups = drawingExclusionGroups;
+        return this;
+    }
+
+    public Participation addDrawingExclusionGroup(DrawingExclusionGroup drawingExclusionGroup) {
+        this.drawingExclusionGroups.add(drawingExclusionGroup);
+        drawingExclusionGroup.getParticipations().add(this);
+        return this;
+    }
+
+    public Participation removeDrawingExclusionGroup(DrawingExclusionGroup drawingExclusionGroup) {
+        this.drawingExclusionGroups.remove(drawingExclusionGroup);
+        drawingExclusionGroup.getParticipations().remove(this);
+        return this;
+    }
+
     public void setDrawingExclusionGroups(Set<DrawingExclusionGroup> drawingExclusionGroups) {
         this.drawingExclusionGroups = drawingExclusionGroups;
     }
-    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
