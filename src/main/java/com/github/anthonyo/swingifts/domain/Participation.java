@@ -43,8 +43,8 @@ public class Participation implements Serializable {
     private User user;
 
     @ManyToMany
-    @JoinTable(name = "participation_recipient",
-               joinColumns = @JoinColumn(name = "participation_id", referencedColumnName = "id"),
+    @JoinTable(name = "gift_drawing",
+               joinColumns = @JoinColumn(name = "donor_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "recipient_id", referencedColumnName = "id"))
     private Set<Participation> recipients = new HashSet<>();
 
@@ -56,6 +56,12 @@ public class Participation implements Serializable {
     @ManyToMany(mappedBy = "recipients")
     @JsonIgnore
     private Set<Participation> donors = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "drawing_exclusion_group_participation",
+               joinColumns = @JoinColumn(name = "participation_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "drawing_exclusion_group_id", referencedColumnName = "id"))
+    private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -205,6 +211,15 @@ public class Participation implements Serializable {
     public void setDonors(Set<Participation> participations) {
         this.donors = participations;
     }
+
+    public Set<DrawingExclusionGroup> getDrawingExclusionGroups() {
+        return drawingExclusionGroups;
+    }
+
+    public void setDrawingExclusionGroups(Set<DrawingExclusionGroup> drawingExclusionGroups) {
+        this.drawingExclusionGroups = drawingExclusionGroups;
+    }
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

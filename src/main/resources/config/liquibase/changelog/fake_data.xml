@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="fake-data" author="anthony-o" context="dev,test">
+        <loadData
+                  file="config/liquibase/fake-data/user.csv"
+                  separator=";"
+                  tableName="swg_user">
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        <loadData
+                  file="config/liquibase/fake-data/user_authority.csv"
+                  separator=";"
+                  tableName="swg_user_authority"/>
+
+        <loadData
+                  file="config/liquibase/fake-data/event.csv"
+                  separator=";"
+                  tableName="event">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+            <column name="admin_id" type="numeric"/>
+        </loadData>
+        
+        <loadData
+                  file="config/liquibase/fake-data/participation.csv"
+                  separator=";"
+                  tableName="participation">
+            <column name="id" type="numeric"/>
+            <column name="nb_of_gift_to_receive" type="numeric"/>
+            <column name="nb_of_gift_to_donate" type="numeric"/>
+            <column name="user_alias" type="string"/>
+            <column name="user_id" type="numeric"/>
+            <column name="event_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+                  file="config/liquibase/fake-data/gift_idea.csv"
+                  separator=";"
+                  tableName="gift_idea">
+            <column name="id" type="numeric"/>
+            <column name="description" type="string"/>
+            <column name="url" type="string"/>
+            <column name="creation_date" type="datetime"/>
+            <column name="modification_date" type="datetime"/>
+            <column name="creator_id" type="numeric"/>
+            <column name="recipient_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+                  file="config/liquibase/fake-data/drawing_exclusion_group.csv"
+                  separator=";"
+                  tableName="drawing_exclusion_group">
+            <column name="id" type="numeric"/>
+            <column name="event_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+                  file="config/liquibase/fake-data/drawing_exclusion_group_participation.csv"
+                  separator=";"
+                  tableName="drawing_exclusion_group_participation">
+            <column name="drawing_exclusion_group_id" type="numeric"/>
+            <column name="participation_id" type="numeric"/>
+        </loadData>
+
+    </changeSet>
+
+</databaseChangeLog>

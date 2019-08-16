@@ -14,15 +14,15 @@
                                  referencedColumnNames="id"
                                  referencedTableName="swg_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="participation_id"
-                                 baseTableName="participation_recipient"
-                                 constraintName="fk_participation_recipient_participation_id"
+        <addForeignKeyConstraint baseColumnNames="donor_id"
+                                 baseTableName="gift_drawing"
+                                 constraintName="fk_gift_drawing_donor_id"
                                  referencedColumnNames="id"
                                  referencedTableName="participation"/>
 
         <addForeignKeyConstraint baseColumnNames="recipient_id"
-                                 baseTableName="participation_recipient"
-                                 constraintName="fk_participation_recipient_recipient_id"
+                                 baseTableName="gift_drawing"
+                                 constraintName="fk_gift_drawing_recipient_id"
                                  referencedColumnNames="id"
                                  referencedTableName="participation"/>
         
