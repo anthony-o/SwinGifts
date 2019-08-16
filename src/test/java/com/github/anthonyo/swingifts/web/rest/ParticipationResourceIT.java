@@ -5,6 +5,7 @@ import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +58,12 @@ public class ParticipationResourceIT {
     @Mock
     private ParticipationRepository participationRepositoryMock;
 
+    @Mock
+    private ParticipationService participationServiceMock;
+
+    @Autowired
+    private ParticipationService participationService;
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -79,7 +86,7 @@ public class ParticipationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ParticipationResource participationResource = new ParticipationResource(participationRepository);
+        final ParticipationResource participationResource = new ParticipationResource(participationService);
         this.restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -226,8 +233,8 @@ public class ParticipationResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllParticipationsWithEagerRelationshipsIsEnabled() throws Exception {
-        ParticipationResource participationResource = new ParticipationResource(participationRepositoryMock);
-        when(participationRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ParticipationResource participationResource = new ParticipationResource(participationServiceMock);
+        when(participationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -238,13 +245,13 @@ public class ParticipationResourceIT {
         restParticipationMockMvc.perform(get("/api/participations?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(participationRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(participationServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllParticipationsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ParticipationResource participationResource = new ParticipationResource(participationRepositoryMock);
-            when(participationRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ParticipationResource participationResource = new ParticipationResource(participationServiceMock);
+            when(participationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -254,7 +261,7 @@ public class ParticipationResourceIT {
         restParticipationMockMvc.perform(get("/api/participations?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(participationRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+            verify(participationServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -285,7 +292,7 @@ public class ParticipationResourceIT {
     @Transactional
     public void updateParticipation() throws Exception {
         // Initialize the database
-        participationRepository.saveAndFlush(participation);
+        participationService.save(participation);
 
         int databaseSizeBeforeUpdate = participationRepository.findAll().size();
 
@@ -334,7 +341,7 @@ public class ParticipationResourceIT {
     @Transactional
     public void deleteParticipation() throws Exception {
         // Initialize the database
-        participationRepository.saveAndFlush(participation);
+        participationService.save(participation);
 
         int databaseSizeBeforeDelete = participationRepository.findAll().size();
 

@@ -4,6 +4,7 @@ import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.DrawingExclusionGroup;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.DrawingExclusionGroupRepository;
+import com.github.anthonyo.swingifts.service.DrawingExclusionGroupService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,12 @@ public class DrawingExclusionGroupResourceIT {
     @Mock
     private DrawingExclusionGroupRepository drawingExclusionGroupRepositoryMock;
 
+    @Mock
+    private DrawingExclusionGroupService drawingExclusionGroupServiceMock;
+
+    @Autowired
+    private DrawingExclusionGroupService drawingExclusionGroupService;
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -67,7 +74,7 @@ public class DrawingExclusionGroupResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupRepository);
+        final DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupService);
         this.restDrawingExclusionGroupMockMvc = MockMvcBuilders.standaloneSetup(drawingExclusionGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -174,8 +181,8 @@ public class DrawingExclusionGroupResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllDrawingExclusionGroupsWithEagerRelationshipsIsEnabled() throws Exception {
-        DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupRepositoryMock);
-        when(drawingExclusionGroupRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupServiceMock);
+        when(drawingExclusionGroupServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restDrawingExclusionGroupMockMvc = MockMvcBuilders.standaloneSetup(drawingExclusionGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -186,13 +193,13 @@ public class DrawingExclusionGroupResourceIT {
         restDrawingExclusionGroupMockMvc.perform(get("/api/drawing-exclusion-groups?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(drawingExclusionGroupRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(drawingExclusionGroupServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllDrawingExclusionGroupsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupRepositoryMock);
-            when(drawingExclusionGroupRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupServiceMock);
+            when(drawingExclusionGroupServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restDrawingExclusionGroupMockMvc = MockMvcBuilders.standaloneSetup(drawingExclusionGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -202,7 +209,7 @@ public class DrawingExclusionGroupResourceIT {
         restDrawingExclusionGroupMockMvc.perform(get("/api/drawing-exclusion-groups?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(drawingExclusionGroupRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+            verify(drawingExclusionGroupServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -230,7 +237,7 @@ public class DrawingExclusionGroupResourceIT {
     @Transactional
     public void updateDrawingExclusionGroup() throws Exception {
         // Initialize the database
-        drawingExclusionGroupRepository.saveAndFlush(drawingExclusionGroup);
+        drawingExclusionGroupService.save(drawingExclusionGroup);
 
         int databaseSizeBeforeUpdate = drawingExclusionGroupRepository.findAll().size();
 
@@ -272,7 +279,7 @@ public class DrawingExclusionGroupResourceIT {
     @Transactional
     public void deleteDrawingExclusionGroup() throws Exception {
         // Initialize the database
-        drawingExclusionGroupRepository.saveAndFlush(drawingExclusionGroup);
+        drawingExclusionGroupService.save(drawingExclusionGroup);
 
         int databaseSizeBeforeDelete = drawingExclusionGroupRepository.findAll().size();
 

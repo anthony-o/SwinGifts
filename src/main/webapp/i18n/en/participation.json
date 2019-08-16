@@ -23,7 +23,8 @@
       "user": "User",
       "recipient": "Recipient",
       "event": "Event",
-      "donor": "Donor"
+      "donor": "Donor",
+      "drawingExclusionGroup": "Drawing Exclusion Group"
     }
   }
 }

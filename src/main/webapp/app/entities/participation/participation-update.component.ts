@@ -10,6 +10,8 @@ import { ParticipationService } from './participation.service';
 import { IUser, UserService } from 'app/core';
 import { IEvent } from 'app/shared/model/event.model';
 import { EventService } from 'app/entities/event';
+import { IDrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
+import { DrawingExclusionGroupService } from 'app/entities/drawing-exclusion-group';
 
 @Component({
   selector: 'swg-participation-update',
@@ -23,6 +25,8 @@ export class ParticipationUpdateComponent implements OnInit {
   participations: IParticipation[];
 
   events: IEvent[];
+
+  drawingexclusiongroups: IDrawingExclusionGroup[];
 
   editForm = this.fb.group({
     id: [],
@@ -39,6 +43,7 @@ export class ParticipationUpdateComponent implements OnInit {
     protected participationService: ParticipationService,
     protected userService: UserService,
     protected eventService: EventService,
+    protected drawingExclusionGroupService: DrawingExclusionGroupService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -69,6 +74,16 @@ export class ParticipationUpdateComponent implements OnInit {
         map((response: HttpResponse<IEvent[]>) => response.body)
       )
       .subscribe((res: IEvent[]) => (this.events = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.drawingExclusionGroupService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IDrawingExclusionGroup[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IDrawingExclusionGroup[]>) => response.body)
+      )
+      .subscribe(
+        (res: IDrawingExclusionGroup[]) => (this.drawingexclusiongroups = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   updateForm(participation: IParticipation) {
@@ -135,6 +150,10 @@ export class ParticipationUpdateComponent implements OnInit {
   }
 
   trackEventById(index: number, item: IEvent) {
+    return item.id;
+  }
+
+  trackDrawingExclusionGroupById(index: number, item: IDrawingExclusionGroup) {
     return item.id;
   }
 

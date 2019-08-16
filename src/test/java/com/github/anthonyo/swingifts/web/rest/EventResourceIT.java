@@ -4,6 +4,7 @@ import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.EventRepository;
+import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,9 @@ public class EventResourceIT {
     private EventRepository eventRepository;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -62,7 +66,7 @@ public class EventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EventResource eventResource = new EventResource(eventRepository);
+        final EventResource eventResource = new EventResource(eventService);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -205,7 +209,7 @@ public class EventResourceIT {
     @Transactional
     public void updateEvent() throws Exception {
         // Initialize the database
-        eventRepository.saveAndFlush(event);
+        eventService.save(event);
 
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
@@ -250,7 +254,7 @@ public class EventResourceIT {
     @Transactional
     public void deleteEvent() throws Exception {
         // Initialize the database
-        eventRepository.saveAndFlush(event);
+        eventService.save(event);
 
         int databaseSizeBeforeDelete = eventRepository.findAll().size();
 

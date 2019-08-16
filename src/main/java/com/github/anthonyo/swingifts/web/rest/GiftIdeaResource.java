@@ -1,7 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.GiftIdea;
-import com.github.anthonyo.swingifts.repository.GiftIdeaRepository;
+import com.github.anthonyo.swingifts.service.GiftIdeaService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -33,10 +33,10 @@ public class GiftIdeaResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final GiftIdeaRepository giftIdeaRepository;
+    private final GiftIdeaService giftIdeaService;
 
-    public GiftIdeaResource(GiftIdeaRepository giftIdeaRepository) {
-        this.giftIdeaRepository = giftIdeaRepository;
+    public GiftIdeaResource(GiftIdeaService giftIdeaService) {
+        this.giftIdeaService = giftIdeaService;
     }
 
     /**
@@ -52,7 +52,7 @@ public class GiftIdeaResource {
         if (giftIdea.getId() != null) {
             throw new BadRequestAlertException("A new giftIdea cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        GiftIdea result = giftIdeaRepository.save(giftIdea);
+        GiftIdea result = giftIdeaService.save(giftIdea);
         return ResponseEntity.created(new URI("/api/gift-ideas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +73,7 @@ public class GiftIdeaResource {
         if (giftIdea.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        GiftIdea result = giftIdeaRepository.save(giftIdea);
+        GiftIdea result = giftIdeaService.save(giftIdea);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, giftIdea.getId().toString()))
             .body(result);
@@ -88,7 +88,7 @@ public class GiftIdeaResource {
     @GetMapping("/gift-ideas")
     public List<GiftIdea> getAllGiftIdeas() {
         log.debug("REST request to get all GiftIdeas");
-        return giftIdeaRepository.findAll();
+        return giftIdeaService.findAll();
     }
 
     /**
@@ -100,7 +100,7 @@ public class GiftIdeaResource {
     @GetMapping("/gift-ideas/{id}")
     public ResponseEntity<GiftIdea> getGiftIdea(@PathVariable Long id) {
         log.debug("REST request to get GiftIdea : {}", id);
-        Optional<GiftIdea> giftIdea = giftIdeaRepository.findById(id);
+        Optional<GiftIdea> giftIdea = giftIdeaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(giftIdea);
     }
 
@@ -113,7 +113,7 @@ public class GiftIdeaResource {
     @DeleteMapping("/gift-ideas/{id}")
     public ResponseEntity<Void> deleteGiftIdea(@PathVariable Long id) {
         log.debug("REST request to delete GiftIdea : {}", id);
-        giftIdeaRepository.deleteById(id);
+        giftIdeaService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -23,7 +23,7 @@
     "entityTableName": "drawing_exclusion_group",
     "dto": "no",
     "pagination": "no",
-    "service": "no",
+    "service": "serviceClass",
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",

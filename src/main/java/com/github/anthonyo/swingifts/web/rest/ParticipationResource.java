@@ -1,7 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.Participation;
-import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -33,10 +33,10 @@ public class ParticipationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ParticipationRepository participationRepository;
+    private final ParticipationService participationService;
 
-    public ParticipationResource(ParticipationRepository participationRepository) {
-        this.participationRepository = participationRepository;
+    public ParticipationResource(ParticipationService participationService) {
+        this.participationService = participationService;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ParticipationResource {
         if (participation.getId() != null) {
             throw new BadRequestAlertException("A new participation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Participation result = participationRepository.save(participation);
+        Participation result = participationService.save(participation);
         return ResponseEntity.created(new URI("/api/participations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +73,7 @@ public class ParticipationResource {
         if (participation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Participation result = participationRepository.save(participation);
+        Participation result = participationService.save(participation);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, participation.getId().toString()))
             .body(result);
@@ -88,7 +88,7 @@ public class ParticipationResource {
     @GetMapping("/participations")
     public List<Participation> getAllParticipations(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Participations");
-        return participationRepository.findAllWithEagerRelationships();
+        return participationService.findAll();
     }
 
     /**
@@ -100,7 +100,7 @@ public class ParticipationResource {
     @GetMapping("/participations/{id}")
     public ResponseEntity<Participation> getParticipation(@PathVariable Long id) {
         log.debug("REST request to get Participation : {}", id);
-        Optional<Participation> participation = participationRepository.findOneWithEagerRelationships(id);
+        Optional<Participation> participation = participationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(participation);
     }
 
@@ -113,7 +113,7 @@ public class ParticipationResource {
     @DeleteMapping("/participations/{id}")
     public ResponseEntity<Void> deleteParticipation(@PathVariable Long id) {
         log.debug("REST request to delete Participation : {}", id);
-        participationRepository.deleteById(id);
+        participationService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }
