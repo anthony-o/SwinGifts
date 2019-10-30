@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { IEvent } from 'app/shared/model/event.model';
-import { AccountService } from 'app/core';
+import { AccountService } from 'app/core/auth/account.service';
 import { EventService } from './event.service';
 
 @Component({
@@ -17,12 +18,7 @@ export class EventComponent implements OnInit, OnDestroy {
   currentAccount: any;
   eventSubscriber: Subscription;
 
-  constructor(
-    protected eventService: EventService,
-    protected jhiAlertService: JhiAlertService,
-    protected eventManager: JhiEventManager,
-    protected accountService: AccountService
-  ) {}
+  constructor(protected eventService: EventService, protected eventManager: JhiEventManager, protected accountService: AccountService) {}
 
   loadAll() {
     this.eventService
@@ -31,17 +27,14 @@ export class EventComponent implements OnInit, OnDestroy {
         filter((res: HttpResponse<IEvent[]>) => res.ok),
         map((res: HttpResponse<IEvent[]>) => res.body)
       )
-      .subscribe(
-        (res: IEvent[]) => {
-          this.events = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+      .subscribe((res: IEvent[]) => {
+        this.events = res;
+      });
   }
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().then(account => {
+    this.accountService.identity().subscribe(account => {
       this.currentAccount = account;
     });
     this.registerChangeInEvents();
@@ -57,9 +50,5 @@ export class EventComponent implements OnInit, OnDestroy {
 
   registerChangeInEvents() {
     this.eventSubscriber = this.eventManager.subscribe('eventListModification', response => this.loadAll());
-  }
-
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
   }
 }

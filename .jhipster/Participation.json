@@ -83,5 +83,6 @@
     "clientRootFolder": "",
     "applications": [
         "SwinGifts"
-    ]
+    ],
+    "readOnly": false
 }

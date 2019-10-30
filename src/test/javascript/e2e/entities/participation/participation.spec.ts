@@ -1,17 +1,22 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { ParticipationComponentsPage, ParticipationDeleteDialog, ParticipationUpdatePage } from './participation.page-object';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {
+  ParticipationComponentsPage,
+  /* ParticipationDeleteDialog,
+   */ ParticipationUpdatePage
+} from './participation.page-object';
 
 const expect = chai.expect;
 
 describe('Participation e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let participationUpdatePage: ParticipationUpdatePage;
   let participationComponentsPage: ParticipationComponentsPage;
-  /*let participationDeleteDialog: ParticipationDeleteDialog;*/
+  let participationUpdatePage: ParticipationUpdatePage;
+  /* let participationDeleteDialog: ParticipationDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -35,7 +40,7 @@ describe('Participation e2e test', () => {
     await participationUpdatePage.cancel();
   });
 
-  /* it('should create and save Participations', async () => {
+  /*  it('should create and save Participations', async () => {
         const nbButtonsBeforeCreate = await participationComponentsPage.countDeleteButtons();
 
         await participationComponentsPage.clickOnCreateButton();
@@ -54,9 +59,9 @@ describe('Participation e2e test', () => {
         expect(await participationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await participationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
-  /* it('should delete last Participation', async () => {
+  /*  it('should delete last Participation', async () => {
         const nbButtonsBeforeDelete = await participationComponentsPage.countDeleteButtons();
         await participationComponentsPage.clickOnLastDeleteButton();
 
@@ -66,7 +71,7 @@ describe('Participation e2e test', () => {
         await participationDeleteDialog.clickOnConfirmButton();
 
         expect(await participationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

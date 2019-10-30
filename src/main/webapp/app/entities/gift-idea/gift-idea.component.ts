@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { IGiftIdea } from 'app/shared/model/gift-idea.model';
-import { AccountService } from 'app/core';
+import { AccountService } from 'app/core/auth/account.service';
 import { GiftIdeaService } from './gift-idea.service';
 
 @Component({
@@ -19,7 +20,6 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
 
   constructor(
     protected giftIdeaService: GiftIdeaService,
-    protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
     protected accountService: AccountService
   ) {}
@@ -31,17 +31,14 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
         filter((res: HttpResponse<IGiftIdea[]>) => res.ok),
         map((res: HttpResponse<IGiftIdea[]>) => res.body)
       )
-      .subscribe(
-        (res: IGiftIdea[]) => {
-          this.giftIdeas = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+      .subscribe((res: IGiftIdea[]) => {
+        this.giftIdeas = res;
+      });
   }
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().then(account => {
+    this.accountService.identity().subscribe(account => {
       this.currentAccount = account;
     });
     this.registerChangeInGiftIdeas();
@@ -57,9 +54,5 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
 
   registerChangeInGiftIdeas() {
     this.eventSubscriber = this.eventManager.subscribe('giftIdeaListModification', response => this.loadAll());
-  }
-
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
   }
 }

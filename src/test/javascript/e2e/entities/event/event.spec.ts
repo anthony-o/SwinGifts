@@ -1,17 +1,22 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { EventComponentsPage, EventDeleteDialog, EventUpdatePage } from './event.page-object';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {
+  EventComponentsPage,
+  /* EventDeleteDialog,
+   */ EventUpdatePage
+} from './event.page-object';
 
 const expect = chai.expect;
 
 describe('Event e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let eventUpdatePage: EventUpdatePage;
   let eventComponentsPage: EventComponentsPage;
-  /*let eventDeleteDialog: EventDeleteDialog;*/
+  let eventUpdatePage: EventUpdatePage;
+  /* let eventDeleteDialog: EventDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -35,7 +40,7 @@ describe('Event e2e test', () => {
     await eventUpdatePage.cancel();
   });
 
-  /* it('should create and save Events', async () => {
+  /*  it('should create and save Events', async () => {
         const nbButtonsBeforeCreate = await eventComponentsPage.countDeleteButtons();
 
         await eventComponentsPage.clickOnCreateButton();
@@ -48,9 +53,9 @@ describe('Event e2e test', () => {
         expect(await eventUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await eventComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
-  /* it('should delete last Event', async () => {
+  /*  it('should delete last Event', async () => {
         const nbButtonsBeforeDelete = await eventComponentsPage.countDeleteButtons();
         await eventComponentsPage.clickOnLastDeleteButton();
 
@@ -60,7 +65,7 @@ describe('Event e2e test', () => {
         await eventDeleteDialog.clickOnConfirmButton();
 
         expect(await eventComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

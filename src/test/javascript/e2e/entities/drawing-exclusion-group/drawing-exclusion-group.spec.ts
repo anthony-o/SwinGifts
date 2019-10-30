@@ -1,11 +1,12 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   DrawingExclusionGroupComponentsPage,
-  DrawingExclusionGroupDeleteDialog,
-  DrawingExclusionGroupUpdatePage
+  /* DrawingExclusionGroupDeleteDialog,
+   */ DrawingExclusionGroupUpdatePage
 } from './drawing-exclusion-group.page-object';
 
 const expect = chai.expect;
@@ -13,9 +14,9 @@ const expect = chai.expect;
 describe('DrawingExclusionGroup e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let drawingExclusionGroupUpdatePage: DrawingExclusionGroupUpdatePage;
   let drawingExclusionGroupComponentsPage: DrawingExclusionGroupComponentsPage;
-  /*let drawingExclusionGroupDeleteDialog: DrawingExclusionGroupDeleteDialog;*/
+  let drawingExclusionGroupUpdatePage: DrawingExclusionGroupUpdatePage;
+  /* let drawingExclusionGroupDeleteDialog: DrawingExclusionGroupDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -39,7 +40,7 @@ describe('DrawingExclusionGroup e2e test', () => {
     await drawingExclusionGroupUpdatePage.cancel();
   });
 
-  /* it('should create and save DrawingExclusionGroups', async () => {
+  /*  it('should create and save DrawingExclusionGroups', async () => {
         const nbButtonsBeforeCreate = await drawingExclusionGroupComponentsPage.countDeleteButtons();
 
         await drawingExclusionGroupComponentsPage.clickOnCreateButton();
@@ -51,9 +52,9 @@ describe('DrawingExclusionGroup e2e test', () => {
         expect(await drawingExclusionGroupUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await drawingExclusionGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
-  /* it('should delete last DrawingExclusionGroup', async () => {
+  /*  it('should delete last DrawingExclusionGroup', async () => {
         const nbButtonsBeforeDelete = await drawingExclusionGroupComponentsPage.countDeleteButtons();
         await drawingExclusionGroupComponentsPage.clickOnLastDeleteButton();
 
@@ -63,7 +64,7 @@ describe('DrawingExclusionGroup e2e test', () => {
         await drawingExclusionGroupDeleteDialog.clickOnConfirmButton();
 
         expect(await drawingExclusionGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

@@ -84,7 +84,7 @@
                 function addApiKeyAuthorization() {
                     var authToken = JSON.parse(localStorage.getItem("swg-authenticationtoken") || sessionStorage.getItem("swg-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
-                    window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
+                    window.swaggerUi.api.clientAuthorizations.add("jwt", apiKeyAuth);
                 }
 
 

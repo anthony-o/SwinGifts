@@ -1,5 +1,4 @@
 package com.github.anthonyo.swingifts.repository;
-
 import com.github.anthonyo.swingifts.domain.DrawingExclusionGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

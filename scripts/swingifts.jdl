@@ -1,6 +1,7 @@
 application {
 	config {
     	baseName SwinGifts
+        clientPackageManager yarn
         packageName com.github.anthonyo.swingifts
         cacheProvider no
         enableHibernateCache false

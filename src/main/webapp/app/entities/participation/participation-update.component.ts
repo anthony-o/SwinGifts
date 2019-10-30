@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -7,11 +9,12 @@ import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IParticipation, Participation } from 'app/shared/model/participation.model';
 import { ParticipationService } from './participation.service';
-import { IUser, UserService } from 'app/core';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 import { IEvent } from 'app/shared/model/event.model';
-import { EventService } from 'app/entities/event';
+import { EventService } from 'app/entities/event/event.service';
 import { IDrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
-import { DrawingExclusionGroupService } from 'app/entities/drawing-exclusion-group';
+import { DrawingExclusionGroupService } from 'app/entities/drawing-exclusion-group/drawing-exclusion-group.service';
 
 @Component({
   selector: 'swg-participation-update',
@@ -157,7 +160,7 @@ export class ParticipationUpdateComponent implements OnInit {
     return item.id;
   }
 
-  getSelected(selectedVals: Array<any>, option: any) {
+  getSelected(selectedVals: any[], option: any) {
     if (selectedVals) {
       for (let i = 0; i < selectedVals.length; i++) {
         if (option.id === selectedVals[i].id) {

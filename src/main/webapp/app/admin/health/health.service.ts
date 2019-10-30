@@ -48,7 +48,7 @@ export class SwgHealthService {
     let hasDetails = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         const value = healthObject[key];
         if (key === 'status' || key === 'error') {
           healthData[key] = value;
@@ -75,7 +75,7 @@ export class SwgHealthService {
 
   private flattenHealthData(result, path, data): any {
     for (const key in data) {
-      if (data.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
         const value = data[key];
         if (this.isHealthObject(value)) {
           if (this.hasSubSystem(value)) {
@@ -108,7 +108,7 @@ export class SwgHealthService {
     let result = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         const value = healthObject[key];
         if (value && value.status) {
           result = true;
@@ -122,7 +122,7 @@ export class SwgHealthService {
     let result = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         if (key === 'status') {
           result = true;
         }

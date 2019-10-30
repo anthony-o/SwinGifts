@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -10,7 +12,7 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IGiftIdea, GiftIdea } from 'app/shared/model/gift-idea.model';
 import { GiftIdeaService } from './gift-idea.service';
 import { IParticipation } from 'app/shared/model/participation.model';
-import { ParticipationService } from 'app/entities/participation';
+import { ParticipationService } from 'app/entities/participation/participation.service';
 
 @Component({
   selector: 'swg-gift-idea-update',

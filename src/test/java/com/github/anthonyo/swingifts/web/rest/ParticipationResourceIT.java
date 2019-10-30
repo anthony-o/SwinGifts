@@ -43,11 +43,9 @@ public class ParticipationResourceIT {
 
     private static final Integer DEFAULT_NB_OF_GIFT_TO_RECEIVE = 0;
     private static final Integer UPDATED_NB_OF_GIFT_TO_RECEIVE = 1;
-    private static final Integer SMALLER_NB_OF_GIFT_TO_RECEIVE = 0 - 1;
 
     private static final Integer DEFAULT_NB_OF_GIFT_TO_DONATE = 0;
     private static final Integer UPDATED_NB_OF_GIFT_TO_DONATE = 1;
-    private static final Integer SMALLER_NB_OF_GIFT_TO_DONATE = 0 - 1;
 
     private static final String DEFAULT_USER_ALIAS = "AAAAAAAAAA";
     private static final String UPDATED_USER_ALIAS = "BBBBBBBBBB";
@@ -228,7 +226,7 @@ public class ParticipationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(participation.getId().intValue())))
             .andExpect(jsonPath("$.[*].nbOfGiftToReceive").value(hasItem(DEFAULT_NB_OF_GIFT_TO_RECEIVE)))
             .andExpect(jsonPath("$.[*].nbOfGiftToDonate").value(hasItem(DEFAULT_NB_OF_GIFT_TO_DONATE)))
-            .andExpect(jsonPath("$.[*].userAlias").value(hasItem(DEFAULT_USER_ALIAS.toString())));
+            .andExpect(jsonPath("$.[*].userAlias").value(hasItem(DEFAULT_USER_ALIAS)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -277,7 +275,7 @@ public class ParticipationResourceIT {
             .andExpect(jsonPath("$.id").value(participation.getId().intValue()))
             .andExpect(jsonPath("$.nbOfGiftToReceive").value(DEFAULT_NB_OF_GIFT_TO_RECEIVE))
             .andExpect(jsonPath("$.nbOfGiftToDonate").value(DEFAULT_NB_OF_GIFT_TO_DONATE))
-            .andExpect(jsonPath("$.userAlias").value(DEFAULT_USER_ALIAS.toString()));
+            .andExpect(jsonPath("$.userAlias").value(DEFAULT_USER_ALIAS));
     }
 
     @Test
