@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,9 +10,9 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IDrawingExclusionGroup, DrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
 import { DrawingExclusionGroupService } from './drawing-exclusion-group.service';
 import { IParticipation } from 'app/shared/model/participation.model';
-import { ParticipationService } from 'app/entities/participation';
+import { ParticipationService } from 'app/entities/participation/participation.service';
 import { IEvent } from 'app/shared/model/event.model';
-import { EventService } from 'app/entities/event';
+import { EventService } from 'app/entities/event/event.service';
 
 @Component({
   selector: 'swg-drawing-exclusion-group-update',
@@ -114,7 +116,7 @@ export class DrawingExclusionGroupUpdateComponent implements OnInit {
     return item.id;
   }
 
-  getSelected(selectedVals: Array<any>, option: any) {
+  getSelected(selectedVals: any[], option: any) {
     if (selectedVals) {
       for (let i = 0; i < selectedVals.length; i++) {
         if (option.id === selectedVals[i].id) {

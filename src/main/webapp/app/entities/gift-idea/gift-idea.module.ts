@@ -1,18 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { SwinGiftsSharedModule } from 'app/shared';
-import {
-  GiftIdeaComponent,
-  GiftIdeaDetailComponent,
-  GiftIdeaUpdateComponent,
-  GiftIdeaDeletePopupComponent,
-  GiftIdeaDeleteDialogComponent,
-  giftIdeaRoute,
-  giftIdeaPopupRoute
-} from './';
+import { SwinGiftsSharedModule } from 'app/shared/shared.module';
+import { GiftIdeaComponent } from './gift-idea.component';
+import { GiftIdeaDetailComponent } from './gift-idea-detail.component';
+import { GiftIdeaUpdateComponent } from './gift-idea-update.component';
+import { GiftIdeaDeletePopupComponent, GiftIdeaDeleteDialogComponent } from './gift-idea-delete-dialog.component';
+import { giftIdeaRoute, giftIdeaPopupRoute } from './gift-idea.route';
 
 const ENTITY_STATES = [...giftIdeaRoute, ...giftIdeaPopupRoute];
 
@@ -25,16 +19,6 @@ const ENTITY_STATES = [...giftIdeaRoute, ...giftIdeaPopupRoute];
     GiftIdeaDeleteDialogComponent,
     GiftIdeaDeletePopupComponent
   ],
-  entryComponents: [GiftIdeaComponent, GiftIdeaUpdateComponent, GiftIdeaDeleteDialogComponent, GiftIdeaDeletePopupComponent],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [GiftIdeaDeleteDialogComponent]
 })
-export class SwinGiftsGiftIdeaModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class SwinGiftsGiftIdeaModule {}

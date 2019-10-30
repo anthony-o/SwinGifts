@@ -16,8 +16,8 @@
 logging:
   level:
     ROOT: INFO
-    com.github.anthonyo.swingifts: INFO
     io.github.jhipster: INFO
+    com.github.anthonyo.swingifts: INFO
 
 management:
   metrics:
@@ -109,7 +109,7 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: MTViZjU2N2QxYjhkMWZkOGQ4NjdjYmRkYmExMDExODBjNzY5YzBjYTJjM2U2MjNmYzAxZjQwMWE4OGMxMDk3MTA1ODg2NDk5ZjAyMDQ1ZjY4OGViMzZhNmU4MGNjODc4ODE2MmI4MGYzMWFhZDEzYjU5NTU5NDYyZDJmYjY2Njk=
+        base64-secret: MmFlYjhhZWI4ZTUwNTlhYjQ1Y2Q2OTdiNzA2MDU0ZGI3YjFiMjIxMzQ3OTU5NzlmMTY3YjNmZTFhNzIzMzM3ZmE0YmNlNjBkMjY5M2FkODA3YTkyYTkwZjhhM2NkNjM3YzYwZDU5YmNkY2QyNDdlZjliZmNkYjU0NmNkYzllM2I=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
@@ -126,6 +126,9 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
+  audit-events:
+    retention-period: 30 # Number of days before audit events are deleted.
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

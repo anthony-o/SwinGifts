@@ -9,7 +9,6 @@ import com.github.anthonyo.swingifts.security.AuthoritiesConstants;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.dto.UserDTO;
 import com.github.anthonyo.swingifts.service.util.RandomUtil;
-import com.github.anthonyo.swingifts.web.rest.errors.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +83,7 @@ public class UserService {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
-                throw new LoginAlreadyUsedException();
+                throw new UsernameAlreadyUsedException();
             }
         });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {

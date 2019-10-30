@@ -8,24 +8,25 @@
             </span>
         </button>
     </h2>
+    <swg-alert-error></swg-alert-error>
     <swg-alert></swg-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="giftIdeas?.length === 0">
         <span jhiTranslate="swinGiftsApp.giftIdea.home.notFound">No giftIdeas found</span>
     </div>
     <div class="table-responsive" *ngIf="giftIdeas?.length > 0">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.description">Description</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></th>
-            <th><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
-            <th></th>
+            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.description">Description</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
+            <th scope="col"></th>
             </tr>
             </thead>
             <tbody>

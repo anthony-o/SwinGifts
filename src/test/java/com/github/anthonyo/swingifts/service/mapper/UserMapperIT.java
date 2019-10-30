@@ -1,6 +1,5 @@
 package com.github.anthonyo.swingifts.service.mapper;
 
-
 import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.service.dto.UserDTO;

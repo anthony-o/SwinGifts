@@ -1,18 +1,15 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { SwinGiftsSharedModule } from 'app/shared';
+import { SwinGiftsSharedModule } from 'app/shared/shared.module';
+import { DrawingExclusionGroupComponent } from './drawing-exclusion-group.component';
+import { DrawingExclusionGroupDetailComponent } from './drawing-exclusion-group-detail.component';
+import { DrawingExclusionGroupUpdateComponent } from './drawing-exclusion-group-update.component';
 import {
-  DrawingExclusionGroupComponent,
-  DrawingExclusionGroupDetailComponent,
-  DrawingExclusionGroupUpdateComponent,
   DrawingExclusionGroupDeletePopupComponent,
-  DrawingExclusionGroupDeleteDialogComponent,
-  drawingExclusionGroupRoute,
-  drawingExclusionGroupPopupRoute
-} from './';
+  DrawingExclusionGroupDeleteDialogComponent
+} from './drawing-exclusion-group-delete-dialog.component';
+import { drawingExclusionGroupRoute, drawingExclusionGroupPopupRoute } from './drawing-exclusion-group.route';
 
 const ENTITY_STATES = [...drawingExclusionGroupRoute, ...drawingExclusionGroupPopupRoute];
 
@@ -25,21 +22,6 @@ const ENTITY_STATES = [...drawingExclusionGroupRoute, ...drawingExclusionGroupPo
     DrawingExclusionGroupDeleteDialogComponent,
     DrawingExclusionGroupDeletePopupComponent
   ],
-  entryComponents: [
-    DrawingExclusionGroupComponent,
-    DrawingExclusionGroupUpdateComponent,
-    DrawingExclusionGroupDeleteDialogComponent,
-    DrawingExclusionGroupDeletePopupComponent
-  ],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [DrawingExclusionGroupDeleteDialogComponent]
 })
-export class SwinGiftsDrawingExclusionGroupModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class SwinGiftsDrawingExclusionGroupModule {}

@@ -1,12 +1,9 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { SwinGiftsTestModule } from '../../../test.module';
 import { SwgConfigurationComponent } from 'app/admin/configuration/configuration.component';
 import { SwgConfigurationService } from 'app/admin/configuration/configuration.service';
-import { ITEMS_PER_PAGE } from 'app/shared';
-import { Log } from 'app/admin';
 
 describe('Component Tests', () => {
   describe('SwgConfigurationComponent', () => {

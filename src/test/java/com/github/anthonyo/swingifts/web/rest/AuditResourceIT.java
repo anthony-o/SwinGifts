@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
+import io.github.jhipster.config.JHipsterProperties;
 import com.github.anthonyo.swingifts.config.audit.AuditEventConverter;
 import com.github.anthonyo.swingifts.domain.PersistentAuditEvent;
 import com.github.anthonyo.swingifts.repository.PersistenceAuditEventRepository;
@@ -46,6 +47,9 @@ public class AuditResourceIT {
     private AuditEventConverter auditEventConverter;
 
     @Autowired
+    private JHipsterProperties jhipsterProperties;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -63,7 +67,7 @@ public class AuditResourceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         AuditEventService auditEventService =
-            new AuditEventService(auditEventRepository, auditEventConverter);
+            new AuditEventService(auditEventRepository, auditEventConverter, jhipsterProperties);
         AuditResource auditResource = new AuditResource(auditEventService);
         this.restAuditMockMvc = MockMvcBuilders.standaloneSetup(auditResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

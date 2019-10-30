@@ -1,18 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { SwinGiftsSharedModule } from 'app/shared';
-import {
-  ParticipationComponent,
-  ParticipationDetailComponent,
-  ParticipationUpdateComponent,
-  ParticipationDeletePopupComponent,
-  ParticipationDeleteDialogComponent,
-  participationRoute,
-  participationPopupRoute
-} from './';
+import { SwinGiftsSharedModule } from 'app/shared/shared.module';
+import { ParticipationComponent } from './participation.component';
+import { ParticipationDetailComponent } from './participation-detail.component';
+import { ParticipationUpdateComponent } from './participation-update.component';
+import { ParticipationDeletePopupComponent, ParticipationDeleteDialogComponent } from './participation-delete-dialog.component';
+import { participationRoute, participationPopupRoute } from './participation.route';
 
 const ENTITY_STATES = [...participationRoute, ...participationPopupRoute];
 
@@ -25,21 +19,6 @@ const ENTITY_STATES = [...participationRoute, ...participationPopupRoute];
     ParticipationDeleteDialogComponent,
     ParticipationDeletePopupComponent
   ],
-  entryComponents: [
-    ParticipationComponent,
-    ParticipationUpdateComponent,
-    ParticipationDeleteDialogComponent,
-    ParticipationDeletePopupComponent
-  ],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [ParticipationDeleteDialogComponent]
 })
-export class SwinGiftsParticipationModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class SwinGiftsParticipationModule {}

@@ -1,17 +1,22 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { GiftIdeaComponentsPage, GiftIdeaDeleteDialog, GiftIdeaUpdatePage } from './gift-idea.page-object';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {
+  GiftIdeaComponentsPage,
+  /* GiftIdeaDeleteDialog,
+   */ GiftIdeaUpdatePage
+} from './gift-idea.page-object';
 
 const expect = chai.expect;
 
 describe('GiftIdea e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let giftIdeaUpdatePage: GiftIdeaUpdatePage;
   let giftIdeaComponentsPage: GiftIdeaComponentsPage;
-  /*let giftIdeaDeleteDialog: GiftIdeaDeleteDialog;*/
+  let giftIdeaUpdatePage: GiftIdeaUpdatePage;
+  /* let giftIdeaDeleteDialog: GiftIdeaDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -35,7 +40,7 @@ describe('GiftIdea e2e test', () => {
     await giftIdeaUpdatePage.cancel();
   });
 
-  /* it('should create and save GiftIdeas', async () => {
+  /*  it('should create and save GiftIdeas', async () => {
         const nbButtonsBeforeCreate = await giftIdeaComponentsPage.countDeleteButtons();
 
         await giftIdeaComponentsPage.clickOnCreateButton();
@@ -56,9 +61,9 @@ describe('GiftIdea e2e test', () => {
         expect(await giftIdeaUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await giftIdeaComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
-  /* it('should delete last GiftIdea', async () => {
+  /*  it('should delete last GiftIdea', async () => {
         const nbButtonsBeforeDelete = await giftIdeaComponentsPage.countDeleteButtons();
         await giftIdeaComponentsPage.clickOnLastDeleteButton();
 
@@ -68,7 +73,7 @@ describe('GiftIdea e2e test', () => {
         await giftIdeaDeleteDialog.clickOnConfirmButton();
 
         expect(await giftIdeaComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

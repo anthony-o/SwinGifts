@@ -8,23 +8,24 @@
             </span>
         </button>
     </h2>
+    <swg-alert-error></swg-alert-error>
     <swg-alert></swg-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="participations?.length === 0">
         <span jhiTranslate="swinGiftsApp.participation.home.notFound">No participations found</span>
     </div>
     <div class="table-responsive" *ngIf="participations?.length > 0">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.user">User</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></th>
-            <th><span jhiTranslate="swinGiftsApp.participation.event">Event</span></th>
-            <th></th>
+            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.user">User</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.event">Event</span></th>
+            <th scope="col"></th>
             </tr>
             </thead>
             <tbody>

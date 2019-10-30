@@ -1,5 +1,4 @@
 package com.github.anthonyo.swingifts.repository;
-
 import com.github.anthonyo.swingifts.domain.GiftIdea;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
