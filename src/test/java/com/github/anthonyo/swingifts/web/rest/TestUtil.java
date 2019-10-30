@@ -51,6 +51,10 @@ public final class TestUtil {
         return mapper.writeValueAsBytes(object);
     }
 
+    public static <T> T convertJsonBytesToObject(byte[] jsonBytes, Class<T> klass) throws IOException {
+        return mapper.readValue(jsonBytes, klass);
+    }
+
     /**
      * Create a byte array with a specific size filled with specified data.
      *

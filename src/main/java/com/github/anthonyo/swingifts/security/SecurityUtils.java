@@ -1,5 +1,6 @@
 package com.github.anthonyo.swingifts.security;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,6 +35,10 @@ public final class SecurityUtils {
                 }
                 return null;
             });
+    }
+
+    public static String getCurrentUserLoginOrThrowBadCredentials() {
+        return getCurrentUserLogin().orElseThrow(() -> new BadCredentialsException("Must authenticate"));
     }
 
     /**

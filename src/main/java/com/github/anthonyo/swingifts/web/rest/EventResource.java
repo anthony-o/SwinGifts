@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.Event;
+import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -115,5 +117,18 @@ public class EventResource {
         log.debug("REST request to delete Event : {}", id);
         eventService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code GET  /events/:id/with-eager-relationships} : get the "id" event.
+     *
+     * @param id the id of the event to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/events/{id}/with-eager-relationships")
+    public ResponseEntity<Event> getEventWithEagerRelationships(@PathVariable Long id) {
+        log.debug("REST request to get Event : {}", id);
+        Optional<Event> event = eventService.findOneWithEagerRelationships(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseUtil.wrapOrNotFound(event);
     }
 }

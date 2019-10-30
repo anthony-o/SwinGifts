@@ -1,4 +1,5 @@
 package com.github.anthonyo.swingifts.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -29,11 +30,12 @@ public class Event implements Serializable {
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
+    @JsonIgnoreProperties("event")
     private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("events")
+    @JsonIgnore
     private User admin;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -1,4 +1,5 @@
 package com.github.anthonyo.swingifts.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -29,7 +30,7 @@ public class DrawingExclusionGroup implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("drawingExclusionGroups")
+    @JsonIgnore
     private Event event;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

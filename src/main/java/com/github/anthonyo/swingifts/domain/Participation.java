@@ -50,7 +50,7 @@ public class Participation implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("participations")
+    @JsonIgnore
     private Event event;
 
     @ManyToMany(mappedBy = "recipients")

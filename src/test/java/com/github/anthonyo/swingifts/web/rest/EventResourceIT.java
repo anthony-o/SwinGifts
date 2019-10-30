@@ -1,7 +1,9 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
+import com.github.anthonyo.swingifts.TestConstants;
 import com.github.anthonyo.swingifts.domain.Event;
+import com.github.anthonyo.swingifts.domain.GiftIdea;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.EventRepository;
 import com.github.anthonyo.swingifts.service.EventService;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,11 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import static com.github.anthonyo.swingifts.TestConstants.GIFT_IDEA_ALICE_S_IDEA_FOR_ALICE;
+import static com.github.anthonyo.swingifts.TestConstants.GIFT_IDEA_DAVE_S_IDEA_FOR_ALICE;
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -182,7 +189,7 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
-    
+
     @Test
     @Transactional
     public void getEvent() throws Exception {
@@ -195,6 +202,26 @@ public class EventResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(event.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("alice")
+    public void getEventWithEagerRelationships() throws Exception {
+        // WHEN
+        final Event event = TestUtil.convertJsonBytesToObject(
+            restEventMockMvc.perform(get("/api/events/{id}/with-eager-relationships", TestConstants.EVENT_ALICES_EVENT_ID))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.id").value(TestConstants.EVENT_ALICES_EVENT_ID))
+                .andReturn().getResponse().getContentAsByteArray(),
+            Event.class);
+
+        // THEN
+        final Set<GiftIdea> allGiftIdeas = event.getParticipations().stream().flatMap(participation -> participation.getGiftIdeas().stream()).collect(Collectors.toUnmodifiableSet());
+        assertThat(allGiftIdeas).hasSize(4);
+        assertThat(allGiftIdeas.stream().map(GiftIdea::getId)).contains(GIFT_IDEA_ALICE_S_IDEA_FOR_ALICE);
+        assertThat(allGiftIdeas.stream().map(GiftIdea::getId)).doesNotContain(GIFT_IDEA_DAVE_S_IDEA_FOR_ALICE);
     }
 
     @Test
