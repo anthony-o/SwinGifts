@@ -28,4 +28,5 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     @Query("select participation from Participation participation left join fetch participation.recipients where participation.id =:id")
     Optional<Participation> findOneWithEagerRelationships(@Param("id") Long id);
 
+    List<Participation> findByEventId(Long eventId);
 }

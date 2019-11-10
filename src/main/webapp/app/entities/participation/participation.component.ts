@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { of, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { IParticipation } from 'app/shared/model/participation.model';
 import { AccountService } from 'app/core/auth/account.service';
-import { ParticipationService } from './participation.service';
+import { ActivatedRoute } from '@angular/router';
+import { ParticipationService } from 'app/entities/participation/participation.service';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'swg-participation',
@@ -21,15 +20,24 @@ export class ParticipationComponent implements OnInit, OnDestroy {
   constructor(
     protected participationService: ParticipationService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected activatedRoute: ActivatedRoute
   ) {}
 
   loadAll() {
-    this.participationService
-      .query()
+    this.activatedRoute.paramMap
       .pipe(
-        filter((res: HttpResponse<IParticipation[]>) => res.ok),
-        map((res: HttpResponse<IParticipation[]>) => res.body)
+        switchMap(paramMap => {
+          const eventId = paramMap.get('eventId');
+          if (eventId) {
+            return this.participationService.findByEventId(Number(eventId)).pipe(
+              filter(res => res.ok),
+              map(res => res.body)
+            );
+          } else {
+            of([]);
+          }
+        })
       )
       .subscribe((res: IParticipation[]) => {
         this.participations = res;

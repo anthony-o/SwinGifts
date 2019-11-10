@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.Participation;
+import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
@@ -80,15 +81,15 @@ public class ParticipationResource {
     }
 
     /**
-     * {@code GET  /participations} : get all the participations.
+     * {@code GET  /participations/by-event-id/:eventId} : get participations for the "eventId".
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param eventId the id of the event to retrieve participations for.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of participations in body.
      */
-    @GetMapping("/participations")
-    public List<Participation> getAllParticipations(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    @GetMapping("/participations/by-event-id/{eventId}")
+    public List<Participation> getParticipationsByEventId(@PathVariable Long eventId) {
         log.debug("REST request to get all Participations");
-        return participationService.findAll();
+        return participationService.findByEventId(eventId, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
     }
 
     /**

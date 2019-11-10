@@ -24,8 +24,11 @@ public class ParticipationService {
 
     private final ParticipationRepository participationRepository;
 
-    public ParticipationService(ParticipationRepository participationRepository) {
+    private final EventService eventService;
+
+    public ParticipationService(ParticipationRepository participationRepository, EventService eventService) {
         this.participationRepository = participationRepository;
+        this.eventService = eventService;
     }
 
     /**
@@ -45,9 +48,10 @@ public class ParticipationService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<Participation> findAll() {
+    public List<Participation> findByEventId(Long eventId, String requesterUserLogin) {
         log.debug("Request to get all Participations");
-        return participationRepository.findAllWithEagerRelationships();
+        eventService.checkEventIdAllowedForRequesterUserLogin(eventId, requesterUserLogin);
+        return participationRepository.findByEventId(eventId);
     }
 
     /**
@@ -58,7 +62,7 @@ public class ParticipationService {
     public Page<Participation> findAllWithEagerRelationships(Pageable pageable) {
         return participationRepository.findAllWithEagerRelationships(pageable);
     }
-    
+
 
     /**
      * Get one participation by id.

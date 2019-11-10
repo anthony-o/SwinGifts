@@ -35,4 +35,8 @@ export class ParticipationService {
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  findByEventId(eventId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IParticipation[]>(`${this.resourceUrl}/by-event-id/${eventId}`, { observe: 'response' });
+  }
 }

@@ -88,9 +88,9 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
      */
     @GetMapping("/events")
-    public List<Event> getAllEvents() {
+    public List<Event> getEventsForCurrentUser() {
         log.debug("REST request to get all Events");
-        return eventService.findAll();
+        return eventService.findForRequesterUserLogin(SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
     }
 
     /**
@@ -102,7 +102,7 @@ public class EventResource {
     @GetMapping("/events/{id}")
     public ResponseEntity<Event> getEvent(@PathVariable Long id) {
         log.debug("REST request to get Event : {}", id);
-        Optional<Event> event = eventService.findOne(id);
+        Optional<Event> event = eventService.findOneForRequesterUserLogin(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseUtil.wrapOrNotFound(event);
     }
 

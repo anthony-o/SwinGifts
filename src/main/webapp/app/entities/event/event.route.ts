@@ -17,9 +17,9 @@ export class EventResolve implements Resolve<IEvent> {
   constructor(private service: EventService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IEvent> {
-    const id = route.params['id'];
-    if (id) {
-      return this.service.find(id).pipe(
+    const eventId = route.params['eventId'];
+    if (eventId) {
+      return this.service.find(eventId).pipe(
         filter((response: HttpResponse<Event>) => response.ok),
         map((event: HttpResponse<Event>) => event.body)
       );
@@ -39,7 +39,7 @@ export const eventRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: ':id/view',
+    path: ':eventId/view',
     component: EventDetailComponent,
     resolve: {
       event: EventResolve
@@ -63,7 +63,7 @@ export const eventRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: ':id/edit',
+    path: ':eventId/edit',
     component: EventUpdateComponent,
     resolve: {
       event: EventResolve
@@ -72,13 +72,19 @@ export const eventRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.event.home.title'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../participation/participation.module').then(m => m.SwinGiftsParticipationModule)
+      }
+    ]
   }
 ];
 
 export const eventPopupRoute: Routes = [
   {
-    path: ':id/delete',
+    path: ':eventId/delete',
     component: EventDeletePopupComponent,
     resolve: {
       event: EventResolve

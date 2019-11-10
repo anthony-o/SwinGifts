@@ -28,10 +28,29 @@ export class ParticipationResolve implements Resolve<IParticipation> {
   }
 }
 
+@Injectable({ providedIn: 'root' })
+export class ParticipationsByEventIdResolve implements Resolve<IParticipation[]> {
+  constructor(private service: ParticipationService) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IParticipation[]> {
+    const eventId = route.params['eventId'];
+    if (eventId) {
+      return this.service.findByEventId(eventId).pipe(
+        filter(response => response.ok),
+        map(participations => participations.body)
+      );
+    }
+    return of([]);
+  }
+}
+
 export const participationRoute: Routes = [
   {
     path: '',
     component: ParticipationComponent,
+    resolve: {
+      participations: ParticipationsByEventIdResolve
+    },
     data: {
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.participation.home.title'
