@@ -21,12 +21,6 @@
                 <dd>
                     {{participation.user?.login}}
                 </dd>
-                <dt><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></dt>
-                <dd>
-                    <span *ngFor="let recipient of participation.recipients; let last = last">
-                        <a [routerLink]="['/participation', recipient?.id, 'view' ]">{{recipient.userAlias}}</a>{{last ? '' : ', '}}
-                    </span>
-                </dd>
                 <dt><span jhiTranslate="swinGiftsApp.participation.event">Event</span></dt>
                 <dd>
                     <div *ngIf="participation.event">

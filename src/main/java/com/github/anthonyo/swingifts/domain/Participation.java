@@ -34,6 +34,9 @@ public class Participation implements Serializable {
     @Column(name = "user_alias", nullable = false)
     private String userAlias;
 
+    @OneToMany(mappedBy = "donor")
+    private Set<GiftDrawing> giftDrawings = new HashSet<>();
+
     @OneToMany(mappedBy = "recipient")
     private Set<GiftIdea> giftIdeas = new HashSet<>();
 
@@ -42,20 +45,10 @@ public class Participation implements Serializable {
     @JsonIgnoreProperties("participations")
     private User user;
 
-    @ManyToMany
-    @JoinTable(name = "participation_recipient",
-               joinColumns = @JoinColumn(name = "participation_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "recipient_id", referencedColumnName = "id"))
-    private Set<Participation> recipients = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("participations")
     private Event event;
-
-    @ManyToMany(mappedBy = "recipients")
-    @JsonIgnore
-    private Set<Participation> donors = new HashSet<>();
 
     @ManyToMany(mappedBy = "participations")
     @JsonIgnore
@@ -109,6 +102,31 @@ public class Participation implements Serializable {
         this.userAlias = userAlias;
     }
 
+    public Set<GiftDrawing> getGiftDrawings() {
+        return giftDrawings;
+    }
+
+    public Participation giftDrawings(Set<GiftDrawing> giftDrawings) {
+        this.giftDrawings = giftDrawings;
+        return this;
+    }
+
+    public Participation addGiftDrawing(GiftDrawing giftDrawing) {
+        this.giftDrawings.add(giftDrawing);
+        giftDrawing.setDonor(this);
+        return this;
+    }
+
+    public Participation removeGiftDrawing(GiftDrawing giftDrawing) {
+        this.giftDrawings.remove(giftDrawing);
+        giftDrawing.setDonor(null);
+        return this;
+    }
+
+    public void setGiftDrawings(Set<GiftDrawing> giftDrawings) {
+        this.giftDrawings = giftDrawings;
+    }
+
     public Set<GiftIdea> getGiftIdeas() {
         return giftIdeas;
     }
@@ -147,31 +165,6 @@ public class Participation implements Serializable {
         this.user = user;
     }
 
-    public Set<Participation> getRecipients() {
-        return recipients;
-    }
-
-    public Participation recipients(Set<Participation> participations) {
-        this.recipients = participations;
-        return this;
-    }
-
-    public Participation addRecipient(Participation participation) {
-        this.recipients.add(participation);
-        participation.getDonors().add(this);
-        return this;
-    }
-
-    public Participation removeRecipient(Participation participation) {
-        this.recipients.remove(participation);
-        participation.getDonors().remove(this);
-        return this;
-    }
-
-    public void setRecipients(Set<Participation> participations) {
-        this.recipients = participations;
-    }
-
     public Event getEvent() {
         return event;
     }
@@ -183,31 +176,6 @@ public class Participation implements Serializable {
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public Set<Participation> getDonors() {
-        return donors;
-    }
-
-    public Participation donors(Set<Participation> participations) {
-        this.donors = participations;
-        return this;
-    }
-
-    public Participation addDonor(Participation participation) {
-        this.donors.add(participation);
-        participation.getRecipients().add(this);
-        return this;
-    }
-
-    public Participation removeDonor(Participation participation) {
-        this.donors.remove(participation);
-        participation.getRecipients().remove(this);
-        return this;
-    }
-
-    public void setDonors(Set<Participation> participations) {
-        this.donors = participations;
     }
 
     public Set<DrawingExclusionGroup> getDrawingExclusionGroups() {

@@ -82,11 +82,11 @@ public class ParticipationResource {
     /**
      * {@code GET  /participations} : get all the participations.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of participations in body.
      */
     @GetMapping("/participations")
-    public List<Participation> getAllParticipations(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Participation> getAllParticipations() {
         log.debug("REST request to get all Participations");
         return participationService.findAll();
     }

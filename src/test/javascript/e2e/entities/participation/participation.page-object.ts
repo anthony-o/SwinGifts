@@ -30,7 +30,6 @@ export class ParticipationUpdatePage {
   nbOfGiftToDonateInput = element(by.id('field_nbOfGiftToDonate'));
   userAliasInput = element(by.id('field_userAlias'));
   userSelect = element(by.id('field_user'));
-  recipientSelect = element(by.id('field_recipient'));
   eventSelect = element(by.id('field_event'));
 
   async getPageTitle() {
@@ -78,25 +77,6 @@ export class ParticipationUpdatePage {
 
   async getUserSelectedOption() {
     return await this.userSelect.element(by.css('option:checked')).getText();
-  }
-
-  async recipientSelectLastOption(timeout?: number) {
-    await this.recipientSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
-  }
-
-  async recipientSelectOption(option) {
-    await this.recipientSelect.sendKeys(option);
-  }
-
-  getRecipientSelect(): ElementFinder {
-    return this.recipientSelect;
-  }
-
-  async getRecipientSelectedOption() {
-    return await this.recipientSelect.element(by.css('option:checked')).getText();
   }
 
   async eventSelectLastOption(timeout?: number) {

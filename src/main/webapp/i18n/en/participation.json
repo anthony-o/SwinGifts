@@ -19,11 +19,10 @@
       "nbOfGiftToReceive": "Nb Of Gift To Receive",
       "nbOfGiftToDonate": "Nb Of Gift To Donate",
       "userAlias": "User Alias",
+      "giftDrawing": "Gift Drawing",
       "giftIdea": "Gift Idea",
       "user": "User",
-      "recipient": "Recipient",
       "event": "Event",
-      "donor": "Donor",
       "drawingExclusionGroup": "Drawing Exclusion Group"
     }
   }

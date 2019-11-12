@@ -10,12 +10,9 @@ import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,13 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,12 +47,6 @@ public class ParticipationResourceIT {
 
     @Autowired
     private ParticipationRepository participationRepository;
-
-    @Mock
-    private ParticipationRepository participationRepositoryMock;
-
-    @Mock
-    private ParticipationService participationServiceMock;
 
     @Autowired
     private ParticipationService participationService;
@@ -229,39 +218,6 @@ public class ParticipationResourceIT {
             .andExpect(jsonPath("$.[*].userAlias").value(hasItem(DEFAULT_USER_ALIAS)));
     }
     
-    @SuppressWarnings({"unchecked"})
-    public void getAllParticipationsWithEagerRelationshipsIsEnabled() throws Exception {
-        ParticipationResource participationResource = new ParticipationResource(participationServiceMock);
-        when(participationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        MockMvc restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restParticipationMockMvc.perform(get("/api/participations?eagerload=true"))
-        .andExpect(status().isOk());
-
-        verify(participationServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllParticipationsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ParticipationResource participationResource = new ParticipationResource(participationServiceMock);
-            when(participationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restParticipationMockMvc.perform(get("/api/participations?eagerload=true"))
-        .andExpect(status().isOk());
-
-            verify(participationServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
     @Test
     @Transactional
     public void getParticipation() throws Exception {

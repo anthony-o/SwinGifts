@@ -5,8 +5,6 @@ import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,18 +45,9 @@ public class ParticipationService {
     @Transactional(readOnly = true)
     public List<Participation> findAll() {
         log.debug("Request to get all Participations");
-        return participationRepository.findAllWithEagerRelationships();
+        return participationRepository.findAll();
     }
 
-    /**
-     * Get all the participations with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<Participation> findAllWithEagerRelationships(Pageable pageable) {
-        return participationRepository.findAllWithEagerRelationships(pageable);
-    }
-    
 
     /**
      * Get one participation by id.
@@ -69,7 +58,7 @@ public class ParticipationService {
     @Transactional(readOnly = true)
     public Optional<Participation> findOne(Long id) {
         log.debug("Request to get Participation : {}", id);
-        return participationRepository.findOneWithEagerRelationships(id);
+        return participationRepository.findById(id);
     }
 
     /**

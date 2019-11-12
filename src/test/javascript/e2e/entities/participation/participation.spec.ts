@@ -49,7 +49,6 @@ describe('Participation e2e test', () => {
             participationUpdatePage.setNbOfGiftToDonateInput('5'),
             participationUpdatePage.setUserAliasInput('userAlias'),
             participationUpdatePage.userSelectLastOption(),
-            // participationUpdatePage.recipientSelectLastOption(),
             participationUpdatePage.eventSelectLastOption(),
         ]);
         expect(await participationUpdatePage.getNbOfGiftToReceiveInput()).to.eq('5', 'Expected nbOfGiftToReceive value to be equals to 5');

@@ -23,7 +23,6 @@
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.user">User</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.recipient">Recipient</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.event">Event</span></th>
             <th scope="col"></th>
             </tr>
@@ -36,11 +35,6 @@
                 <td>{{participation.userAlias}}</td>
                 <td>
                     {{participation.user?.login}}
-                </td>
-                <td>
-                    <span *ngFor="let recipient of participation.recipients; let last = last">
-                            <a class="form-control-static" [routerLink]="['/participation', recipient?.id, 'view' ]">{{recipient.userAlias}}</a>{{last ? '' : ', '}}
-                        </span>
                 </td>
                 <td>
                     <div *ngIf="participation.event">

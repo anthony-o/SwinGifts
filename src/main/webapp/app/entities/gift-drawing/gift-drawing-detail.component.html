@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="giftDrawing">
+            <h2><span jhiTranslate="swinGiftsApp.giftDrawing.detail.title">Gift Drawing</span> {{giftDrawing.id}}</h2>
+            <hr>
+            <swg-alert-error></swg-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="swinGiftsApp.giftDrawing.recipient">Recipient</span></dt>
+                <dd>
+                    <div *ngIf="giftDrawing.recipient">
+                        <a [routerLink]="['/participation', giftDrawing.recipient?.id, 'view']">{{giftDrawing.recipient?.userAlias}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftDrawing.donor">Donor</span></dt>
+                <dd>
+                    <div *ngIf="giftDrawing.donor">
+                        <a [routerLink]="['/participation', giftDrawing.donor?.id, 'view']">{{giftDrawing.donor?.userAlias}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/gift-drawing', giftDrawing.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

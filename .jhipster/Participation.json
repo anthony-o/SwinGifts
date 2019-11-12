@@ -28,6 +28,12 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "giftDrawing",
+            "otherEntityRelationshipName": "donor",
+            "relationshipName": "giftDrawing"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "giftIdea",
             "otherEntityRelationshipName": "recipient",
             "relationshipName": "giftIdea"
@@ -41,28 +47,12 @@
             "otherEntityField": "login"
         },
         {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "participation",
-            "otherEntityRelationshipName": "donor",
-            "relationshipName": "recipient",
-            "otherEntityField": "userAlias",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "event",
             "otherEntityRelationshipName": "participations",
             "relationshipValidateRules": "required",
             "relationshipName": "event",
             "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "participation",
-            "otherEntityRelationshipName": "recipient",
-            "relationshipName": "donor",
-            "otherEntityField": "userAlias",
-            "ownerSide": false
         },
         {
             "relationshipType": "many-to-many",

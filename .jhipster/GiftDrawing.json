@@ -1,0 +1,32 @@
+{
+    "name": "GiftDrawing",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftDrawing",
+            "relationshipName": "recipient",
+            "otherEntityField": "userAlias"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftDrawing",
+            "relationshipName": "donor",
+            "otherEntityField": "userAlias"
+        }
+    ],
+    "changelogDate": "20191112134820",
+    "entityTableName": "gift_drawing",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": [
+        "SwinGifts"
+    ]
+}
