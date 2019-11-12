@@ -2,6 +2,7 @@ package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
@@ -18,13 +19,20 @@ public class GiftDrawing implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("giftDrawings")
     private Participation recipient;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("giftDrawings")
     private Participation donor;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("giftDrawings")
+    private Event event;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -59,6 +67,19 @@ public class GiftDrawing implements Serializable {
 
     public void setDonor(Participation participation) {
         this.donor = participation;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public GiftDrawing event(Event event) {
+        this.event = event;
+        return this;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

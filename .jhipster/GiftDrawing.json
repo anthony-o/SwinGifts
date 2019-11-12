@@ -6,6 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "participation",
             "otherEntityRelationshipName": "giftDrawing",
+            "relationshipValidateRules": "required",
             "relationshipName": "recipient",
             "otherEntityField": "userAlias"
         },
@@ -13,8 +14,17 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "participation",
             "otherEntityRelationshipName": "giftDrawing",
+            "relationshipValidateRules": "required",
             "relationshipName": "donor",
             "otherEntityField": "userAlias"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "giftDrawing",
+            "relationshipValidateRules": "required",
+            "relationshipName": "event",
+            "otherEntityField": "name"
         }
     ],
     "changelogDate": "20191112134820",

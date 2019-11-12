@@ -18,6 +18,7 @@
       },
       "name": "Name",
       "participations": "Participations",
+      "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",
       "admin": "Admin"
     }
