@@ -17,6 +17,12 @@
                         <a [routerLink]="['/participation', giftDrawing.donor?.id, 'view']">{{giftDrawing.donor?.userAlias}}</a>
                     </div>
                 </dd>
+                <dt><span jhiTranslate="swinGiftsApp.giftDrawing.event">Event</span></dt>
+                <dd>
+                    <div *ngIf="giftDrawing.event">
+                        <a [routerLink]="['/event', giftDrawing.event?.id, 'view']">{{giftDrawing.event?.name}}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

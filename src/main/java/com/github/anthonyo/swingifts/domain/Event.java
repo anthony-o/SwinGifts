@@ -30,6 +30,9 @@ public class Event implements Serializable {
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
+    private Set<GiftDrawing> giftDrawings = new HashSet<>();
+
+    @OneToMany(mappedBy = "event")
     @JsonIgnoreProperties("event")
     private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
@@ -83,6 +86,31 @@ public class Event implements Serializable {
 
     public void setParticipations(Set<Participation> participations) {
         this.participations = participations;
+    }
+
+    public Set<GiftDrawing> getGiftDrawings() {
+        return giftDrawings;
+    }
+
+    public Event giftDrawings(Set<GiftDrawing> giftDrawings) {
+        this.giftDrawings = giftDrawings;
+        return this;
+    }
+
+    public Event addGiftDrawing(GiftDrawing giftDrawing) {
+        this.giftDrawings.add(giftDrawing);
+        giftDrawing.setEvent(this);
+        return this;
+    }
+
+    public Event removeGiftDrawing(GiftDrawing giftDrawing) {
+        this.giftDrawings.remove(giftDrawing);
+        giftDrawing.setEvent(null);
+        return this;
+    }
+
+    public void setGiftDrawings(Set<GiftDrawing> giftDrawings) {
+        this.giftDrawings = giftDrawings;
     }
 
     public Set<DrawingExclusionGroup> getDrawingExclusionGroups() {

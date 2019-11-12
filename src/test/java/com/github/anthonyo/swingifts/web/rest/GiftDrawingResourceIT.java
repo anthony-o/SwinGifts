@@ -2,6 +2,8 @@ package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.GiftDrawing;
+import com.github.anthonyo.swingifts.domain.Participation;
+import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
 import com.github.anthonyo.swingifts.service.GiftDrawingService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
@@ -79,6 +81,28 @@ public class GiftDrawingResourceIT {
      */
     public static GiftDrawing createEntity(EntityManager em) {
         GiftDrawing giftDrawing = new GiftDrawing();
+        // Add required entity
+        Participation participation;
+        if (TestUtil.findAll(em, Participation.class).isEmpty()) {
+            participation = ParticipationResourceIT.createEntity(em);
+            em.persist(participation);
+            em.flush();
+        } else {
+            participation = TestUtil.findAll(em, Participation.class).get(0);
+        }
+        giftDrawing.setRecipient(participation);
+        // Add required entity
+        giftDrawing.setDonor(participation);
+        // Add required entity
+        Event event;
+        if (TestUtil.findAll(em, Event.class).isEmpty()) {
+            event = EventResourceIT.createEntity(em);
+            em.persist(event);
+            em.flush();
+        } else {
+            event = TestUtil.findAll(em, Event.class).get(0);
+        }
+        giftDrawing.setEvent(event);
         return giftDrawing;
     }
     /**
@@ -89,6 +113,28 @@ public class GiftDrawingResourceIT {
      */
     public static GiftDrawing createUpdatedEntity(EntityManager em) {
         GiftDrawing giftDrawing = new GiftDrawing();
+        // Add required entity
+        Participation participation;
+        if (TestUtil.findAll(em, Participation.class).isEmpty()) {
+            participation = ParticipationResourceIT.createUpdatedEntity(em);
+            em.persist(participation);
+            em.flush();
+        } else {
+            participation = TestUtil.findAll(em, Participation.class).get(0);
+        }
+        giftDrawing.setRecipient(participation);
+        // Add required entity
+        giftDrawing.setDonor(participation);
+        // Add required entity
+        Event event;
+        if (TestUtil.findAll(em, Event.class).isEmpty()) {
+            event = EventResourceIT.createUpdatedEntity(em);
+            em.persist(event);
+            em.flush();
+        } else {
+            event = TestUtil.findAll(em, Event.class).get(0);
+        }
+        giftDrawing.setEvent(event);
         return giftDrawing;
     }
 

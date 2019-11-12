@@ -28,6 +28,7 @@ export class GiftDrawingUpdatePage {
   cancelButton = element(by.id('cancel-save'));
   recipientSelect = element(by.id('field_recipient'));
   donorSelect = element(by.id('field_donor'));
+  eventSelect = element(by.id('field_event'));
 
   async getPageTitle() {
     return this.pageTitle.getAttribute('jhiTranslate');
@@ -69,6 +70,25 @@ export class GiftDrawingUpdatePage {
 
   async getDonorSelectedOption() {
     return await this.donorSelect.element(by.css('option:checked')).getText();
+  }
+
+  async eventSelectLastOption(timeout?: number) {
+    await this.eventSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async eventSelectOption(option) {
+    await this.eventSelect.sendKeys(option);
+  }
+
+  getEventSelect(): ElementFinder {
+    return this.eventSelect;
+  }
+
+  async getEventSelectedOption() {
+    return await this.eventSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -46,7 +47,7 @@ public class GiftDrawingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/gift-drawings")
-    public ResponseEntity<GiftDrawing> createGiftDrawing(@RequestBody GiftDrawing giftDrawing) throws URISyntaxException {
+    public ResponseEntity<GiftDrawing> createGiftDrawing(@Valid @RequestBody GiftDrawing giftDrawing) throws URISyntaxException {
         log.debug("REST request to save GiftDrawing : {}", giftDrawing);
         if (giftDrawing.getId() != null) {
             throw new BadRequestAlertException("A new giftDrawing cannot already have an ID", ENTITY_NAME, "idexists");
@@ -67,7 +68,7 @@ public class GiftDrawingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/gift-drawings")
-    public ResponseEntity<GiftDrawing> updateGiftDrawing(@RequestBody GiftDrawing giftDrawing) throws URISyntaxException {
+    public ResponseEntity<GiftDrawing> updateGiftDrawing(@Valid @RequestBody GiftDrawing giftDrawing) throws URISyntaxException {
         log.debug("REST request to update GiftDrawing : {}", giftDrawing);
         if (giftDrawing.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

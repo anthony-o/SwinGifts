@@ -18,6 +18,12 @@
         },
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "giftDrawing",
+            "otherEntityRelationshipName": "event",
+            "relationshipName": "giftDrawing"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "drawingExclusionGroup",
             "otherEntityRelationshipName": "event",
             "relationshipName": "drawingExclusionGroup"

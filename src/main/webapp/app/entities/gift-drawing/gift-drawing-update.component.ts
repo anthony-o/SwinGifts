@@ -11,6 +11,8 @@ import { IGiftDrawing, GiftDrawing } from 'app/shared/model/gift-drawing.model';
 import { GiftDrawingService } from './gift-drawing.service';
 import { IParticipation } from 'app/shared/model/participation.model';
 import { ParticipationService } from 'app/entities/participation/participation.service';
+import { IEvent } from 'app/shared/model/event.model';
+import { EventService } from 'app/entities/event/event.service';
 
 @Component({
   selector: 'swg-gift-drawing-update',
@@ -21,16 +23,20 @@ export class GiftDrawingUpdateComponent implements OnInit {
 
   participations: IParticipation[];
 
+  events: IEvent[];
+
   editForm = this.fb.group({
     id: [],
-    recipient: [],
-    donor: []
+    recipient: [null, Validators.required],
+    donor: [null, Validators.required],
+    event: [null, Validators.required]
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected giftDrawingService: GiftDrawingService,
     protected participationService: ParticipationService,
+    protected eventService: EventService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -47,13 +53,21 @@ export class GiftDrawingUpdateComponent implements OnInit {
         map((response: HttpResponse<IParticipation[]>) => response.body)
       )
       .subscribe((res: IParticipation[]) => (this.participations = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.eventService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IEvent[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IEvent[]>) => response.body)
+      )
+      .subscribe((res: IEvent[]) => (this.events = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(giftDrawing: IGiftDrawing) {
     this.editForm.patchValue({
       id: giftDrawing.id,
       recipient: giftDrawing.recipient,
-      donor: giftDrawing.donor
+      donor: giftDrawing.donor,
+      event: giftDrawing.event
     });
   }
 
@@ -76,7 +90,8 @@ export class GiftDrawingUpdateComponent implements OnInit {
       ...new GiftDrawing(),
       id: this.editForm.get(['id']).value,
       recipient: this.editForm.get(['recipient']).value,
-      donor: this.editForm.get(['donor']).value
+      donor: this.editForm.get(['donor']).value,
+      event: this.editForm.get(['event']).value
     };
   }
 
@@ -97,6 +112,10 @@ export class GiftDrawingUpdateComponent implements OnInit {
   }
 
   trackParticipationById(index: number, item: IParticipation) {
+    return item.id;
+  }
+
+  trackEventById(index: number, item: IEvent) {
     return item.id;
   }
 }

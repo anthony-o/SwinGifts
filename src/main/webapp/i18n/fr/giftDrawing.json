@@ -17,7 +17,8 @@
         "title": "Gift Drawing"
       },
       "recipient": "Recipient",
-      "donor": "Donor"
+      "donor": "Donor",
+      "event": "Event"
     }
   }
 }

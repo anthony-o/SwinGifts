@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="participation"/>
 
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="gift_drawing"
+                                 constraintName="fk_gift_drawing_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -21,6 +21,7 @@
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftDrawing.recipient">Recipient</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftDrawing.donor">Donor</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftDrawing.event">Event</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -35,6 +36,11 @@
                 <td>
                     <div *ngIf="giftDrawing.donor">
                         <a [routerLink]="['/participation', giftDrawing.donor?.id, 'view' ]" >{{giftDrawing.donor?.userAlias}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="giftDrawing.event">
+                        <a [routerLink]="['/event', giftDrawing.event?.id, 'view' ]" >{{giftDrawing.event?.name}}</a>
                     </div>
                 </td>
                 <td class="text-right">

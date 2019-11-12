@@ -3,7 +3,11 @@ import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { GiftDrawingComponentsPage, GiftDrawingDeleteDialog, GiftDrawingUpdatePage } from './gift-drawing.page-object';
+import {
+  GiftDrawingComponentsPage,
+  /* GiftDrawingDeleteDialog,
+   */ GiftDrawingUpdatePage
+} from './gift-drawing.page-object';
 
 const expect = chai.expect;
 
@@ -12,7 +16,7 @@ describe('GiftDrawing e2e test', () => {
   let signInPage: SignInPage;
   let giftDrawingComponentsPage: GiftDrawingComponentsPage;
   let giftDrawingUpdatePage: GiftDrawingUpdatePage;
-  let giftDrawingDeleteDialog: GiftDrawingDeleteDialog;
+  /* let giftDrawingDeleteDialog: GiftDrawingDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -36,27 +40,32 @@ describe('GiftDrawing e2e test', () => {
     await giftDrawingUpdatePage.cancel();
   });
 
-  it('should create and save GiftDrawings', async () => {
-    const nbButtonsBeforeCreate = await giftDrawingComponentsPage.countDeleteButtons();
+  /*  it('should create and save GiftDrawings', async () => {
+        const nbButtonsBeforeCreate = await giftDrawingComponentsPage.countDeleteButtons();
 
-    await giftDrawingComponentsPage.clickOnCreateButton();
-    await promise.all([giftDrawingUpdatePage.recipientSelectLastOption(), giftDrawingUpdatePage.donorSelectLastOption()]);
-    await giftDrawingUpdatePage.save();
-    expect(await giftDrawingUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await giftDrawingComponentsPage.clickOnCreateButton();
+        await promise.all([
+            giftDrawingUpdatePage.recipientSelectLastOption(),
+            giftDrawingUpdatePage.donorSelectLastOption(),
+            giftDrawingUpdatePage.eventSelectLastOption(),
+        ]);
+        await giftDrawingUpdatePage.save();
+        expect(await giftDrawingUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await giftDrawingComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-  });
+        expect(await giftDrawingComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last GiftDrawing', async () => {
-    const nbButtonsBeforeDelete = await giftDrawingComponentsPage.countDeleteButtons();
-    await giftDrawingComponentsPage.clickOnLastDeleteButton();
+  /*  it('should delete last GiftDrawing', async () => {
+        const nbButtonsBeforeDelete = await giftDrawingComponentsPage.countDeleteButtons();
+        await giftDrawingComponentsPage.clickOnLastDeleteButton();
 
-    giftDrawingDeleteDialog = new GiftDrawingDeleteDialog();
-    expect(await giftDrawingDeleteDialog.getDialogTitle()).to.eq('swinGiftsApp.giftDrawing.delete.question');
-    await giftDrawingDeleteDialog.clickOnConfirmButton();
+        giftDrawingDeleteDialog = new GiftDrawingDeleteDialog();
+        expect(await giftDrawingDeleteDialog.getDialogTitle())
+            .to.eq('swinGiftsApp.giftDrawing.delete.question');
+        await giftDrawingDeleteDialog.clickOnConfirmButton();
 
-    expect(await giftDrawingComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await giftDrawingComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();
