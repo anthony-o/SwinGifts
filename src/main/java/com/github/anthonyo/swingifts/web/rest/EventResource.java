@@ -3,6 +3,7 @@ package com.github.anthonyo.swingifts.web.rest;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.EventService;
+import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -131,4 +132,11 @@ public class EventResource {
         Optional<Event> event = eventService.findOneWithEagerRelationships(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseUtil.wrapOrNotFound(event);
     }
+
+    @PostMapping("/events/{id}/draw-gifts") // POST as this is not an idempotent action: it changes data, see https://softwareengineering.stackexchange.com/a/261675/119279
+    public void drawGifts(@PathVariable Long id) throws EntityNotFoundException {
+        log.debug("Request to launch the gift drawing of the Event : {}", id);
+        eventService.drawGifts(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+    }
+
 }

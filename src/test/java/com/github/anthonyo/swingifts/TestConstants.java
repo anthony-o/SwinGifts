@@ -3,6 +3,7 @@ package com.github.anthonyo.swingifts;
 public class TestConstants {
     public static final long USER_ALICE_ID = 5L;
     public static final String USER_ALICE_LOGIN = "alice";
+    public static final String USER_BOB_LOGIN = "bob";
 
     public static long EVENT_ALICES_EVENT_ID = 1L;
 
