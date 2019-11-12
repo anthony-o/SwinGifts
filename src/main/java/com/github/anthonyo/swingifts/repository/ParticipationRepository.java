@@ -1,13 +1,10 @@
 package com.github.anthonyo.swingifts.repository;
 import com.github.anthonyo.swingifts.domain.Participation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Spring Data  repository for the Participation entity.
@@ -18,19 +15,10 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     @Query("select participation from Participation participation where participation.user.login = ?#{principal.username}")
     List<Participation> findByUserIsCurrentUser();
 
-    @Query(value = "select distinct participation from Participation participation left join fetch participation.recipients",
-        countQuery = "select count(distinct participation) from Participation participation")
-    Page<Participation> findAllWithEagerRelationships(Pageable pageable);
-
-    @Query("select distinct participation from Participation participation left join fetch participation.recipients")
-    List<Participation> findAllWithEagerRelationships();
-
-    @Query("select participation from Participation participation left join fetch participation.recipients where participation.id =:id")
-    Optional<Participation> findOneWithEagerRelationships(@Param("id") Long id);
-
     List<Participation> findByEventId(Long eventId);
 
     @Query("select count(participation) > 0 from Participation participation join participation.event event left join event.participations eventParticipation" +
         " where participation.id = :id and (event.admin.login = :login or eventParticipation.user.login = :login)")
     boolean existsByIdAndEventParticipationsUserLoginOrEventAdminLogin(@Param("id") Long id, @Param("login") String login);
+
 }

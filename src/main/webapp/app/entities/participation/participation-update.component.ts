@@ -25,8 +25,6 @@ export class ParticipationUpdateComponent implements OnInit {
 
   users: IUser[];
 
-  participations: IParticipation[];
-
   events: IEvent[];
 
   drawingexclusiongroups: IDrawingExclusionGroup[];
@@ -37,7 +35,6 @@ export class ParticipationUpdateComponent implements OnInit {
     nbOfGiftToDonate: [null, [Validators.min(0)]],
     userAlias: [null, [Validators.required]],
     user: [null, Validators.required],
-    recipients: [],
     event: [null, Validators.required]
   });
 
@@ -63,13 +60,6 @@ export class ParticipationUpdateComponent implements OnInit {
         map((response: HttpResponse<IUser[]>) => response.body)
       )
       .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.participationService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IParticipation[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IParticipation[]>) => response.body)
-      )
-      .subscribe((res: IParticipation[]) => (this.participations = res), (res: HttpErrorResponse) => this.onError(res.message));
     this.eventService
       .query()
       .pipe(
@@ -96,7 +86,6 @@ export class ParticipationUpdateComponent implements OnInit {
       nbOfGiftToDonate: participation.nbOfGiftToDonate,
       userAlias: participation.userAlias,
       user: participation.user,
-      recipients: participation.recipients,
       event: participation.event
     });
   }
@@ -123,7 +112,6 @@ export class ParticipationUpdateComponent implements OnInit {
       nbOfGiftToDonate: this.editForm.get(['nbOfGiftToDonate']).value,
       userAlias: this.editForm.get(['userAlias']).value,
       user: this.editForm.get(['user']).value,
-      recipients: this.editForm.get(['recipients']).value,
       event: this.editForm.get(['event']).value
     };
   }
@@ -145,10 +133,6 @@ export class ParticipationUpdateComponent implements OnInit {
   }
 
   trackUserById(index: number, item: IUser) {
-    return item.id;
-  }
-
-  trackParticipationById(index: number, item: IParticipation) {
     return item.id;
   }
 

@@ -20,6 +20,10 @@ import { RouterModule } from '@angular/router';
         path: 'drawing-exclusion-group',
         loadChildren: () =>
           import('./drawing-exclusion-group/drawing-exclusion-group.module').then(m => m.SwinGiftsDrawingExclusionGroupModule)
+      },
+      {
+        path: 'gift-drawing',
+        loadChildren: () => import('./gift-drawing/gift-drawing.module').then(m => m.SwinGiftsGiftDrawingModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

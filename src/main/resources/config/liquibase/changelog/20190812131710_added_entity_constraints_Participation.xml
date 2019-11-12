@@ -14,18 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="swg_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="donor_id"
-                                 baseTableName="gift_drawing"
-                                 constraintName="fk_gift_drawing_donor_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="participation"/>
-
-        <addForeignKeyConstraint baseColumnNames="recipient_id"
-                                 baseTableName="gift_drawing"
-                                 constraintName="fk_gift_drawing_recipient_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="participation"/>
-        
         <addForeignKeyConstraint baseColumnNames="event_id"
                                  baseTableName="participation"
                                  constraintName="fk_participation_event_id"

@@ -34,8 +34,13 @@ relationship ManyToOne {
 relationship OneToMany {
 	Event{participations(userAlias)} to Participation{event(name) required}
 }
-relationship ManyToMany {
-    Participation{recipient(userAlias)} to Participation{donor(userAlias)}
+
+entity GiftDrawing {}
+relationship OneToMany {
+    Participation to GiftDrawing{donor(userAlias)}
+}
+relationship ManyToOne {
+    GiftDrawing{recipient(userAlias)} to Participation
 }
 
 entity GiftIdea {

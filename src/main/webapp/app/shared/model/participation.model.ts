@@ -1,6 +1,6 @@
+import { IGiftDrawing } from 'app/shared/model/gift-drawing.model';
 import { IGiftIdea } from 'app/shared/model/gift-idea.model';
 import { IUser } from 'app/core/user/user.model';
-import { IParticipation } from 'app/shared/model/participation.model';
 import { IEvent } from 'app/shared/model/event.model';
 import { IDrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
 
@@ -9,11 +9,10 @@ export interface IParticipation {
   nbOfGiftToReceive?: number;
   nbOfGiftToDonate?: number;
   userAlias?: string;
+  giftDrawings?: IGiftDrawing[];
   giftIdeas?: IGiftIdea[];
   user?: IUser;
-  recipients?: IParticipation[];
   event?: IEvent;
-  donors?: IParticipation[];
   drawingExclusionGroups?: IDrawingExclusionGroup[];
 }
 
@@ -23,11 +22,10 @@ export class Participation implements IParticipation {
     public nbOfGiftToReceive?: number,
     public nbOfGiftToDonate?: number,
     public userAlias?: string,
+    public giftDrawings?: IGiftDrawing[],
     public giftIdeas?: IGiftIdea[],
     public user?: IUser,
-    public recipients?: IParticipation[],
     public event?: IEvent,
-    public donors?: IParticipation[],
     public drawingExclusionGroups?: IDrawingExclusionGroup[]
   ) {}
 }

@@ -38,5 +38,5 @@
     "otherModules": [],
     "blueprints": []
   },
-  "entities": ["Event", "Participation", "GiftIdea", "DrawingExclusionGroup"]
+  "entities": ["Event", "Participation", "GiftDrawing", "GiftIdea", "DrawingExclusionGroup"]
 }

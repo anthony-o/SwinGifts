@@ -1,0 +1,23 @@
+{
+  "swinGiftsApp": {
+    "giftDrawing": {
+      "home": {
+        "title": "Gift Drawings",
+        "createLabel": "Create a new Gift Drawing",
+        "createOrEditLabel": "Create or edit a Gift Drawing",
+        "notFound": "No Gift Drawings found"
+      },
+      "created": "A new Gift Drawing is created with identifier {{ param }}",
+      "updated": "A Gift Drawing is updated with identifier {{ param }}",
+      "deleted": "A Gift Drawing is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Gift Drawing {{ id }}?"
+      },
+      "detail": {
+        "title": "Gift Drawing"
+      },
+      "recipient": "Recipient",
+      "donor": "Donor"
+    }
+  }
+}
