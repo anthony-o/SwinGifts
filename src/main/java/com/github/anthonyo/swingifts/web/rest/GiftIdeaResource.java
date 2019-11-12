@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.domain.GiftIdea;
+import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.GiftIdeaService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
@@ -16,8 +17,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * REST controller for managing {@link com.github.anthonyo.swingifts.domain.GiftIdea}.
@@ -80,15 +81,15 @@ public class GiftIdeaResource {
     }
 
     /**
-     * {@code GET  /gift-ideas} : get all the giftIdeas.
+     * {@code GET  /gift-ideas/by-recipient-id/:participationId} : get the giftIdeas for the given "participationId" recipient.
      *
 
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of giftIdeas in body.
      */
-    @GetMapping("/gift-ideas")
-    public List<GiftIdea> getAllGiftIdeas() {
-        log.debug("REST request to get all GiftIdeas");
-        return giftIdeaService.findAll();
+    @GetMapping("/gift-ideas/by-recipient-id/{participationId}")
+    public Stream<GiftIdea> getGiftIdeasByRecipientId(@PathVariable Long participationId) {
+        log.debug("REST request to get the giftIdeas for the given \"participationId\" recipient : {}", participationId);
+        return giftIdeaService.findByRecipientIdForRequesterUserLogin(participationId, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
     }
 
     /**

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +85,11 @@ public class ParticipationService {
     public void delete(Long id) {
         log.debug("Request to delete Participation : {}", id);
         participationRepository.deleteById(id);
+    }
+
+    public void checkParticipationIdAllowedForRequesterUserLogin(Long participationId, String requesterUserLogin) {
+        if (!participationRepository.existsByIdAndEventParticipationsUserLoginOrEventAdminLogin(participationId, requesterUserLogin)) {
+            throw new AccessDeniedException("User is not allowed to access this participation");
+        }
     }
 }

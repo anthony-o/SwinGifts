@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Service Implementation for managing {@link GiftIdea}.
@@ -21,9 +22,11 @@ public class GiftIdeaService {
     private final Logger log = LoggerFactory.getLogger(GiftIdeaService.class);
 
     private final GiftIdeaRepository giftIdeaRepository;
+    private final ParticipationService participationService;
 
-    public GiftIdeaService(GiftIdeaRepository giftIdeaRepository) {
+    public GiftIdeaService(GiftIdeaRepository giftIdeaRepository, ParticipationService participationService) {
         this.giftIdeaRepository = giftIdeaRepository;
+        this.participationService = participationService;
     }
 
     /**
@@ -69,5 +72,10 @@ public class GiftIdeaService {
     public void delete(Long id) {
         log.debug("Request to delete GiftIdea : {}", id);
         giftIdeaRepository.deleteById(id);
+    }
+
+    public Stream<GiftIdea> findByRecipientIdForRequesterUserLogin(Long participationId, String requesterUserLogin) {
+        participationService.checkParticipationIdAllowedForRequesterUserLogin(participationId, requesterUserLogin);
+        return giftIdeaRepository.findByRecipientId(participationId).stream().filter(giftIdea -> !requesterUserLogin.equals(giftIdea.getRecipient().getUser().getLogin()) || requesterUserLogin.equals(giftIdea.getCreator().getUser().getLogin()));
     }
 }

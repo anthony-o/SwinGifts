@@ -29,4 +29,8 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     Optional<Participation> findOneWithEagerRelationships(@Param("id") Long id);
 
     List<Participation> findByEventId(Long eventId);
+
+    @Query("select count(participation) > 0 from Participation participation join participation.event event left join event.participations eventParticipation" +
+        " where participation.id = :id and (event.admin.login = :login or eventParticipation.user.login = :login)")
+    boolean existsByIdAndEventParticipationsUserLoginOrEventAdminLogin(@Param("id") Long id, @Param("login") String login);
 }

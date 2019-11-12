@@ -17,9 +17,9 @@ export class ParticipationResolve implements Resolve<IParticipation> {
   constructor(private service: ParticipationService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IParticipation> {
-    const id = route.params['id'];
-    if (id) {
-      return this.service.find(id).pipe(
+    const participationId = route.params['participationId'];
+    if (participationId) {
+      return this.service.find(participationId).pipe(
         filter((response: HttpResponse<Participation>) => response.ok),
         map((participation: HttpResponse<Participation>) => participation.body)
       );
@@ -28,29 +28,10 @@ export class ParticipationResolve implements Resolve<IParticipation> {
   }
 }
 
-@Injectable({ providedIn: 'root' })
-export class ParticipationsByEventIdResolve implements Resolve<IParticipation[]> {
-  constructor(private service: ParticipationService) {}
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IParticipation[]> {
-    const eventId = route.params['eventId'];
-    if (eventId) {
-      return this.service.findByEventId(eventId).pipe(
-        filter(response => response.ok),
-        map(participations => participations.body)
-      );
-    }
-    return of([]);
-  }
-}
-
 export const participationRoute: Routes = [
   {
     path: '',
     component: ParticipationComponent,
-    resolve: {
-      participations: ParticipationsByEventIdResolve
-    },
     data: {
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.participation.home.title'
@@ -58,7 +39,7 @@ export const participationRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: ':id/view',
+    path: ':participationId/view',
     component: ParticipationDetailComponent,
     resolve: {
       participation: ParticipationResolve
@@ -67,7 +48,13 @@ export const participationRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.participation.home.title'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../gift-idea/gift-idea.module').then(m => m.SwinGiftsGiftIdeaModule)
+      }
+    ]
   },
   {
     path: 'new',
@@ -82,7 +69,7 @@ export const participationRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: ':id/edit',
+    path: ':participationId/edit',
     component: ParticipationUpdateComponent,
     resolve: {
       participation: ParticipationResolve
@@ -91,13 +78,19 @@ export const participationRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.participation.home.title'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../gift-idea/gift-idea.module').then(m => m.SwinGiftsGiftIdeaModule)
+      }
+    ]
   }
 ];
 
 export const participationPopupRoute: Routes = [
   {
-    path: ':id/delete',
+    path: ':participationId/delete',
     component: ParticipationDeletePopupComponent,
     resolve: {
       participation: ParticipationResolve

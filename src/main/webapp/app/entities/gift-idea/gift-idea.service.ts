@@ -2,12 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared/util/request-util';
 import { IGiftIdea } from 'app/shared/model/gift-idea.model';
 
 type EntityResponseType = HttpResponse<IGiftIdea>;
@@ -39,10 +36,9 @@ export class GiftIdeaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
+  findByRecipientId(participationId: number): Observable<EntityArrayResponseType> {
     return this.http
-      .get<IGiftIdea[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<IGiftIdea[]>(`${this.resourceUrl}/by-recipient-id/${participationId}`, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 

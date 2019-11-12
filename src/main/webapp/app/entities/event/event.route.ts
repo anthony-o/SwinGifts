@@ -48,7 +48,13 @@ export const eventRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.event.home.title'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../participation/participation.module').then(m => m.SwinGiftsParticipationModule)
+      }
+    ]
   },
   {
     path: 'new',

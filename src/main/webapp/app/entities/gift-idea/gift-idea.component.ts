@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { IGiftIdea } from 'app/shared/model/gift-idea.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { GiftIdeaService } from './gift-idea.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'swg-gift-idea',
@@ -21,15 +20,24 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
   constructor(
     protected giftIdeaService: GiftIdeaService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected activatedRoute: ActivatedRoute
   ) {}
 
   loadAll() {
-    this.giftIdeaService
-      .query()
+    this.activatedRoute.paramMap
       .pipe(
-        filter((res: HttpResponse<IGiftIdea[]>) => res.ok),
-        map((res: HttpResponse<IGiftIdea[]>) => res.body)
+        switchMap(paramMap => {
+          const participationId = paramMap.get('participationId');
+          if (participationId) {
+            return this.giftIdeaService.findByRecipientId(Number(participationId)).pipe(
+              filter(res => res.ok),
+              map(res => res.body)
+            );
+          } else {
+            of([]);
+          }
+        })
       )
       .subscribe((res: IGiftIdea[]) => {
         this.giftIdeas = res;
