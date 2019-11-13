@@ -1,6 +1,8 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,6 +22,7 @@ public class Participation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.EventGet.class)
     private Long id;
 
     @Min(value = 0)
@@ -32,6 +35,7 @@ public class Participation implements Serializable {
 
     @NotNull
     @Column(name = "user_alias", nullable = false)
+    @JsonView(JsonViews.EventGet.class)
     private String userAlias;
 
     @OneToMany(mappedBy = "donor")

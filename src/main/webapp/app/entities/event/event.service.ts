@@ -35,4 +35,8 @@ export class EventService {
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  drawGifts(id: number): Observable<HttpResponse<any>> {
+    return this.http.post<any>(`${this.resourceUrl}/${id}/draw-gifts`, null, { observe: 'response' });
+  }
 }

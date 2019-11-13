@@ -1,6 +1,9 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,28 +23,37 @@ public class Event implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.EventGet.class)
     private Long id;
 
     @NotNull
     @Column(name = "name", nullable = false)
+    @JsonView(JsonViews.EventGet.class)
     private String name;
 
     @OneToMany(mappedBy = "event")
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
+    @JsonIgnore
     private Set<GiftDrawing> giftDrawings = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
     @JsonIgnoreProperties("event")
+    @JsonView(JsonViews.EventGet.class)
     private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnore
+    @JsonView(JsonViews.EventGet.class)
     private User admin;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+    @Transient
+    private Set<Participation> myGiftDrawingRecipients = new HashSet<>();
+
+
     public Long getId() {
         return id;
     }
@@ -151,6 +163,20 @@ public class Event implements Serializable {
         this.admin = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @JsonView(JsonViews.EventGet.class)
+    public Set<Participation> getMyGiftDrawingRecipients() {
+        return myGiftDrawingRecipients;
+    }
+
+    public void setMyGiftDrawingRecipients(Set<Participation> myGiftDrawingRecipients) {
+        this.myGiftDrawingRecipients = myGiftDrawingRecipients;
+    }
+
+    public Event myGiftDrawingRecipients(Set<Participation> myGiftDrawingRecipients) {
+        this.myGiftDrawingRecipients = myGiftDrawingRecipients;
+        return this;
+    }
 
     @Override
     public boolean equals(Object o) {

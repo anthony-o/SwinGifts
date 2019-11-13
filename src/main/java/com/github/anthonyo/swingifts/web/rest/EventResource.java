@@ -1,18 +1,19 @@
 package com.github.anthonyo.swingifts.web.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -101,6 +102,7 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/events/{id}")
+    @JsonView(JsonViews.EventGet.class)
     public ResponseEntity<Event> getEvent(@PathVariable Long id) {
         log.debug("REST request to get Event : {}", id);
         Optional<Event> event = eventService.findOneForRequesterUserLogin(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());

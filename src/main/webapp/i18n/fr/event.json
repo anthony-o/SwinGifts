@@ -20,7 +20,11 @@
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",
-      "admin": "Admin"
+      "admin": "Admin",
+      "myGiftDrawingRecipients": "Destinataires de mes cadeaux aléatoires",
+      "action": {
+        "drawGifts": "Piocher les cadeaux"
+      }
     }
   }
 }

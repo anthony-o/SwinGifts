@@ -2,10 +2,9 @@ package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.TestConstants;
-import com.github.anthonyo.swingifts.domain.Event;
-import com.github.anthonyo.swingifts.domain.GiftIdea;
-import com.github.anthonyo.swingifts.domain.User;
+import com.github.anthonyo.swingifts.domain.*;
 import com.github.anthonyo.swingifts.repository.EventRepository;
+import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
 import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
@@ -28,8 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.github.anthonyo.swingifts.TestConstants.GIFT_IDEA_ALICE_S_IDEA_FOR_ALICE;
-import static com.github.anthonyo.swingifts.TestConstants.GIFT_IDEA_DAVE_S_IDEA_FOR_ALICE;
+import static com.github.anthonyo.swingifts.TestConstants.*;
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -50,6 +48,9 @@ public class EventResourceIT {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private GiftDrawingRepository giftDrawingRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -308,5 +309,29 @@ public class EventResourceIT {
         assertThat(event1).isNotEqualTo(event2);
         event1.setId(null);
         assertThat(event1).isNotEqualTo(event2);
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("alice")
+    public void drawGiftsTest() throws Exception {
+        // GIVEN
+        long giftDrawingCountBefore = giftDrawingRepository.count();
+
+        // WHEN
+        // Launch the gift drawing
+        restEventMockMvc.perform(post("/api/events/{id}/draw-gifts", EVENT_ALICES_EVENT_ID)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+
+        // THEN
+        assertThat(giftDrawingRepository.count()).isEqualTo(giftDrawingCountBefore + 5);
+        Participation alicesGiftDrawingRecipient = giftDrawingRepository.findAll().stream().filter(giftDrawing -> giftDrawing.getEvent().getId() == EVENT_ALICES_EVENT_ID && giftDrawing.getDonor().getUser().getId().equals(USER_ALICE_ID)).findFirst().get().getRecipient();
+        restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.myGiftDrawingRecipients.length()").value(1))
+            .andExpect(jsonPath("$.myGiftDrawingRecipients.[0].id").value(alicesGiftDrawingRecipient.getId().intValue()))
+            .andExpect(jsonPath("$.myGiftDrawingRecipients.[0].userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));
     }
 }

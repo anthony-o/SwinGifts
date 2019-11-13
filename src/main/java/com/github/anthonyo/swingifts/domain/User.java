@@ -1,8 +1,10 @@
 package com.github.anthonyo.swingifts.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
@@ -28,6 +30,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.EventGet.class)
     private Long id;
 
     @NotNull

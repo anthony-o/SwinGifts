@@ -13,6 +13,12 @@
                 <dd>
                     {{event.admin?.login}}
                 </dd>
+                <dt><span jhiTranslate="swinGiftsApp.event.myGiftDrawingRecipients"></span></dt>
+                <dd>
+                    <ul *ngFor="let recipient of event.myGiftDrawingRecipients">
+                        {{recipient.userAlias}}
+                    </ul>
+                </dd>
             </dl>
 
             <button type="submit"
@@ -25,6 +31,13 @@
                     [routerLink]="['/event', event.id, 'edit']"
                     class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+
+            <button type="button"
+                    (click)="drawGifts()"
+                    class="btn btn-primary"
+                    *ngIf="isEventAdmin()">
+                <fa-icon icon="dice"></fa-icon>&nbsp;<span jhiTranslate="swinGiftsApp.event.action.drawGifts"> Draw Gifts</span>
             </button>
         </div>
         <router-outlet></router-outlet>

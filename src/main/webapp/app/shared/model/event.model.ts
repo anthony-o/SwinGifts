@@ -10,6 +10,7 @@ export interface IEvent {
   giftDrawings?: IGiftDrawing[];
   drawingExclusionGroups?: IDrawingExclusionGroup[];
   admin?: IUser;
+  myGiftDrawingRecipients?: IParticipation[];
 }
 
 export class Event implements IEvent {
@@ -19,6 +20,7 @@ export class Event implements IEvent {
     public participations?: IParticipation[],
     public giftDrawings?: IGiftDrawing[],
     public drawingExclusionGroups?: IDrawingExclusionGroup[],
-    public admin?: IUser
+    public admin?: IUser,
+    public myGiftDrawingRecipients?: IParticipation[]
   ) {}
 }

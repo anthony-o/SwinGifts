@@ -71,7 +71,15 @@ public class EventService {
     public Optional<Event> findOneForRequesterUserLogin(Long id, String requesterUserLogin) throws AccessDeniedException {
         log.debug("Request to get Event : {}", id);
         checkEventIdAllowedForRequesterUserLogin(id, requesterUserLogin);
-        return eventRepository.findById(id);
+        return eventRepository.findById(id).map(
+            event -> event.myGiftDrawingRecipients(
+                event.getGiftDrawings().stream()
+                    .filter(giftDrawing -> giftDrawing.getDonor().getUser().getLogin().equals(requesterUserLogin))
+                    .map(GiftDrawing::getRecipient)
+                    .collect(Collectors.toSet()
+                )
+            )
+        );
     }
 
     public void checkEventIdAllowedForRequesterUserLogin(Long eventId, String requesterUserLogin) {
