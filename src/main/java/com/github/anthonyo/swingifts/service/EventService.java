@@ -112,7 +112,14 @@ public class EventService {
         });
     }
 
-    public void drawGifts(Long id, String requesterUserLogin) throws EntityNotFoundException {
+    /**
+     *
+     * @param id
+     * @param requesterUserLogin
+     * @throws EntityNotFoundException if event does not exist
+     * @throws AccessDeniedException if given user is not the admin of the event
+     */
+    public void drawGifts(Long id, String requesterUserLogin) throws EntityNotFoundException, AccessDeniedException {
         Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
         checkRequesterUserLoginIsEventAdmin(event, requesterUserLogin); // Only admin can do this
         // check that number of gifts to give equals the one expected to be received
