@@ -42,7 +42,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "user",
             "otherEntityRelationshipName": "participation",
-            "relationshipValidateRules": "required",
             "relationshipName": "user",
             "otherEntityField": "login"
         },

@@ -44,8 +44,7 @@ public class Participation implements Serializable {
     @OneToMany(mappedBy = "recipient")
     private Set<GiftIdea> giftIdeas = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("participations")
     private User user;
 
