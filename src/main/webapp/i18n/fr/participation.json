@@ -21,7 +21,9 @@
       "userAlias": "User Alias",
       "giftDrawing": "Gift Drawing",
       "giftIdea": "Gift Idea",
-      "user": "User",
+      "user": "Utilisateur lié",
+      "user.login": "Login de l'utilisateur lié",
+      "user.email": "Email de l'utilisateur lié",
       "event": "Event",
       "drawingExclusionGroup": "Drawing Exclusion Group"
     }

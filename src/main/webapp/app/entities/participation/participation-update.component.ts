@@ -10,7 +10,6 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IParticipation, Participation } from 'app/shared/model/participation.model';
 import { ParticipationService } from './participation.service';
 import { IUser } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
 import { IEvent } from 'app/shared/model/event.model';
 import { EventService } from 'app/entities/event/event.service';
 import { IDrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
@@ -23,10 +22,6 @@ import { DrawingExclusionGroupService } from 'app/entities/drawing-exclusion-gro
 export class ParticipationUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  users: IUser[];
-
-  events: IEvent[];
-
   drawingexclusiongroups: IDrawingExclusionGroup[];
 
   editForm = this.fb.group({
@@ -34,14 +29,17 @@ export class ParticipationUpdateComponent implements OnInit {
     nbOfGiftToReceive: [null, [Validators.min(0)]],
     nbOfGiftToDonate: [null, [Validators.min(0)]],
     userAlias: [null, [Validators.required]],
-    user: [],
-    event: [null, Validators.required]
+    user: this.fb.group({
+      id: [],
+      login: [],
+      email: []
+    }),
+    event: []
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected participationService: ParticipationService,
-    protected userService: UserService,
     protected eventService: EventService,
     protected drawingExclusionGroupService: DrawingExclusionGroupService,
     protected activatedRoute: ActivatedRoute,
@@ -53,20 +51,6 @@ export class ParticipationUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ participation }) => {
       this.updateForm(participation);
     });
-    this.userService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IUser[]>) => response.body)
-      )
-      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.eventService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IEvent[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IEvent[]>) => response.body)
-      )
-      .subscribe((res: IEvent[]) => (this.events = res), (res: HttpErrorResponse) => this.onError(res.message));
     this.drawingExclusionGroupService
       .query()
       .pipe(
@@ -102,6 +86,10 @@ export class ParticipationUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.participationService.create(participation));
     }
+  }
+
+  isCreating(): boolean {
+    return this.editForm.get('id').value === undefined;
   }
 
   private createFromForm(): IParticipation {

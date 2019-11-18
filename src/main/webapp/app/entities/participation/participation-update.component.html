@@ -51,25 +51,15 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="swinGiftsApp.participation.user" for="field_user">User</label>
-                    <select class="form-control" id="field_user" name="user" formControlName="user">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="userOption.id === editForm.get('user').value?.id ? editForm.get('user').value : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
-                    </select>
+                <div class="form-group" *ngIf="isCreating()">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.participation.user.login" for="field_user_login">User Login</label>
+                    <input type="text" class="form-control" name="userLogin" id="field_user_login"
+                           [formControl]="editForm.get('user.login')"/>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="swinGiftsApp.participation.event" for="field_event">Event</label>
-                    <select class="form-control" id="field_event" name="event" formControlName="event">
-                        <option *ngIf="!editForm.get('event').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="eventOption.id === editForm.get('event').value?.id ? editForm.get('event').value : eventOption" *ngFor="let eventOption of events; trackBy: trackEventById">{{eventOption.name}}</option>
-                    </select>
-                </div>
-                <div *ngIf="editForm.get('event').invalid && (editForm.get('event').dirty || editForm.get('event').touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('event').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </small>
+                <div class="form-group" *ngIf="isCreating()">
+                    <label class="form-control-label" jhiTranslate="swinGiftsApp.participation.user.email" for="field_user_email">User Email</label>
+                    <input type="text" class="form-control" name="userEmail" id="field_user_email"
+                           [formControl]="editForm.get('user.email')"/>
                 </div>
             </div>
             <div>

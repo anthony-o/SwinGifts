@@ -1,7 +1,10 @@
 package com.github.anthonyo.swingifts.service;
 
+import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.domain.Participation;
+import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +28,12 @@ public class ParticipationService {
 
     private final EventService eventService;
 
-    public ParticipationService(ParticipationRepository participationRepository, EventService eventService) {
+    private final UserRepository userRepository;
+
+    public ParticipationService(ParticipationRepository participationRepository, EventService eventService, UserRepository userRepository) {
         this.participationRepository = participationRepository;
         this.eventService = eventService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -36,8 +42,50 @@ public class ParticipationService {
      * @param participation the entity to save.
      * @return the persisted entity.
      */
-    public Participation save(Participation participation) {
+    public Participation save(Participation participation, String requesterUserLogin) {
         log.debug("Request to save Participation : {}", participation);
+        if (participation.getId() != null) {
+            checkParticipationCanBeModifiedByRequesterUserLogin(participation.getId(), requesterUserLogin);
+            // When updating a participation, forbid to modify its event & user
+            participationRepository.findById(participation.getId()).ifPresentOrElse(
+                dbParticipation -> {
+                    participation.setEvent(dbParticipation.getEvent());
+                    participation.setUser(dbParticipation.getUser());
+                }, () -> {
+                    participation.setEvent(null);
+                    participation.setUser(null);
+                });
+        } else {
+            // Load event & user if creating a new participation
+            Event event = participation.getEvent();
+            if (event != null && event.getId() != null) {
+                // Only participant in the event can create a new participant
+                eventService.checkEventIdAllowedForRequesterUserLogin(event.getId(), requesterUserLogin);
+                eventService.findOneForRequesterUserLogin(event.getId(), requesterUserLogin)
+                    .ifPresent(dbEvent -> participation.setEvent(dbEvent));
+            }
+            User user = participation.getUser();
+            if (user != null) {
+                if (user.getId() != null) {
+                    userRepository.findById(user.getId())
+                        .ifPresent(dbUser -> participation.setUser(dbUser));
+                } else {
+                    if (user.getLogin() != null) {
+                        userRepository.findOneByLogin(user.getLogin().toLowerCase())
+                            .ifPresent(dbUser -> participation.setUser(dbUser));
+                    }
+                    if (user.getEmail() != null && (participation.getUser() == null || participation.getUser().getId() == null)) {
+                        // An email has been defined and the user was still not found, let's try by email
+                        userRepository.findOneByEmailIgnoreCase(user.getEmail())
+                            .ifPresent(dbUser -> participation.setUser(dbUser));
+                    }
+                }
+            }
+            if (participation.getUser() == null || participation.getUser().getId() == null) {
+                // User still not found, let's set it to null
+                participation.setUser(null);
+            }
+        }
         return participationRepository.save(participation);
     }
 
@@ -78,6 +126,13 @@ public class ParticipationService {
     public void checkParticipationIdAllowedForRequesterUserLogin(Long participationId, String requesterUserLogin) {
         if (!participationRepository.existsByIdAndEventParticipationsUserLoginOrEventAdminLogin(participationId, requesterUserLogin)) {
             throw new AccessDeniedException("User is not allowed to access this participation");
+        }
+    }
+
+    public void checkParticipationCanBeModifiedByRequesterUserLogin(Long participationId, String requesterUserLogin) {
+        // Only event's admin or participant's user can update this event
+        if (!participationRepository.existsByIdAndUserLoginOrEventAdminLogin(participationId, requesterUserLogin)) {
+            throw new AccessDeniedException("Only event's admin or participation user can modify this participation");
         }
     }
 }

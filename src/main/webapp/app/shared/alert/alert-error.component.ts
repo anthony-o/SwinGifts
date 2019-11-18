@@ -69,7 +69,12 @@ export class SwgAlertErrorComponent implements OnDestroy {
 
         default:
           if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
+            let message = httpErrorResponse.error.message;
+            const detail = httpErrorResponse.error.detail;
+            if (detail) {
+              message = `${detail} (${message})`;
+            }
+            this.addErrorAlert(message);
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }

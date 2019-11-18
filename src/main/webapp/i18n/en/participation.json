@@ -22,6 +22,8 @@
       "giftDrawing": "Gift Drawing",
       "giftIdea": "Gift Idea",
       "user": "User",
+      "user.login": "User's login",
+      "user.email": "User's email",
       "event": "Event",
       "drawingExclusionGroup": "Drawing Exclusion Group"
     }

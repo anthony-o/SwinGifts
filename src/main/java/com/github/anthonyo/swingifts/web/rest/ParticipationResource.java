@@ -1,10 +1,12 @@
 package com.github.anthonyo.swingifts.web.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -53,7 +55,7 @@ public class ParticipationResource {
         if (participation.getId() != null) {
             throw new BadRequestAlertException("A new participation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Participation result = participationService.save(participation);
+        Participation result = participationService.save(participation, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/participations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +76,7 @@ public class ParticipationResource {
         if (participation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Participation result = participationService.save(participation);
+        Participation result = participationService.save(participation, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, participation.getId().toString()))
             .body(result);
@@ -99,6 +101,7 @@ public class ParticipationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the participation, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/participations/{id}")
+    @JsonView(JsonViews.ParticipationGet.class)
     public ResponseEntity<Participation> getParticipation(@PathVariable Long id) {
         log.debug("REST request to get Participation : {}", id);
         Optional<Participation> participation = participationService.findOne(id);

@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
+import com.github.anthonyo.swingifts.TestConstants;
 import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
@@ -206,7 +207,7 @@ public class ParticipationResourceIT {
             .andExpect(jsonPath("$.[*].nbOfGiftToDonate").value(hasItem(DEFAULT_NB_OF_GIFT_TO_DONATE)))
             .andExpect(jsonPath("$.[*].userAlias").value(hasItem(DEFAULT_USER_ALIAS)));
     }
-    
+
     @Test
     @Transactional
     public void getParticipation() throws Exception {
@@ -235,7 +236,7 @@ public class ParticipationResourceIT {
     @Transactional
     public void updateParticipation() throws Exception {
         // Initialize the database
-        participationService.save(participation);
+        participationService.save(participation, TestConstants.USER_ALICE_LOGIN);
 
         int databaseSizeBeforeUpdate = participationRepository.findAll().size();
 
@@ -284,7 +285,7 @@ public class ParticipationResourceIT {
     @Transactional
     public void deleteParticipation() throws Exception {
         // Initialize the database
-        participationService.save(participation);
+        participationService.save(participation, TestConstants.USER_ALICE_LOGIN);
 
         int databaseSizeBeforeDelete = participationRepository.findAll().size();
 

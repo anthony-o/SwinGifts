@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { Participation } from 'app/shared/model/participation.model';
+import { IParticipation, Participation } from 'app/shared/model/participation.model';
 import { ParticipationService } from './participation.service';
 import { ParticipationComponent } from './participation.component';
 import { ParticipationDetailComponent } from './participation-detail.component';
 import { ParticipationUpdateComponent } from './participation-update.component';
 import { ParticipationDeletePopupComponent } from './participation-delete-dialog.component';
-import { IParticipation } from 'app/shared/model/participation.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParticipationResolve implements Resolve<IParticipation> {
@@ -21,10 +20,23 @@ export class ParticipationResolve implements Resolve<IParticipation> {
     if (participationId) {
       return this.service.find(participationId).pipe(
         filter((response: HttpResponse<Participation>) => response.ok),
-        map((participation: HttpResponse<Participation>) => participation.body)
+        map((participation: HttpResponse<Participation>) => {
+          return {
+            ...participation.body,
+            event: {},
+            user: {}
+          };
+        })
       );
+    } else {
+      const participation = new Participation();
+      const eventId = route.params['eventId'];
+      if (eventId) {
+        participation.event = { id: eventId };
+      }
+      participation.user = { email: '', login: '' };
+      return of(participation);
     }
-    return of(new Participation());
   }
 }
 
@@ -78,13 +90,7 @@ export const participationRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'swinGiftsApp.participation.home.title'
     },
-    canActivate: [UserRouteAccessService],
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('../gift-idea/gift-idea.module').then(m => m.SwinGiftsGiftIdeaModule)
-      }
-    ]
+    canActivate: [UserRouteAccessService]
   }
 ];
 

@@ -1,6 +1,7 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
@@ -22,20 +23,28 @@ public class Participation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(JsonViews.EventGet.class)
+    @JsonView({
+        JsonViews.EventGet.class,
+        JsonViews.ParticipationGet.class
+    })
     private Long id;
 
     @Min(value = 0)
     @Column(name = "nb_of_gift_to_receive")
+    @JsonView(JsonViews.ParticipationGet.class)
     private Integer nbOfGiftToReceive;
 
     @Min(value = 0)
     @Column(name = "nb_of_gift_to_donate")
+    @JsonView(JsonViews.ParticipationGet.class)
     private Integer nbOfGiftToDonate;
 
     @NotNull
     @Column(name = "user_alias", nullable = false)
-    @JsonView(JsonViews.EventGet.class)
+    @JsonView({
+        JsonViews.EventGet.class,
+        JsonViews.ParticipationGet.class
+    })
     private String userAlias;
 
     @OneToMany(mappedBy = "donor")
@@ -50,7 +59,7 @@ public class Participation implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Event event;
 
     @ManyToMany(mappedBy = "participations")
