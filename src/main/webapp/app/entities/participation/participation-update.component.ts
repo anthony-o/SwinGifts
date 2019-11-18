@@ -34,7 +34,7 @@ export class ParticipationUpdateComponent implements OnInit {
     nbOfGiftToReceive: [null, [Validators.min(0)]],
     nbOfGiftToDonate: [null, [Validators.min(0)]],
     userAlias: [null, [Validators.required]],
-    user: [null, Validators.required],
+    user: [],
     event: [null, Validators.required]
   });
 

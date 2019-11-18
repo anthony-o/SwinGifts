@@ -2,7 +2,6 @@ package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.Participation;
-import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.service.ParticipationService;
@@ -94,11 +93,6 @@ public class ParticipationResourceIT {
             .nbOfGiftToDonate(DEFAULT_NB_OF_GIFT_TO_DONATE)
             .userAlias(DEFAULT_USER_ALIAS);
         // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        participation.setUser(user);
-        // Add required entity
         Event event;
         if (TestUtil.findAll(em, Event.class).isEmpty()) {
             event = EventResourceIT.createEntity(em);
@@ -121,11 +115,6 @@ public class ParticipationResourceIT {
             .nbOfGiftToReceive(UPDATED_NB_OF_GIFT_TO_RECEIVE)
             .nbOfGiftToDonate(UPDATED_NB_OF_GIFT_TO_DONATE)
             .userAlias(UPDATED_USER_ALIAS);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        participation.setUser(user);
         // Add required entity
         Event event;
         if (TestUtil.findAll(em, Event.class).isEmpty()) {
