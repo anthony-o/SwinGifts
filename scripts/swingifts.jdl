@@ -29,7 +29,7 @@ entity Participation {
     userAlias String required
 }
 relationship ManyToOne {
-	Participation{user(login) required} to User
+	Participation{user(login)} to User
 }
 relationship OneToMany {
 	Event{participations(userAlias)} to Participation{event(name) required}
