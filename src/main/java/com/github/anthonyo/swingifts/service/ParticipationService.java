@@ -5,6 +5,7 @@ import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.repository.UserRepository;
+import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,19 +43,16 @@ public class ParticipationService {
      * @param participation the entity to save.
      * @return the persisted entity.
      */
-    public Participation save(Participation participation, String requesterUserLogin) {
+    public Participation save(Participation participation, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to save Participation : {}", participation);
         if (participation.getId() != null) {
             checkParticipationCanBeModifiedByRequesterUserLogin(participation.getId(), requesterUserLogin);
             // When updating a participation, forbid to modify its event & user
-            participationRepository.findById(participation.getId()).ifPresentOrElse(
-                dbParticipation -> {
-                    participation.setEvent(dbParticipation.getEvent());
-                    participation.setUser(dbParticipation.getUser());
-                }, () -> {
-                    participation.setEvent(null);
-                    participation.setUser(null);
-                });
+            participationRepository.findById(participation.getId()).map(dbParticipation -> {
+                participation.setEvent(dbParticipation.getEvent());
+                participation.setUser(dbParticipation.getUser());
+                return participation;
+            }).orElseThrow(() -> new EntityNotFoundException("Participation not found"));
         } else {
             // Load event & user if creating a new participation
             Event event = participation.getEvent();

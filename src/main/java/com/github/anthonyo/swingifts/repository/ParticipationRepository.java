@@ -1,10 +1,13 @@
 package com.github.anthonyo.swingifts.repository;
+
 import com.github.anthonyo.swingifts.domain.Participation;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data  repository for the Participation entity.
@@ -23,4 +26,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
 
     @Query("select count(*) > 0 from Participation where id = :id and (user.login = :login or event.admin.login = :login)")
     boolean existsByIdAndUserLoginOrEventAdminLogin(@Param("id") Long id, @Param("login") String login);
+
+    Optional<Participation> findByEventIdAndUserLogin(Long eventId, String userLogin);
 }

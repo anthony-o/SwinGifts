@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.ParticipationService;
+import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
@@ -50,7 +51,7 @@ public class ParticipationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/participations")
-    public ResponseEntity<Participation> createParticipation(@Valid @RequestBody Participation participation) throws URISyntaxException {
+    public ResponseEntity<Participation> createParticipation(@Valid @RequestBody Participation participation) throws URISyntaxException, EntityNotFoundException {
         log.debug("REST request to save Participation : {}", participation);
         if (participation.getId() != null) {
             throw new BadRequestAlertException("A new participation cannot already have an ID", ENTITY_NAME, "idexists");
@@ -68,10 +69,9 @@ public class ParticipationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated participation,
      * or with status {@code 400 (Bad Request)} if the participation is not valid,
      * or with status {@code 500 (Internal Server Error)} if the participation couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/participations")
-    public ResponseEntity<Participation> updateParticipation(@Valid @RequestBody Participation participation) throws URISyntaxException {
+    public ResponseEntity<Participation> updateParticipation(@Valid @RequestBody Participation participation) throws EntityNotFoundException {
         log.debug("REST request to update Participation : {}", participation);
         if (participation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

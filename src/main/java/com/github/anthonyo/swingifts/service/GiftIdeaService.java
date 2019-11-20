@@ -1,13 +1,19 @@
 package com.github.anthonyo.swingifts.service;
 
 import com.github.anthonyo.swingifts.domain.GiftIdea;
+import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.repository.GiftIdeaRepository;
+import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -23,10 +29,12 @@ public class GiftIdeaService {
 
     private final GiftIdeaRepository giftIdeaRepository;
     private final ParticipationService participationService;
+    private final ParticipationRepository participationRepository;
 
-    public GiftIdeaService(GiftIdeaRepository giftIdeaRepository, ParticipationService participationService) {
+    public GiftIdeaService(GiftIdeaRepository giftIdeaRepository, ParticipationService participationService, ParticipationRepository participationRepository) {
         this.giftIdeaRepository = giftIdeaRepository;
         this.participationService = participationService;
+        this.participationRepository = participationRepository;
     }
 
     /**
@@ -35,8 +43,41 @@ public class GiftIdeaService {
      * @param giftIdea the entity to save.
      * @return the persisted entity.
      */
-    public GiftIdea save(GiftIdea giftIdea) {
+    public GiftIdea save(GiftIdea giftIdea, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to save GiftIdea : {}", giftIdea);
+        if (giftIdea.getId() != null) {
+            // Update mode
+            giftIdea.setModificationDate(Instant.now());
+            // Can't change participants fields
+            giftIdeaRepository.findById(giftIdea.getId()).map(dbGiftIdea -> {
+                giftIdea.setCreator(dbGiftIdea.getCreator());
+                giftIdea.setRecipient(dbGiftIdea.getRecipient());
+                Participation dbTaker = dbGiftIdea.getTaker();
+                if (dbTaker != null) {
+                    // If taker is already present, can't change it
+                    giftIdea.setTaker(dbTaker);
+                }
+                return giftIdea;
+            }).orElseThrow(() -> new EntityNotFoundException("Gift idea not found"));
+        } else {
+            // Creation mode
+            giftIdea.setCreationDate(Instant.now());
+            Participation recipient = participationRepository.findById(giftIdea.getRecipient().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Recipient participant not found"));
+            giftIdea.setRecipient(recipient);
+            giftIdea.setTaker(null); // No taker when creating
+        }
+        Participation requesterParticipation = participationRepository.findByEventIdAndUserLogin(giftIdea.getRecipient().getEvent().getId(), requesterUserLogin).orElseThrow(() -> new AccessDeniedException("User is not a participant of this event"));
+        if (giftIdea.getId() == null) {
+            // Creation mode
+            giftIdea.setCreator(requesterParticipation);
+        } else {
+            // Modification mode: only creator can modify this gift idea
+            if (!giftIdea.getCreator().equals(requesterParticipation)) {
+                throw new AccessDeniedException("User is not the creator of this gift idea: cannot modify it");
+            }
+        }
+
         return giftIdeaRepository.save(giftIdea);
     }
 

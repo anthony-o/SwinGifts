@@ -3,6 +3,7 @@ package com.github.anthonyo.swingifts.web.rest;
 import com.github.anthonyo.swingifts.domain.GiftIdea;
 import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.GiftIdeaService;
+import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -48,12 +49,12 @@ public class GiftIdeaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/gift-ideas")
-    public ResponseEntity<GiftIdea> createGiftIdea(@Valid @RequestBody GiftIdea giftIdea) throws URISyntaxException {
+    public ResponseEntity<GiftIdea> createGiftIdea(@Valid @RequestBody GiftIdea giftIdea) throws URISyntaxException, EntityNotFoundException {
         log.debug("REST request to save GiftIdea : {}", giftIdea);
         if (giftIdea.getId() != null) {
             throw new BadRequestAlertException("A new giftIdea cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        GiftIdea result = giftIdeaService.save(giftIdea);
+        GiftIdea result = giftIdeaService.save(giftIdea, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/gift-ideas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -66,15 +67,14 @@ public class GiftIdeaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated giftIdea,
      * or with status {@code 400 (Bad Request)} if the giftIdea is not valid,
      * or with status {@code 500 (Internal Server Error)} if the giftIdea couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/gift-ideas")
-    public ResponseEntity<GiftIdea> updateGiftIdea(@Valid @RequestBody GiftIdea giftIdea) throws URISyntaxException {
+    public ResponseEntity<GiftIdea> updateGiftIdea(@Valid @RequestBody GiftIdea giftIdea) throws EntityNotFoundException {
         log.debug("REST request to update GiftIdea : {}", giftIdea);
         if (giftIdea.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        GiftIdea result = giftIdeaService.save(giftIdea);
+        GiftIdea result = giftIdeaService.save(giftIdea, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, giftIdea.getId().toString()))
             .body(result);

@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-import { IGiftIdea, GiftIdea } from 'app/shared/model/gift-idea.model';
+import { GiftIdea, IGiftIdea } from 'app/shared/model/gift-idea.model';
 import { GiftIdeaService } from './gift-idea.service';
 import { IParticipation } from 'app/shared/model/participation.model';
 import { ParticipationService } from 'app/entities/participation/participation.service';
@@ -21,15 +18,13 @@ import { ParticipationService } from 'app/entities/participation/participation.s
 export class GiftIdeaUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  participations: IParticipation[];
-
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
     url: [],
-    creationDate: [null, [Validators.required]],
+    creationDate: [],
     modificationDate: [],
-    creator: [null, Validators.required],
+    creator: [],
     taker: [],
     recipient: [null, Validators.required]
   });
@@ -47,13 +42,6 @@ export class GiftIdeaUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ giftIdea }) => {
       this.updateForm(giftIdea);
     });
-    this.participationService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IParticipation[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IParticipation[]>) => response.body)
-      )
-      .subscribe((res: IParticipation[]) => (this.participations = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(giftIdea: IGiftIdea) {

@@ -27,7 +27,6 @@ public class GiftIdea implements Serializable {
     @Column(name = "url")
     private String url;
 
-    @NotNull
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
@@ -35,7 +34,6 @@ public class GiftIdea implements Serializable {
     private Instant modificationDate;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("giftIdeas")
     private Participation creator;
 

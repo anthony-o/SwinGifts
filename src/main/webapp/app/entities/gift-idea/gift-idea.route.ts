@@ -24,7 +24,12 @@ export class GiftIdeaResolve implements Resolve<IGiftIdea> {
         map((giftIdea: HttpResponse<GiftIdea>) => giftIdea.body)
       );
     }
-    return of(new GiftIdea());
+    const giftIdea = new GiftIdea();
+    const recipientId = route.params['participationId'];
+    if (recipientId) {
+      giftIdea.recipient = { id: recipientId };
+    }
+    return of(giftIdea);
   }
 }
 
