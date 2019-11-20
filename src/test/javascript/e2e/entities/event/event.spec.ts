@@ -46,9 +46,13 @@ describe('Event e2e test', () => {
         await eventComponentsPage.clickOnCreateButton();
         await promise.all([
             eventUpdatePage.setNameInput('name'),
+            eventUpdatePage.setDescriptionInput('description'),
+            eventUpdatePage.setPublicKeyInput('publicKey'),
             eventUpdatePage.adminSelectLastOption(),
         ]);
         expect(await eventUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
+        expect(await eventUpdatePage.getDescriptionInput()).to.eq('description', 'Expected Description value to be equals to description');
+        expect(await eventUpdatePage.getPublicKeyInput()).to.eq('publicKey', 'Expected PublicKey value to be equals to publicKey');
         await eventUpdatePage.save();
         expect(await eventUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

@@ -43,6 +43,12 @@ public class EventResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PUBLIC_KEY = "AAAAAAAAAA";
+    private static final String UPDATED_PUBLIC_KEY = "BBBBBBBBBB";
+
     @Autowired
     private EventRepository eventRepository;
 
@@ -91,7 +97,9 @@ public class EventResourceIT {
      */
     public static Event createEntity(EntityManager em) {
         Event event = new Event()
-            .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
+            .publicKey(DEFAULT_PUBLIC_KEY);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -107,7 +115,9 @@ public class EventResourceIT {
      */
     public static Event createUpdatedEntity(EntityManager em) {
         Event event = new Event()
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .publicKey(UPDATED_PUBLIC_KEY);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -137,6 +147,8 @@ public class EventResourceIT {
         assertThat(eventList).hasSize(databaseSizeBeforeCreate + 1);
         Event testEvent = eventList.get(eventList.size() - 1);
         assertThat(testEvent.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testEvent.getPublicKey()).isEqualTo(DEFAULT_PUBLIC_KEY);
     }
 
     @Test
@@ -188,7 +200,9 @@ public class EventResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].publicKey").value(hasItem(DEFAULT_PUBLIC_KEY)));
     }
 
     @Test
@@ -202,7 +216,9 @@ public class EventResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(event.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.publicKey").value(DEFAULT_PUBLIC_KEY));
     }
 
     @Test
@@ -246,7 +262,9 @@ public class EventResourceIT {
         // Disconnect from session so that the updates on updatedEvent are not directly saved in db
         em.detach(updatedEvent);
         updatedEvent
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .publicKey(UPDATED_PUBLIC_KEY);
 
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -258,6 +276,8 @@ public class EventResourceIT {
         assertThat(eventList).hasSize(databaseSizeBeforeUpdate);
         Event testEvent = eventList.get(eventList.size() - 1);
         assertThat(testEvent.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testEvent.getPublicKey()).isEqualTo(UPDATED_PUBLIC_KEY);
     }
 
     @Test

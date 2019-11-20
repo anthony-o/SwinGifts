@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new GiftIdea(0, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new GiftIdea(0, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -32,7 +32,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT),
+            takenDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -51,14 +52,16 @@ describe('Service Tests', () => {
           {
             id: 0,
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT),
+            takenDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
             creationDate: currentDate,
-            modificationDate: currentDate
+            modificationDate: currentDate,
+            takenDate: currentDate
           },
           returnedFromService
         );
@@ -77,7 +80,8 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             url: 'BBBBBB',
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT),
+            takenDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -85,7 +89,8 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             creationDate: currentDate,
-            modificationDate: currentDate
+            modificationDate: currentDate,
+            takenDate: currentDate
           },
           returnedFromService
         );
@@ -104,14 +109,16 @@ describe('Service Tests', () => {
       //       description: 'BBBBBB',
       //       url: 'BBBBBB',
       //       creationDate: currentDate.format(DATE_TIME_FORMAT),
-      //       modificationDate: currentDate.format(DATE_TIME_FORMAT)
+      //       modificationDate: currentDate.format(DATE_TIME_FORMAT),
+      //       takenDate: currentDate.format(DATE_TIME_FORMAT)
       //     },
       //     elemDefault
       //   );
       //   const expected = Object.assign(
       //     {
       //       creationDate: currentDate,
-      //       modificationDate: currentDate
+      //       modificationDate: currentDate,
+      //       takenDate: currentDate
       //     },
       //     returnedFromService
       //   );

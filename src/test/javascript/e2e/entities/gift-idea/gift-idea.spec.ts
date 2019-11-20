@@ -49,6 +49,7 @@ describe('GiftIdea e2e test', () => {
             giftIdeaUpdatePage.setUrlInput('url'),
             giftIdeaUpdatePage.setCreationDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             giftIdeaUpdatePage.setModificationDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            giftIdeaUpdatePage.setTakenDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             giftIdeaUpdatePage.creatorSelectLastOption(),
             giftIdeaUpdatePage.takerSelectLastOption(),
             giftIdeaUpdatePage.recipientSelectLastOption(),
@@ -57,6 +58,7 @@ describe('GiftIdea e2e test', () => {
         expect(await giftIdeaUpdatePage.getUrlInput()).to.eq('url', 'Expected Url value to be equals to url');
         expect(await giftIdeaUpdatePage.getCreationDateInput()).to.contain('2001-01-01T02:30', 'Expected creationDate value to be equals to 2000-12-31');
         expect(await giftIdeaUpdatePage.getModificationDateInput()).to.contain('2001-01-01T02:30', 'Expected modificationDate value to be equals to 2000-12-31');
+        expect(await giftIdeaUpdatePage.getTakenDateInput()).to.contain('2001-01-01T02:30', 'Expected takenDate value to be equals to 2000-12-31');
         await giftIdeaUpdatePage.save();
         expect(await giftIdeaUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

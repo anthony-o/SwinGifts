@@ -49,7 +49,9 @@ export class GiftIdeaService {
   protected convertDateFromClient(giftIdea: IGiftIdea): IGiftIdea {
     const copy: IGiftIdea = Object.assign({}, giftIdea, {
       creationDate: giftIdea.creationDate != null && giftIdea.creationDate.isValid() ? giftIdea.creationDate.toJSON() : null,
-      modificationDate: giftIdea.modificationDate != null && giftIdea.modificationDate.isValid() ? giftIdea.modificationDate.toJSON() : null
+      modificationDate:
+        giftIdea.modificationDate != null && giftIdea.modificationDate.isValid() ? giftIdea.modificationDate.toJSON() : null,
+      takenDate: giftIdea.takenDate != null && giftIdea.takenDate.isValid() ? giftIdea.takenDate.toJSON() : null
     });
     return copy;
   }
@@ -58,6 +60,7 @@ export class GiftIdeaService {
     if (res.body) {
       res.body.creationDate = res.body.creationDate != null ? moment(res.body.creationDate) : null;
       res.body.modificationDate = res.body.modificationDate != null ? moment(res.body.modificationDate) : null;
+      res.body.takenDate = res.body.takenDate != null ? moment(res.body.takenDate) : null;
     }
     return res;
   }
@@ -67,6 +70,7 @@ export class GiftIdeaService {
       res.body.forEach((giftIdea: IGiftIdea) => {
         giftIdea.creationDate = giftIdea.creationDate != null ? moment(giftIdea.creationDate) : null;
         giftIdea.modificationDate = giftIdea.modificationDate != null ? moment(giftIdea.modificationDate) : null;
+        giftIdea.takenDate = giftIdea.takenDate != null ? moment(giftIdea.takenDate) : null;
       });
     }
     return res;

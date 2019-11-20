@@ -6,6 +6,8 @@ import { IUser } from 'app/core/user/user.model';
 export interface IEvent {
   id?: number;
   name?: string;
+  description?: string;
+  publicKey?: string;
   participations?: IParticipation[];
   giftDrawings?: IGiftDrawing[];
   drawingExclusionGroups?: IDrawingExclusionGroup[];
@@ -17,6 +19,8 @@ export class Event implements IEvent {
   constructor(
     public id?: number,
     public name?: string,
+    public description?: string,
+    public publicKey?: string,
     public participations?: IParticipation[],
     public giftDrawings?: IGiftDrawing[],
     public drawingExclusionGroups?: IDrawingExclusionGroup[],

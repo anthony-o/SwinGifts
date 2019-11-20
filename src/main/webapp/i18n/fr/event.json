@@ -17,6 +17,8 @@
         "title": "Event"
       },
       "name": "Name",
+      "description": "Description",
+      "publicKey": "Public Key",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",

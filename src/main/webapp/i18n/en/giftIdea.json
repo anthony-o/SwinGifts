@@ -20,6 +20,7 @@
       "url": "Url",
       "creationDate": "Creation Date",
       "modificationDate": "Modification Date",
+      "takenDate": "Taken Date",
       "creator": "Creator",
       "taker": "Taker",
       "recipient": "Recipient"
