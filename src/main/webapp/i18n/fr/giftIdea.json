@@ -23,7 +23,11 @@
       "takenDate": "Taken Date",
       "creator": "Creator",
       "taker": "Taker",
-      "recipient": "Recipient"
+      "recipient": "Recipient",
+      "action": {
+        "take": "Prendre cette idée",
+        "release": "Laisser cette idée à quelqu'un d'autre"
+      }
     }
   }
 }

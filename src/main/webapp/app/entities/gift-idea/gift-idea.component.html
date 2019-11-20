@@ -72,14 +72,14 @@
                                 (click)="take(giftIdea, giftIdeaIndex)"
                                 class="btn btn-primary btn-sm">
                             <fa-icon icon="hand-paper"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.take">Take</span>
+                            <span class="d-none d-md-inline" jhiTranslate="swinGiftsApp.giftIdea.action.take">Take</span>
                         </button>
                         <button type="submit"
                                 *ngIf="!isRecipientIsMe(giftIdea) && isTakerIsMe(giftIdea)"
                                 (click)="release(giftIdea, giftIdeaIndex)"
                                 class="btn btn-primary btn-sm">
                             <fa-icon icon="hand-holding"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.release">Release</span>
+                            <span class="d-none d-md-inline" jhiTranslate="swinGiftsApp.giftIdea.action.release">Release</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/gift-idea', { outlets: { popup: giftIdea.id + '/delete'} }]"
