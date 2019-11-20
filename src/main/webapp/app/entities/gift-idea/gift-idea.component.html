@@ -30,7 +30,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let giftIdea of giftIdeas ;trackBy: trackId">
+            <tr *ngFor="let giftIdea of giftIdeas; let giftIdeaIndex = index; trackBy: trackId">
                 <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.id}}</a></td>
                 <td>{{giftIdea.description}}</td>
                 <td>{{giftIdea.url}}</td>
@@ -64,6 +64,20 @@
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                *ngIf="!isRecipientIsMe(giftIdea) && !giftIdea.taker"
+                                (click)="take(giftIdea, giftIdeaIndex)"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon icon="hand-paper"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.take">Take</span>
+                        </button>
+                        <button type="submit"
+                                *ngIf="!isRecipientIsMe(giftIdea) && isTakerIsMe(giftIdea)"
+                                (click)="release(giftIdea, giftIdeaIndex)"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon icon="hand-holding"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.release">Release</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/gift-idea', { outlets: { popup: giftIdea.id + '/delete'} }]"

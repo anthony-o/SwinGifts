@@ -25,7 +25,8 @@ public class Participation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView({
         JsonViews.EventGet.class,
-        JsonViews.ParticipationGet.class
+        JsonViews.ParticipationGet.class,
+        JsonViews.GiftIdeaGet.class
     })
     private Long id;
 
@@ -43,7 +44,8 @@ public class Participation implements Serializable {
     @Column(name = "user_alias", nullable = false)
     @JsonView({
         JsonViews.EventGet.class,
-        JsonViews.ParticipationGet.class
+        JsonViews.ParticipationGet.class,
+        JsonViews.GiftIdeaGet.class
     })
     private String userAlias;
 
@@ -55,6 +57,7 @@ public class Participation implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("participations")
+    @JsonView(JsonViews.GiftIdeaGet.class)
     private User user;
 
     @ManyToOne(optional = false)
@@ -215,6 +218,11 @@ public class Participation implements Serializable {
         this.drawingExclusionGroups = drawingExclusionGroups;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @JsonIgnore
+    public String getUserLoginIgnoringNull() {
+        return getUser() != null ? getUser().getLogin() : null;
+    }
 
     @Override
     public boolean equals(Object o) {

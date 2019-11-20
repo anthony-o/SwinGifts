@@ -71,4 +71,16 @@ export class GiftIdeaService {
     }
     return res;
   }
+
+  take(id: number) {
+    return this.http
+      .post<IGiftIdea>(`${this.resourceUrl}/${id}/take`, null, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  release(id: number) {
+    return this.http
+      .post<IGiftIdea>(`${this.resourceUrl}/${id}/release`, null, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

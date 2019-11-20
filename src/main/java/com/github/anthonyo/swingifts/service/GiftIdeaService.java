@@ -5,11 +5,11 @@ import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.repository.GiftIdeaRepository;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
+import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +26,8 @@ import java.util.stream.Stream;
 public class GiftIdeaService {
 
     private final Logger log = LoggerFactory.getLogger(GiftIdeaService.class);
+
+    public static final String ENTITY_NAME = "giftIdea";
 
     private final GiftIdeaRepository giftIdeaRepository;
     private final ParticipationService participationService;
@@ -67,7 +69,7 @@ public class GiftIdeaService {
             giftIdea.setRecipient(recipient);
             giftIdea.setTaker(null); // No taker when creating
         }
-        Participation requesterParticipation = participationRepository.findByEventIdAndUserLogin(giftIdea.getRecipient().getEvent().getId(), requesterUserLogin).orElseThrow(() -> new AccessDeniedException("User is not a participant of this event"));
+        Participation requesterParticipation = getRequesterParticipationOrThrowAccessDeniedException(giftIdea, requesterUserLogin);
         if (giftIdea.getId() == null) {
             // Creation mode
             giftIdea.setCreator(requesterParticipation);
@@ -79,6 +81,10 @@ public class GiftIdeaService {
         }
 
         return giftIdeaRepository.save(giftIdea);
+    }
+
+    private Participation getRequesterParticipationOrThrowAccessDeniedException(GiftIdea giftIdea, String requesterUserLogin) throws AccessDeniedException {
+        return participationRepository.findByEventIdAndUserLogin(giftIdea.getRecipient().getEvent().getId(), requesterUserLogin).orElseThrow(() -> new AccessDeniedException("User is not a participant of this event"));
     }
 
     /**
@@ -100,9 +106,9 @@ public class GiftIdeaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<GiftIdea> findOne(Long id) {
+    public Optional<GiftIdea> findOne(Long id, String requesterUserLogin) {
         log.debug("Request to get GiftIdea : {}", id);
-        return giftIdeaRepository.findById(id);
+        return filterGiftIdeaStream(giftIdeaRepository.findById(id).stream(), requesterUserLogin).findFirst();
     }
 
     /**
@@ -115,8 +121,46 @@ public class GiftIdeaService {
         giftIdeaRepository.deleteById(id);
     }
 
+    static boolean filterRequesterUserLoginNotRecipientOrCreator(GiftIdea giftIdea, String requesterUserLogin) {
+        return !requesterUserLogin.equals(giftIdea.getRecipient().getUserLoginIgnoringNull())
+            || requesterUserLogin.equals(giftIdea.getCreator().getUserLoginIgnoringNull());
+    }
+
+    static Stream<GiftIdea> filterGiftIdeaStream(Stream<GiftIdea> giftIdeaStream, String requesterUserLogin) {
+        return giftIdeaStream
+            .filter(giftIdea -> filterRequesterUserLoginNotRecipientOrCreator(giftIdea, requesterUserLogin))
+            .peek(giftIdea -> {
+                // If the requester is the recipient, hide the taker
+                if (requesterUserLogin.equals(giftIdea.getRecipient().getUserLoginIgnoringNull())) {
+                    giftIdea.setTaker(null);
+                }
+            });
+    }
+
+    @Transactional(readOnly = true)
     public Stream<GiftIdea> findByRecipientIdForRequesterUserLogin(Long participationId, String requesterUserLogin) {
         participationService.checkParticipationIdAllowedForRequesterUserLogin(participationId, requesterUserLogin);
-        return giftIdeaRepository.findByRecipientId(participationId).stream().filter(giftIdea -> !requesterUserLogin.equals(giftIdea.getRecipient().getUser().getLogin()) || requesterUserLogin.equals(giftIdea.getCreator().getUser().getLogin()));
+        return filterGiftIdeaStream(giftIdeaRepository.findByRecipientId(participationId).stream(), requesterUserLogin);
+    }
+
+    public GiftIdea takeById(Long id, String requesterUserLogin) throws EntityNotFoundException {
+        GiftIdea giftIdea = giftIdeaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Gift idea not found."));
+        if (giftIdea.getTaker() != null) {
+            throw new BadRequestAlertException("This gift idea is already taken by someone else", ENTITY_NAME, "takerexists");
+        }
+        participationService.checkParticipationIdAllowedForRequesterUserLogin(giftIdea.getRecipient().getId(), requesterUserLogin);
+        Participation requesterParticipation = getRequesterParticipationOrThrowAccessDeniedException(giftIdea, requesterUserLogin);
+        giftIdea.setTaker(requesterParticipation);
+        return giftIdeaRepository.save(giftIdea);
+    }
+
+    public GiftIdea releaseById(Long id, String requesterUserLogin) throws EntityNotFoundException {
+        GiftIdea giftIdea = giftIdeaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Gift idea not found."));
+        Participation requesterParticipation = getRequesterParticipationOrThrowAccessDeniedException(giftIdea, requesterUserLogin);
+        if (!requesterParticipation.equals(giftIdea.getTaker())) {
+            throw new BadRequestAlertException("This gift idea is not taken by the current user", ENTITY_NAME, "takerisnotcurrentuser");
+        }
+        giftIdea.setTaker(null);
+        return giftIdeaRepository.save(giftIdea);
     }
 }

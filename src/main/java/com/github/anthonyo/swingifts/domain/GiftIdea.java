@@ -1,5 +1,7 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,6 +14,7 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "gift_idea")
+@JsonView(JsonViews.GiftIdeaGet.class)
 public class GiftIdea implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -74,7 +74,7 @@ public class EventService {
         return eventRepository.findById(id).map(
             event -> event.myGiftDrawingRecipients(
                 event.getGiftDrawings().stream()
-                    .filter(giftDrawing -> giftDrawing.getDonor().getUser().getLogin().equals(requesterUserLogin))
+                    .filter(giftDrawing -> requesterUserLogin.equals(giftDrawing.getDonor().getUserLoginIgnoringNull()))
                     .map(GiftDrawing::getRecipient)
                     .collect(Collectors.toSet()
                 )
@@ -108,11 +108,8 @@ public class EventService {
             for (Participation participation : event.getParticipations()) {
                 // Filter gift ideas : must be either the ones of the requester or not concerning the requester
                 participation.setGiftIdeas(
-                    participation.getGiftIdeas().stream()
-                        .filter(giftIdea ->
-                            !giftIdea.getRecipient().getUser().getLogin().equals(requesterUserLogin)
-                            || giftIdea.getCreator().getUser().getLogin().equals(requesterUserLogin)
-                        ).collect(Collectors.toUnmodifiableSet())
+                    GiftIdeaService.filterGiftIdeaStream(participation.getGiftIdeas().stream(), requesterUserLogin)
+                        .collect(Collectors.toUnmodifiableSet())
                 );
             }
             entityManager.detach(event);

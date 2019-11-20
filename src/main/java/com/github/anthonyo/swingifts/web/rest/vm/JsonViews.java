@@ -4,4 +4,6 @@ public interface JsonViews {
     interface EventGet {}
 
     interface ParticipationGet {}
+
+    interface GiftIdeaGet {}
 }
