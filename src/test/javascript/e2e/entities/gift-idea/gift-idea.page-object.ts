@@ -30,6 +30,7 @@ export class GiftIdeaUpdatePage {
   urlInput = element(by.id('field_url'));
   creationDateInput = element(by.id('field_creationDate'));
   modificationDateInput = element(by.id('field_modificationDate'));
+  takenDateInput = element(by.id('field_takenDate'));
   creatorSelect = element(by.id('field_creator'));
   takerSelect = element(by.id('field_taker'));
   recipientSelect = element(by.id('field_recipient'));
@@ -68,6 +69,14 @@ export class GiftIdeaUpdatePage {
 
   async getModificationDateInput() {
     return await this.modificationDateInput.getAttribute('value');
+  }
+
+  async setTakenDateInput(takenDate) {
+    await this.takenDateInput.sendKeys(takenDate);
+  }
+
+  async getTakenDateInput() {
+    return await this.takenDateInput.getAttribute('value');
   }
 
   async creatorSelectLastOption(timeout?: number) {

@@ -24,6 +24,8 @@ export class EventUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
+    description: [null, [Validators.maxLength(8192)]],
+    publicKey: [null, [Validators.maxLength(32)]],
     admin: [null, Validators.required]
   });
 
@@ -53,6 +55,8 @@ export class EventUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: event.id,
       name: event.name,
+      description: event.description,
+      publicKey: event.publicKey,
       admin: event.admin
     });
   }
@@ -76,6 +80,8 @@ export class EventUpdateComponent implements OnInit {
       ...new Event(),
       id: this.editForm.get(['id']).value,
       name: this.editForm.get(['name']).value,
+      description: this.editForm.get(['description']).value,
+      publicKey: this.editForm.get(['publicKey']).value,
       admin: this.editForm.get(['admin']).value
     };
   }

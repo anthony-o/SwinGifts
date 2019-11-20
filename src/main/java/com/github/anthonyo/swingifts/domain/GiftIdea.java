@@ -21,10 +21,12 @@ public class GiftIdea implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "description", nullable = false)
+    @Size(max = 2048)
+    @Column(name = "description", length = 2048, nullable = false)
     private String description;
 
-    @Column(name = "url")
+    @Size(max = 2048)
+    @Column(name = "url", length = 2048)
     private String url;
 
     @NotNull
@@ -33,6 +35,9 @@ public class GiftIdea implements Serializable {
 
     @Column(name = "modification_date")
     private Instant modificationDate;
+
+    @Column(name = "taken_date")
+    private Instant takenDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -109,6 +114,19 @@ public class GiftIdea implements Serializable {
         this.modificationDate = modificationDate;
     }
 
+    public Instant getTakenDate() {
+        return takenDate;
+    }
+
+    public GiftIdea takenDate(Instant takenDate) {
+        this.takenDate = takenDate;
+        return this;
+    }
+
+    public void setTakenDate(Instant takenDate) {
+        this.takenDate = takenDate;
+    }
+
     public Participation getCreator() {
         return creator;
     }
@@ -173,6 +191,7 @@ public class GiftIdea implements Serializable {
             ", url='" + getUrl() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             ", modificationDate='" + getModificationDate() + "'" +
+            ", takenDate='" + getTakenDate() + "'" +
             "}";
     }
 }

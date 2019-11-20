@@ -27,6 +27,8 @@ export class EventUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   nameInput = element(by.id('field_name'));
+  descriptionInput = element(by.id('field_description'));
+  publicKeyInput = element(by.id('field_publicKey'));
   adminSelect = element(by.id('field_admin'));
 
   async getPageTitle() {
@@ -39,6 +41,22 @@ export class EventUpdatePage {
 
   async getNameInput() {
     return await this.nameInput.getAttribute('value');
+  }
+
+  async setDescriptionInput(description) {
+    await this.descriptionInput.sendKeys(description);
+  }
+
+  async getDescriptionInput() {
+    return await this.descriptionInput.getAttribute('value');
+  }
+
+  async setPublicKeyInput(publicKey) {
+    await this.publicKeyInput.sendKeys(publicKey);
+  }
+
+  async getPublicKeyInput() {
+    return await this.publicKeyInput.getAttribute('value');
   }
 
   async adminSelectLastOption(timeout?: number) {

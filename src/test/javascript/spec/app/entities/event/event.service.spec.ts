@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(EventService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Event(0, 'AAAAAAA');
+      elemDefault = new Event(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -56,7 +56,9 @@ describe('Service Tests', () => {
       it('should update a Event', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB'
+            name: 'BBBBBB',
+            description: 'BBBBBB',
+            publicKey: 'BBBBBB'
           },
           elemDefault
         );
@@ -74,7 +76,9 @@ describe('Service Tests', () => {
       it('should return a list of Event', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB'
+            name: 'BBBBBB',
+            description: 'BBBBBB',
+            publicKey: 'BBBBBB'
           },
           elemDefault
         );

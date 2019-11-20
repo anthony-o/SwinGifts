@@ -16,16 +16,19 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="varchar(2048)">
                 <constraints nullable="false" />
             </column>
-            <column name="url" type="varchar(255)">
+            <column name="url" type="varchar(2048)">
                 <constraints nullable="true" />
             </column>
             <column name="creation_date" type="datetime">
                 <constraints nullable="false" />
             </column>
             <column name="modification_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="taken_date" type="datetime">
                 <constraints nullable="true" />
             </column>
             <column name="creator_id" type="bigint">
@@ -41,6 +44,7 @@
         </createTable>
         <dropDefaultValue tableName="gift_idea" columnName="creation_date" columnDataType="datetime"/>
         <dropDefaultValue tableName="gift_idea" columnName="modification_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="gift_idea" columnName="taken_date" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20190812131711-1-relations" author="jhipster">
@@ -66,6 +70,7 @@
             <column name="url" type="string"/>
             <column name="creation_date" type="datetime"/>
             <column name="modification_date" type="datetime"/>
+            <column name="taken_date" type="datetime"/>
             <column name="creator_id" type="numeric"/>
             <column name="recipient_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->

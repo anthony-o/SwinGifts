@@ -7,6 +7,7 @@ export interface IGiftIdea {
   url?: string;
   creationDate?: Moment;
   modificationDate?: Moment;
+  takenDate?: Moment;
   creator?: IParticipation;
   taker?: IParticipation;
   recipient?: IParticipation;
@@ -19,6 +20,7 @@ export class GiftIdea implements IGiftIdea {
     public url?: string,
     public creationDate?: Moment,
     public modificationDate?: Moment,
+    public takenDate?: Moment,
     public creator?: IParticipation,
     public taker?: IParticipation,
     public recipient?: IParticipation

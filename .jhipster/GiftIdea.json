@@ -5,12 +5,18 @@
             "fieldName": "description",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 2048
         },
         {
             "fieldName": "url",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 2048
         },
         {
             "fieldName": "creationDate",
@@ -21,6 +27,10 @@
         },
         {
             "fieldName": "modificationDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "takenDate",
             "fieldType": "Instant"
         }
     ],

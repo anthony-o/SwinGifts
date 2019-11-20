@@ -20,6 +20,8 @@
             <tr>
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.event.name">Name</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.event.description">Description</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.event.publicKey">Public Key</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.event.admin">Admin</span></th>
             <th scope="col"></th>
             </tr>
@@ -28,6 +30,8 @@
             <tr *ngFor="let event of events ;trackBy: trackId">
                 <td><a [routerLink]="['/event', event.id, 'view' ]">{{event.id}}</a></td>
                 <td>{{event.name}}</td>
+                <td>{{event.description}}</td>
+                <td>{{event.publicKey}}</td>
                 <td>
                     {{event.admin?.login}}
                 </td>
