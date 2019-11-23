@@ -36,8 +36,11 @@ public class Event implements Serializable {
     private String description;
 
     @Size(max = 32)
-    @Column(name = "public_key", length = 32)
+    @Column(name = "public_key", length = 32, unique = true)
     private String publicKey;
+
+    @Column(name = "public_key_enabled")
+    private Boolean publicKeyEnabled;
 
     @OneToMany(mappedBy = "event")
     private Set<Participation> participations = new HashSet<>();
@@ -107,6 +110,19 @@ public class Event implements Serializable {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public Boolean isPublicKeyEnabled() {
+        return publicKeyEnabled;
+    }
+
+    public Event publicKeyEnabled(Boolean publicKeyEnabled) {
+        this.publicKeyEnabled = publicKeyEnabled;
+        return this;
+    }
+
+    public void setPublicKeyEnabled(Boolean publicKeyEnabled) {
+        this.publicKeyEnabled = publicKeyEnabled;
     }
 
     public Set<Participation> getParticipations() {
@@ -235,6 +251,7 @@ public class Event implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", publicKey='" + getPublicKey() + "'" +
+            ", publicKeyEnabled='" + isPublicKeyEnabled() + "'" +
             "}";
     }
 }

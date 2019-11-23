@@ -19,6 +19,7 @@
       "name": "Name",
       "description": "Description",
       "publicKey": "Public Key",
+      "publicKeyEnabled": "Public Key Enabled",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",

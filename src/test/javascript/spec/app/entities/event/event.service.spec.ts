@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(EventService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Event(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Event(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {
@@ -58,7 +58,8 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            publicKey: 'BBBBBB'
+            publicKey: 'BBBBBB',
+            publicKeyEnabled: true
           },
           elemDefault
         );
@@ -78,7 +79,8 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            publicKey: 'BBBBBB'
+            publicKey: 'BBBBBB',
+            publicKeyEnabled: true
           },
           elemDefault
         );
