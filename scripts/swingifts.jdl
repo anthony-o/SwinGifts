@@ -19,7 +19,8 @@ service * with serviceClass
 entity Event {
 	name String required,
 	description String maxlength(8192),
-	publicKey String maxlength(32)
+	publicKey String unique maxlength(32),
+	publicKeyEnabled Boolean
 }
 relationship ManyToOne {
 	Event{admin(login) required} to User
