@@ -20,9 +20,14 @@
             "fieldName": "publicKey",
             "fieldType": "String",
             "fieldValidateRules": [
+                "unique",
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": 32
+        },
+        {
+            "fieldName": "publicKeyEnabled",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

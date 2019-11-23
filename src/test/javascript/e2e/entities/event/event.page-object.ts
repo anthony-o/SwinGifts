@@ -29,6 +29,7 @@ export class EventUpdatePage {
   nameInput = element(by.id('field_name'));
   descriptionInput = element(by.id('field_description'));
   publicKeyInput = element(by.id('field_publicKey'));
+  publicKeyEnabledInput = element(by.id('field_publicKeyEnabled'));
   adminSelect = element(by.id('field_admin'));
 
   async getPageTitle() {
@@ -57,6 +58,10 @@ export class EventUpdatePage {
 
   async getPublicKeyInput() {
     return await this.publicKeyInput.getAttribute('value');
+  }
+
+  getPublicKeyEnabledInput(timeout?: number) {
+    return this.publicKeyEnabledInput;
   }
 
   async adminSelectLastOption(timeout?: number) {

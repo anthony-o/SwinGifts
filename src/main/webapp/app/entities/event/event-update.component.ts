@@ -26,6 +26,7 @@ export class EventUpdateComponent implements OnInit {
     name: [null, [Validators.required]],
     description: [null, [Validators.maxLength(8192)]],
     publicKey: [null, [Validators.maxLength(32)]],
+    publicKeyEnabled: [],
     admin: [null, Validators.required]
   });
 
@@ -57,6 +58,7 @@ export class EventUpdateComponent implements OnInit {
       name: event.name,
       description: event.description,
       publicKey: event.publicKey,
+      publicKeyEnabled: event.publicKeyEnabled,
       admin: event.admin
     });
   }
@@ -82,6 +84,7 @@ export class EventUpdateComponent implements OnInit {
       name: this.editForm.get(['name']).value,
       description: this.editForm.get(['description']).value,
       publicKey: this.editForm.get(['publicKey']).value,
+      publicKeyEnabled: this.editForm.get(['publicKeyEnabled']).value,
       admin: this.editForm.get(['admin']).value
     };
   }

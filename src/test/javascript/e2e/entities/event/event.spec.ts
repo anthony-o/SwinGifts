@@ -53,6 +53,14 @@ describe('Event e2e test', () => {
         expect(await eventUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
         expect(await eventUpdatePage.getDescriptionInput()).to.eq('description', 'Expected Description value to be equals to description');
         expect(await eventUpdatePage.getPublicKeyInput()).to.eq('publicKey', 'Expected PublicKey value to be equals to publicKey');
+        const selectedPublicKeyEnabled = eventUpdatePage.getPublicKeyEnabledInput();
+        if (await selectedPublicKeyEnabled.isSelected()) {
+            await eventUpdatePage.getPublicKeyEnabledInput().click();
+            expect(await eventUpdatePage.getPublicKeyEnabledInput().isSelected(), 'Expected publicKeyEnabled not to be selected').to.be.false;
+        } else {
+            await eventUpdatePage.getPublicKeyEnabledInput().click();
+            expect(await eventUpdatePage.getPublicKeyEnabledInput().isSelected(), 'Expected publicKeyEnabled to be selected').to.be.true;
+        }
         await eventUpdatePage.save();
         expect(await eventUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

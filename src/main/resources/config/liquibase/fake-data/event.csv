@@ -1,11 +1,11 @@
-id;name;description;public_key;admin_id
-1;mobile Fish;Home Loan Account Table Computer;Trace;1
-2;Metal deposit;Producer;Implementation Electronics Offic;2
-3;Home Loan Account;web-readiness;Namibia;1
-4;Gorgeous Frozen Pants;Common;Savings Account syndicate Planne;1
-5;HDD;Table Small Frozen Sausages Planner;envisioneer Music Public-key;1
-6;Bahamian Dollar Investment Account;Games Regional Digitized;copy convergence;1
-7;Georgia Industrial;connect Markets Chief;capacitor archive;2
-8;Aruba;software scale interactive;Louisiana Specialist Home Loan A;1
-9;scalable;Small;deliverables reinvent 24 hour;1
-10;magenta monitor 1080p;Unbranded Plastic Tuna Frozen;generating Highway Ergonomic;1
+id;name;description;public_key;public_key_enabled;admin_id
+1;mobile Fish;Home Loan Account Table Computer;Trace;false;2
+2;alarm;Tasty Metal Bacon;red Chips Soap;false;2
+3;Grocery Home;Investment Account Steel;Coordinator;false;1
+4;bluetooth;syndicate;Mississippi Refined Rubber Chick;false;1
+5;Usability South Dakota envisioneer;Intelligent;Monitored Bahamian Dollar Invest;true;1
+6;Regional;Tuna;hardware Costa Rica Mayotte;false;1
+7;synthesizing Views e-enable;Credit Card Account National Awesome;Aruba;true;1
+8;scale interactive generating;Specialist Home Loan Account;Plastic;true;1
+9;Industrial;index orange;Jewelery;false;2
+10;application quantify Unbranded Plastic Tuna;Internal;Investment Account archive Fanta;false;2

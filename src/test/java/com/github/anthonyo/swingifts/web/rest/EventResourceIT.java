@@ -44,6 +44,9 @@ public class EventResourceIT {
     private static final String DEFAULT_PUBLIC_KEY = "AAAAAAAAAA";
     private static final String UPDATED_PUBLIC_KEY = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_PUBLIC_KEY_ENABLED = false;
+    private static final Boolean UPDATED_PUBLIC_KEY_ENABLED = true;
+
     @Autowired
     private EventRepository eventRepository;
 
@@ -91,7 +94,8 @@ public class EventResourceIT {
         Event event = new Event()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .publicKey(DEFAULT_PUBLIC_KEY);
+            .publicKey(DEFAULT_PUBLIC_KEY)
+            .publicKeyEnabled(DEFAULT_PUBLIC_KEY_ENABLED);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -109,7 +113,8 @@ public class EventResourceIT {
         Event event = new Event()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .publicKey(UPDATED_PUBLIC_KEY);
+            .publicKey(UPDATED_PUBLIC_KEY)
+            .publicKeyEnabled(UPDATED_PUBLIC_KEY_ENABLED);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -141,6 +146,7 @@ public class EventResourceIT {
         assertThat(testEvent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testEvent.getPublicKey()).isEqualTo(DEFAULT_PUBLIC_KEY);
+        assertThat(testEvent.isPublicKeyEnabled()).isEqualTo(DEFAULT_PUBLIC_KEY_ENABLED);
     }
 
     @Test
@@ -194,7 +200,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].publicKey").value(hasItem(DEFAULT_PUBLIC_KEY)));
+            .andExpect(jsonPath("$.[*].publicKey").value(hasItem(DEFAULT_PUBLIC_KEY)))
+            .andExpect(jsonPath("$.[*].publicKeyEnabled").value(hasItem(DEFAULT_PUBLIC_KEY_ENABLED.booleanValue())));
     }
     
     @Test
@@ -210,7 +217,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.id").value(event.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.publicKey").value(DEFAULT_PUBLIC_KEY));
+            .andExpect(jsonPath("$.publicKey").value(DEFAULT_PUBLIC_KEY))
+            .andExpect(jsonPath("$.publicKeyEnabled").value(DEFAULT_PUBLIC_KEY_ENABLED.booleanValue()));
     }
 
     @Test
@@ -236,7 +244,8 @@ public class EventResourceIT {
         updatedEvent
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .publicKey(UPDATED_PUBLIC_KEY);
+            .publicKey(UPDATED_PUBLIC_KEY)
+            .publicKeyEnabled(UPDATED_PUBLIC_KEY_ENABLED);
 
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -250,6 +259,7 @@ public class EventResourceIT {
         assertThat(testEvent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testEvent.getPublicKey()).isEqualTo(UPDATED_PUBLIC_KEY);
+        assertThat(testEvent.isPublicKeyEnabled()).isEqualTo(UPDATED_PUBLIC_KEY_ENABLED);
     }
 
     @Test

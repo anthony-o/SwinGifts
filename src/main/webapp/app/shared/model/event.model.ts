@@ -8,6 +8,7 @@ export interface IEvent {
   name?: string;
   description?: string;
   publicKey?: string;
+  publicKeyEnabled?: boolean;
   participations?: IParticipation[];
   giftDrawings?: IGiftDrawing[];
   drawingExclusionGroups?: IDrawingExclusionGroup[];
@@ -20,9 +21,12 @@ export class Event implements IEvent {
     public name?: string,
     public description?: string,
     public publicKey?: string,
+    public publicKeyEnabled?: boolean,
     public participations?: IParticipation[],
     public giftDrawings?: IGiftDrawing[],
     public drawingExclusionGroups?: IDrawingExclusionGroup[],
     public admin?: IUser
-  ) {}
+  ) {
+    this.publicKeyEnabled = this.publicKeyEnabled || false;
+  }
 }
