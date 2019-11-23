@@ -33,13 +33,16 @@ public class Event implements Serializable {
 
     @Size(max = 8192)
     @Column(name = "description", length = 8192)
+    @JsonView(JsonViews.EventGet.class)
     private String description;
 
     @Size(max = 32)
     @Column(name = "public_key", length = 32, unique = true)
+    @JsonView(JsonViews.EventGet.class)
     private String publicKey;
 
     @Column(name = "public_key_enabled")
+    @JsonView(JsonViews.EventGet.class)
     private Boolean publicKeyEnabled;
 
     @OneToMany(mappedBy = "event")
@@ -55,7 +58,6 @@ public class Event implements Serializable {
     private Set<DrawingExclusionGroup> drawingExclusionGroups = new HashSet<>();
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonView(JsonViews.EventGet.class)
     private User admin;
 

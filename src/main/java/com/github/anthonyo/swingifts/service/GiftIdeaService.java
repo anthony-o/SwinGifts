@@ -59,6 +59,7 @@ public class GiftIdeaService {
                     // If taker is already present, can't change it
                     giftIdea.setTaker(dbTaker);
                 }
+                giftIdea.setTakenDate(dbGiftIdea.getTakenDate());
                 return giftIdea;
             }).orElseThrow(() -> new EntityNotFoundException("Gift idea not found"));
         } else {
@@ -68,6 +69,7 @@ public class GiftIdeaService {
                 .orElseThrow(() -> new EntityNotFoundException("Recipient participant not found"));
             giftIdea.setRecipient(recipient);
             giftIdea.setTaker(null); // No taker when creating
+            giftIdea.setTakenDate(null);
         }
         Participation requesterParticipation = getRequesterParticipationOrThrowAccessDeniedException(giftIdea, requesterUserLogin);
         if (giftIdea.getId() == null) {
@@ -151,6 +153,7 @@ public class GiftIdeaService {
         participationService.checkParticipationIdAllowedForRequesterUserLogin(giftIdea.getRecipient().getId(), requesterUserLogin);
         Participation requesterParticipation = getRequesterParticipationOrThrowAccessDeniedException(giftIdea, requesterUserLogin);
         giftIdea.setTaker(requesterParticipation);
+        giftIdea.setTakenDate(Instant.now());
         return giftIdeaRepository.save(giftIdea);
     }
 
@@ -161,6 +164,7 @@ public class GiftIdeaService {
             throw new BadRequestAlertException("This gift idea is not taken by the current user", ENTITY_NAME, "takerisnotcurrentuser");
         }
         giftIdea.setTaker(null);
+        giftIdea.setTakenDate(null);
         return giftIdeaRepository.save(giftIdea);
     }
 }

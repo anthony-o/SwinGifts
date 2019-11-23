@@ -16,8 +16,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select event from Event event where event.admin.login = ?#{principal.username}")
     List<Event> findByAdminIsCurrentUser();
 
-    @Query("select distinct event from Event event left join event.participations participation" +
-        " where event.admin.login = :login or participation.user.login = :login")
+    @Query("select distinct event from Event event left join event.participations participation left join participation.user participationUser" +
+        " where event.admin.login = :login or participationUser.login = :login")
     List<Event> findByParticipationsUserLoginIsOrAdminLoginIs(@Param("login") String login);
 
     @Query("select count(event) > 0 from Event event left join event.participations participation left join participation.user participationUser" +

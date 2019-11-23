@@ -261,7 +261,7 @@ public class EventResourceIT {
     @Transactional
     public void updateEvent() throws Exception {
         // Initialize the database
-        eventService.save(event);
+        eventService.save(event, "alice");
 
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
@@ -312,7 +312,7 @@ public class EventResourceIT {
     @Transactional
     public void deleteEvent() throws Exception {
         // Initialize the database
-        eventService.save(event);
+        eventService.save(event, "alice");
 
         int databaseSizeBeforeDelete = eventRepository.findAll().size();
 

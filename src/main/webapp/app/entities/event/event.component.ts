@@ -51,4 +51,8 @@ export class EventComponent implements OnInit, OnDestroy {
   registerChangeInEvents() {
     this.eventSubscriber = this.eventManager.subscribe('eventListModification', response => this.loadAll());
   }
+
+  isEventAdmin(event: IEvent) {
+    return (event && event.admin.id) === (this.currentAccount && this.currentAccount.id);
+  }
 }

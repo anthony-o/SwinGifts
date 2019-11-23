@@ -3,8 +3,12 @@ package com.github.anthonyo.swingifts.service;
 import com.github.anthonyo.swingifts.domain.*;
 import com.github.anthonyo.swingifts.repository.EventRepository;
 import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
+import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.repository.UserRepository;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
+import com.github.anthonyo.swingifts.service.util.RandomUtil;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,10 +34,16 @@ public class EventService {
 
     private final GiftDrawingRepository giftDrawingRepository;
 
-    public EventService(EventRepository eventRepository, EntityManager entityManager, GiftDrawingRepository giftDrawingRepository) {
+    private final UserRepository userRepository;
+
+    private final ParticipationRepository participationRepository;
+
+    public EventService(EventRepository eventRepository, EntityManager entityManager, GiftDrawingRepository giftDrawingRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
         this.eventRepository = eventRepository;
         this.entityManager = entityManager;
         this.giftDrawingRepository = giftDrawingRepository;
+        this.userRepository = userRepository;
+        this.participationRepository = participationRepository;
     }
 
     /**
@@ -42,10 +52,39 @@ public class EventService {
      * @param event the entity to save.
      * @return the persisted entity.
      */
-    public Event save(Event event) {
+    public Event save(Event event, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to save Event : {}", event);
-        return eventRepository.save(event);
+        boolean isModifying = event.getId() != null;
+        boolean isCreating = !isModifying;
+        User currentUser = null;
+        if (isModifying) {
+            // Modification mode: can't edit the publicKey
+            Event dbEvent = eventRepository.findById(event.getId()).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+            checkRequesterUserLoginIsEventAdmin(dbEvent, requesterUserLogin); // Only admin can modify the event
+            event.setPublicKey(dbEvent.getPublicKey());
+            // Can't modify admin
+            event.setAdmin(dbEvent.getAdmin());
+        } else {
+            // Creation mode: can't edit the publicKey
+            event.setPublicKey(null);
+            // Admin is the creator
+            currentUser = userRepository.findOneByLogin(requesterUserLogin).orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+            event.setAdmin(currentUser);
+        }
+        if (BooleanUtils.isTrue(event.isPublicKeyEnabled()) && event.getPublicKey() == null) {
+            // Want to enable publicKey, but publicKey is still null: must generate a new one
+            event.setPublicKey(RandomUtil.generateEventPublicKey());
+        }
+        Event savedEvent = eventRepository.save(event);
+        if (isCreating) {
+            // Add the admin as a participant
+            event.addParticipations(participationRepository.save(
+                new Participation().userAlias(currentUser.getLogin()).event(event)
+            ));
+        }
+        return savedEvent;
     }
+
 
     /**
      * Get all the events.
@@ -284,8 +323,8 @@ public class EventService {
         }
     }
 
-    private void checkRequesterUserLoginIsEventAdmin(Event event, String requesterUserLogin) {
-        if (!requesterUserLogin.equals(event.getAdmin().getLogin())) {
+    private void checkRequesterUserLoginIsEventAdmin(Event dbEvent, String requesterUserLogin) {
+        if (!requesterUserLogin.equals(dbEvent.getAdmin().getLogin())) {
             throw new AccessDeniedException("User is not admin of this event");
         }
     }

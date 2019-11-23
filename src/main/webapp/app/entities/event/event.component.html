@@ -47,7 +47,8 @@
                         </button>
                         <button type="submit"
                                 [routerLink]="['/event', event.id, 'edit']"
-                                class="btn btn-primary btn-sm">
+                                class="btn btn-primary btn-sm"
+                                *ngIf="isEventAdmin(event)">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
@@ -55,7 +56,8 @@
                                 [routerLink]="['/event', { outlets: { popup: event.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
+                                class="btn btn-danger btn-sm"
+                                *ngIf="isEventAdmin(event)">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>

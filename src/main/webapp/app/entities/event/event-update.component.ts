@@ -19,15 +19,12 @@ import { UserService } from 'app/core/user/user.service';
 export class EventUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  users: IUser[];
-
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
     description: [null, [Validators.maxLength(8192)]],
     publicKey: [null, [Validators.maxLength(32)]],
-    publicKeyEnabled: [],
-    admin: [null, Validators.required]
+    publicKeyEnabled: []
   });
 
   constructor(
@@ -43,13 +40,6 @@ export class EventUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.updateForm(event);
     });
-    this.userService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IUser[]>) => response.body)
-      )
-      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(event: IEvent) {
@@ -58,8 +48,7 @@ export class EventUpdateComponent implements OnInit {
       name: event.name,
       description: event.description,
       publicKey: event.publicKey,
-      publicKeyEnabled: event.publicKeyEnabled,
-      admin: event.admin
+      publicKeyEnabled: event.publicKeyEnabled
     });
   }
 
@@ -84,8 +73,7 @@ export class EventUpdateComponent implements OnInit {
       name: this.editForm.get(['name']).value,
       description: this.editForm.get(['description']).value,
       publicKey: this.editForm.get(['publicKey']).value,
-      publicKeyEnabled: this.editForm.get(['publicKeyEnabled']).value,
-      admin: this.editForm.get(['admin']).value
+      publicKeyEnabled: this.editForm.get(['publicKeyEnabled']).value
     };
   }
 

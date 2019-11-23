@@ -51,12 +51,12 @@ public class EventResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/events")
-    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) throws URISyntaxException, EntityNotFoundException {
         log.debug("REST request to save Event : {}", event);
         if (event.getId() != null) {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Event result = eventService.save(event);
+        Event result = eventService.save(event, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -69,15 +69,14 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated event,
      * or with status {@code 400 (Bad Request)} if the event is not valid,
      * or with status {@code 500 (Internal Server Error)} if the event couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/events")
-    public ResponseEntity<Event> updateEvent(@Valid @RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> updateEvent(@Valid @RequestBody Event event) throws EntityNotFoundException {
         log.debug("REST request to update Event : {}", event);
         if (event.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Event result = eventService.save(event);
+        Event result = eventService.save(event, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, event.getId().toString()))
             .body(result);
@@ -90,6 +89,7 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
      */
     @GetMapping("/events")
+    @JsonView(JsonViews.EventGet.class)
     public List<Event> getEventsForCurrentUser() {
         log.debug("REST request to get all Events");
         return eventService.findForRequesterUserLogin(SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
