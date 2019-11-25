@@ -6,6 +6,8 @@ import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.repository.UserRepository;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
+import io.undertow.util.BadRequestException;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,5 +134,38 @@ public class ParticipationService {
         if (!participationRepository.existsByIdAndUserLoginOrEventAdminLogin(participationId, requesterUserLogin)) {
             throw new AccessDeniedException("Only event's admin or participation user can modify this participation");
         }
+    }
+
+    /**
+     * Create a new participation for a public event with a publicKey
+     * @param participation
+     * @param requesterUserLogin
+     * @return
+     */
+    public Participation savePublic(Participation participation, String requesterUserLogin) throws EntityNotFoundException {
+        Event event = eventService.findOneByPublicKeyAndPublicKeyEnabledIsTrue(participation.getEvent().getPublicKey()).orElseThrow(() -> new EntityNotFoundException("Public event not found"));
+        Participation participationToCreate = new Participation()
+            .userAlias(participation.getUserAlias())
+            .event(event)
+            .user(findRequesterUserOrElseThrow(requesterUserLogin))
+        ;
+        return participationRepository.save(participationToCreate);
+    }
+
+    private User findRequesterUserOrElseThrow(String requesterUserLogin) throws EntityNotFoundException {
+        return userRepository.findOneByLogin(requesterUserLogin).orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+    public Participation updateUserWithCurrentUser(Long id, String eventPublicKey, String requesterUserLogin) throws EntityNotFoundException, BadRequestException {
+        Participation participation = participationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Participation not found"));
+        if (participation.getUser() != null) {
+            throw new BadRequestException("Participation has already a user defined");
+        }
+        Event event = participation.getEvent();
+        if (!eventPublicKey.equals(event.getPublicKey()) || BooleanUtils.isNotTrue(event.isPublicKeyEnabled())) {
+            throw new BadRequestException("Public event does not match");
+        }
+        participation.setUser(findRequesterUserOrElseThrow(requesterUserLogin));
+        return participationRepository.save(participation);
     }
 }

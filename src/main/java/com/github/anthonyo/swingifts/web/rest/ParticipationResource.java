@@ -10,6 +10,7 @@ import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.undertow.util.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -119,5 +120,28 @@ public class ParticipationResource {
         log.debug("REST request to delete Participation : {}", id);
         participationService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @PostMapping("/public/participations")
+    @JsonView(JsonViews.ParticipationGet.class)
+    public ResponseEntity<Participation> createPublicParticipation(@RequestBody Participation participation) throws URISyntaxException, EntityNotFoundException {
+        log.debug("REST request to save public Participation : {}", participation);
+        if (participation.getId() != null) {
+            throw new BadRequestAlertException("A new participation cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Participation result = participationService.savePublic(participation, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseEntity.created(new URI("/api/participations/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    @PostMapping("/participations/{id}/set-user-with-current-user")
+    @JsonView(JsonViews.ParticipationGet.class)
+    public ResponseEntity<Participation> updateUserWithCurrentUser(@PathVariable Long id, @RequestBody String eventPublicKey) throws EntityNotFoundException, BadRequestException {
+        log.debug("REST request to set-user-with-current-user : {}, {}", id, eventPublicKey);
+        Participation result = participationService.updateUserWithCurrentUser(id, eventPublicKey, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 }

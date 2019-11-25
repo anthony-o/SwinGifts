@@ -26,7 +26,8 @@ public class Participation implements Serializable {
     @JsonView({
         JsonViews.EventGet.class,
         JsonViews.ParticipationGet.class,
-        JsonViews.GiftIdeaGet.class
+        JsonViews.GiftIdeaGet.class,
+        JsonViews.EventPublicGet.class
     })
     private Long id;
 
@@ -45,7 +46,8 @@ public class Participation implements Serializable {
     @JsonView({
         JsonViews.EventGet.class,
         JsonViews.ParticipationGet.class,
-        JsonViews.GiftIdeaGet.class
+        JsonViews.GiftIdeaGet.class,
+        JsonViews.EventPublicGet.class
     })
     private String userAlias;
 
@@ -62,7 +64,7 @@ public class Participation implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonView(JsonViews.ParticipationGet.class)
     private Event event;
 
     @ManyToMany(mappedBy = "participations")

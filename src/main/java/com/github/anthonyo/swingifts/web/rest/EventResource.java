@@ -141,4 +141,17 @@ public class EventResource {
         eventService.drawGifts(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
     }
 
+    /**
+     * {@code GET  /public/events/:publicKey} : get the "publicKey" event.
+     *
+     * @param publicKey the publicKey of the event to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/public/events/{publicKey}")
+    @JsonView(JsonViews.EventPublicGet.class)
+    public ResponseEntity<Event> getEventByPublicKey(@PathVariable String publicKey) {
+        log.debug("REST request to get Event by public key: {}", publicKey);
+        Optional<Event> event = eventService.findOneByPublicKeyAndPublicKeyEnabledIsTrue(publicKey);
+        return ResponseUtil.wrapOrNotFound(event);
+    }
 }

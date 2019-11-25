@@ -23,17 +23,26 @@ public class Event implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(JsonViews.EventGet.class)
+    @JsonView({
+        JsonViews.EventGet.class,
+        JsonViews.ParticipationGet.class
+    })
     private Long id;
 
     @NotNull
     @Column(name = "name", nullable = false)
-    @JsonView(JsonViews.EventGet.class)
+    @JsonView({
+        JsonViews.EventGet.class,
+        JsonViews.EventPublicGet.class
+    })
     private String name;
 
     @Size(max = 8192)
     @Column(name = "description", length = 8192)
-    @JsonView(JsonViews.EventGet.class)
+    @JsonView({
+        JsonViews.EventGet.class,
+        JsonViews.EventPublicGet.class
+    })
     private String description;
 
     @Size(max = 32)
@@ -46,6 +55,7 @@ public class Event implements Serializable {
     private Boolean publicKeyEnabled;
 
     @OneToMany(mappedBy = "event")
+    @JsonView(JsonViews.EventPublicGet.class)
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "event")

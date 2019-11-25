@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="event">
+            <h2><span jhiTranslate="swinGiftsApp.event.detail.title">Event</span> {{event.id}}</h2>
+            <hr>
+            <swg-alert-error></swg-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="swinGiftsApp.event.name">Name</span></dt>
+                <dd>
+                    <span>{{event.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="swinGiftsApp.event.description">Description</span></dt>
+                <dd>
+                    <span>{{event.description}}</span>
+                </dd>
+            </dl>
+            <h3><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.title">Want to join in?</span></h3>
+            <ng-container *ngIf="currentAccount">
+                <p><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanations">Select your name</span></p>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let participation of event.participations">
+                        <a (click)="confirmParticipationSelection(participation)">{{participation.userAlias}}</a>
+                    </li>
+                </ul>
+                <p><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotInTheList">Not in the list? Enter your name:</span></p>
+                <form name="newParticipationForm" role="form" novalidate (ngSubmit)="saveNewParticipation()" [formGroup]="newParticipationForm">
+                    <div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="userAlias" id="field_userAlias"
+                                   formControlName="userAlias"/>
+                            <div *ngIf="newParticipationForm.get('userAlias').invalid && (newParticipationForm.get('userAlias').dirty || newParticipationForm.get('userAlias').touched)">
+                                <small class="form-text text-danger"
+                                       *ngIf="newParticipationForm.get('userAlias').errors.required" jhiTranslate="entity.validation.required">
+                                    This field is required.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" id="save-entity" [disabled]="newParticipationForm.invalid || isSavingNewParticipation" class="btn btn-primary">
+                            <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </ng-container>
+            <ng-container *ngIf="!currentAccount">
+                <p><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected">Login or create an account, then you will be able to join</span></p>
+            </ng-container>
+        </div>
+    </div>
+</div>

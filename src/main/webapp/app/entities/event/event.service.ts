@@ -27,6 +27,10 @@ export class EventService {
     return this.http.get<IEvent>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByPublicKey(publicKey: string): Observable<EntityResponseType> {
+    return this.http.get<IEvent>(`${SERVER_API_URL}/api/public/events/${publicKey}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IEvent[]>(this.resourceUrl, { params: options, observe: 'response' });

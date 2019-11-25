@@ -23,4 +23,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select count(event) > 0 from Event event left join event.participations participation left join participation.user participationUser" +
         " where event.id = :id and (event.admin.login = :login or participationUser.login = :login)")
     boolean existsByIdAndParticipationsUserLoginOrAdminLogin(@Param("id") Long id, @Param("login") String login);
+
+    Optional<Event> findOneByPublicKeyAndPublicKeyEnabledIsTrue(String publicKey);
 }

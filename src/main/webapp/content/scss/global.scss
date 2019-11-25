@@ -156,6 +156,13 @@ ui bootstrap tweaks
   cursor: pointer;
 }
 
+nav a {
+  &.nav-link,
+  &.navbar-brand {
+    color: gray();
+  }
+}
+
 .thread-dump-modal-lock {
   max-width: 450px;
   overflow: hidden;

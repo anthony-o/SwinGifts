@@ -39,4 +39,16 @@ export class ParticipationService {
   findByEventId(eventId: number): Observable<EntityArrayResponseType> {
     return this.http.get<IParticipation[]>(`${this.resourceUrl}/by-event-id/${eventId}`, { observe: 'response' });
   }
+
+  createPublic(participation: IParticipation): Observable<EntityResponseType> {
+    return this.http.post<IParticipation>(`${SERVER_API_URL}/api/public/participations`, participation, { observe: 'response' });
+  }
+
+  updateUserWithCurrentUser(participation: IParticipation): Observable<EntityResponseType> {
+    return this.http.post<IParticipation>(
+      `${this.resourceUrl}/${participation.id}/set-user-with-current-user`,
+      participation.event.publicKey,
+      { observe: 'response' }
+    );
+  }
 }

@@ -328,4 +328,16 @@ public class EventService {
             throw new AccessDeniedException("User is not admin of this event");
         }
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Event> findOneByPublicKeyAndPublicKeyEnabledIsTrue(String publicKey) {
+        return eventRepository.findOneByPublicKeyAndPublicKeyEnabledIsTrue(publicKey).map(event -> {
+            // Only keep public information
+            event.setParticipations(event.getParticipations().stream()
+                .filter(participation -> participation.getUser() == null) // Only keep participations that have not yet a real user associated with
+                .collect(Collectors.toSet())
+            );
+            return event;
+        });
+    }
 }
