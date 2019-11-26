@@ -53,9 +53,9 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "If you want to ",
+          "prefix": "Please ",
           "link": "sign in",
-          "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          "suffix": " to display all your events."
         },
         "register": {
           "noaccount": "You don't have an account yet?",

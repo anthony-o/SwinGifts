@@ -24,6 +24,11 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.SwinGiftsAccountModule)
         },
+        {
+          path: '',
+          redirectTo: '/event',
+          pathMatch: 'full'
+        },
         ...LAYOUT_ROUTES
       ],
       { enableTracing: DEBUG_INFO_ENABLED }

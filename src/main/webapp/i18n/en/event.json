@@ -14,7 +14,24 @@
         "question": "Are you sure you want to delete Event {{ id }}?"
       },
       "detail": {
-        "title": "Event"
+        "title": "Event",
+        "public.selectParticipation": {
+          "title": "Want to join this event in?",
+          "explanations": "Click on your name in the following list:",
+          "explanationsNotInTheList": "Not in the list? Enter your name:",
+          "explanationsNotConnected": {
+            "prefix": "You must ",
+            "signInLink": "sign in",
+            "middle": " or ",
+            "registerLink": "register",
+            "suffix": " in order to be able to join this event."
+          },
+          "confirm": {
+            "title": "Confirm your participation",
+            "question": "Are you sure you are \"{{ userAlias }}\" in the event \"{{ eventName }}\"?",
+            "action": "Confirm"
+          }
+        }
       },
       "name": "Name",
       "description": "Description",

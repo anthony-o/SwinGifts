@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventSelectParticipationDialogComponent } from 'app/entities/event/event-select-participation-dialog.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ParticipationService } from 'app/entities/participation/participation.service';
+import { LoginModalService } from 'app/core/login/login-modal.service';
 
 @Component({
   selector: 'swg-event-detail-public',
@@ -30,14 +31,15 @@ export class EventDetailPublicComponent implements OnInit, OnDestroy {
     protected modalService: NgbModal,
     private fb: FormBuilder,
     protected participationService: ParticipationService,
-    private router: Router
+    private router: Router,
+    private loginModalService: LoginModalService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.event = event;
     });
-    this.accountService.identity().subscribe(account => (this.currentAccount = account));
+    this.accountService.getAuthenticationState().subscribe(account => (this.currentAccount = account));
   }
 
   previousState() {
@@ -53,6 +55,7 @@ export class EventDetailPublicComponent implements OnInit, OnDestroy {
   confirmParticipationSelection(participation: IParticipation) {
     this.ngbModalRef = this.modalService.open(EventSelectParticipationDialogComponent as Component, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.participation = participation;
+    this.ngbModalRef.componentInstance.event = this.event;
     this.ngbModalRef.result.then(
       result => {
         const participationToUpdate = {
@@ -92,5 +95,9 @@ export class EventDetailPublicComponent implements OnInit, OnDestroy {
       },
       () => (this.isSavingNewParticipation = false)
     );
+  }
+
+  login() {
+    this.ngbModalRef = this.loginModalService.open();
   }
 }

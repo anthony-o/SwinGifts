@@ -1,19 +1,10 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="event">
-            <h2><span jhiTranslate="swinGiftsApp.event.detail.title">Event</span> {{event.id}}</h2>
+            <h2>{{event.name}}</h2>
             <hr>
+            <p class="lead">{{event.description}}</p>
             <swg-alert-error></swg-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="swinGiftsApp.event.name">Name</span></dt>
-                <dd>
-                    <span>{{event.name}}</span>
-                </dd>
-                <dt><span jhiTranslate="swinGiftsApp.event.description">Description</span></dt>
-                <dd>
-                    <span>{{event.description}}</span>
-                </dd>
-            </dl>
             <h3><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.title">Want to join in?</span></h3>
             <ng-container *ngIf="currentAccount">
                 <p><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanations">Select your name</span></p>
@@ -44,7 +35,13 @@
                 </form>
             </ng-container>
             <ng-container *ngIf="!currentAccount">
-                <p><span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected">Login or create an account, then you will be able to join</span></p>
+                <div class="alert alert-warning">
+                    <span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected.prefix">You must </span>
+                    <a class="alert-link" (click)="login()" jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected.signInLink">sign in</a>
+                    <span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected.middle"> or </span>
+                    <a class="alert-link" routerLink="account/register" jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected.registerLink">create an account</a>
+                    <span jhiTranslate="swinGiftsApp.event.detail.public.selectParticipation.explanationsNotConnected.suffix"> in order to be able to join this event.</span>
+                </div>
             </ng-container>
         </div>
     </div>

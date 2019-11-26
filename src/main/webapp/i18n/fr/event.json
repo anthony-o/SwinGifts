@@ -2,24 +2,41 @@
   "swinGiftsApp": {
     "event": {
       "home": {
-        "title": "Events",
-        "createLabel": "Créer un nouveau Event",
-        "createOrEditLabel": "Créer ou éditer un Event",
-        "notFound": "Aucun Event trouvé"
+        "title": "Évènements",
+        "createLabel": "Créer un nouvel évènement",
+        "createOrEditLabel": "Créer ou éditer un évènement",
+        "notFound": "Aucun évènement trouvé"
       },
-      "created": "Un nouveau Event a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Event avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Event avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouvel évènement a été créé avec l'identifiant {{ param }}",
+      "updated": "L'évènement avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "L'évènement avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"
+        "question": "Êtes-vous certain de vouloir supprimer l'évènement {{ id }} ?"
       },
       "detail": {
-        "title": "Event"
+        "title": "Évènement",
+        "public.selectParticipation": {
+          "title": "Vous voulez rejoindre cet évènement?",
+          "explanations": "Cliquez sur votre nom dans la liste suivante :",
+          "explanationsNotInTheList": "Vous n'êtes pas sur la liste ? Entrez votre nom ici :",
+          "explanationsNotConnected": {
+            "prefix": "Vous devez vous ",
+            "signInLink": "authentifier",
+            "middle": " ou ",
+            "registerLink": "créer un compte",
+            "suffix": " pour avoir la possibilité de rejoindre cet évènement"
+          },
+          "confirm": {
+            "title": "Confirmer votre participation",
+            "question": "Êtes-vous sûrs d'être \"{{ userAlias }}\" dans l'évènement \"{{ eventName }}\"?",
+            "action": "Confirmer"
+          }
+        }
       },
-      "name": "Name",
+      "name": "Nom",
       "description": "Description",
-      "publicKey": "Public Key",
-      "publicKeyEnabled": "Public Key Enabled",
+      "publicKey": "Clée publique",
+      "publicKeyEnabled": "Partager l'évènement publiquement ?",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",
