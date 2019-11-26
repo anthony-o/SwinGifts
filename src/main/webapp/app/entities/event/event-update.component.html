@@ -4,11 +4,6 @@
             <h2 id="swg-event-heading" jhiTranslate="swinGiftsApp.event.home.createOrEditLabel">Create or edit a Event</h2>
             <div>
                 <swg-alert-error></swg-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
-                </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="swinGiftsApp.event.name" for="field_name">Name</label>
                     <input type="text" class="form-control" name="name" id="field_name"
@@ -58,6 +53,5 @@
                 </button>
             </div>
         </form>
-        <router-outlet></router-outlet>
     </div>
 </div>

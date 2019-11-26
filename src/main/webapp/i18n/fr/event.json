@@ -37,6 +37,7 @@
       "description": "Description",
       "publicKey": "Clée publique",
       "publicKeyEnabled": "Partager l'évènement publiquement ?",
+      "publicUrl": "URL publique partagée de l'évènement",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",

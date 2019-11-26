@@ -18,7 +18,6 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr>
-            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.description">Description</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
@@ -32,8 +31,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let giftIdea of giftIdeas; let giftIdeaIndex = index; trackBy: trackId">
-                <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.id}}</a></td>
-                <td>{{giftIdea.description}}</td>
+                <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.description}}</a></td>
                 <td>{{giftIdea.url}}</td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
                 <td>{{giftIdea.modificationDate | date:'medium'}}</td>

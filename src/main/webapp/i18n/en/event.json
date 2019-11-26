@@ -37,6 +37,7 @@
       "description": "Description",
       "publicKey": "Public Key",
       "publicKeyEnabled": "Public Key Enabled",
+      "publicUrl": "Public sharing URL",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",

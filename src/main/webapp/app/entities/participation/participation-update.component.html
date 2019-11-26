@@ -4,11 +4,6 @@
             <h2 id="swg-participation-heading" jhiTranslate="swinGiftsApp.participation.home.createOrEditLabel">Create or edit a Participation</h2>
             <div>
                 <swg-alert-error></swg-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
-                </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive" for="field_nbOfGiftToReceive">Nb Of Gift To Receive</label>
                     <input type="number" class="form-control" name="nbOfGiftToReceive" id="field_nbOfGiftToReceive"
@@ -71,6 +66,5 @@
                 </button>
             </div>
         </form>
-        <router-outlet></router-outlet>
     </div>
 </div>

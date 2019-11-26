@@ -6,6 +6,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { EventService } from 'app/entities/event/event.service';
 import { JhiEventManager } from 'ng-jhipster';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'swg-event-detail',
@@ -14,17 +15,22 @@ import { JhiEventManager } from 'ng-jhipster';
 export class EventDetailComponent implements OnInit {
   event: IEvent;
   private account: Account;
+  eventPublicUrl: string;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     private accountService: AccountService,
     private eventService: EventService,
-    private eventManager: JhiEventManager
+    private eventManager: JhiEventManager,
+    private platformLocation: PlatformLocation
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.event = event;
+      this.eventPublicUrl = event.publicKeyEnabled
+        ? window.location.origin + this.platformLocation.getBaseHrefFromDOM() + 'event/public/' + event.publicKey
+        : null;
     });
     this.accountService.identity().subscribe(account => (this.account = account));
   }

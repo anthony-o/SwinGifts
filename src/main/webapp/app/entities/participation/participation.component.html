@@ -18,29 +18,17 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr>
-            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.user">User</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.event">Event</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let participation of participations ;trackBy: trackId">
-                <td><a [routerLink]="['/participation', participation.id, 'view' ]">{{participation.id}}</a></td>
+                <td><a [routerLink]="['/participation', participation.id, 'view' ]">{{participation.userAlias}}</a></td>
                 <td>{{participation.nbOfGiftToReceive}}</td>
                 <td>{{participation.nbOfGiftToDonate}}</td>
-                <td>{{participation.userAlias}}</td>
-                <td>
-                    {{participation.user?.login}}
-                </td>
-                <td>
-                    <div *ngIf="participation.event">
-                        <a [routerLink]="['/event', participation.event?.id, 'view' ]" >{{participation.event?.name}}</a>
-                    </div>
-                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

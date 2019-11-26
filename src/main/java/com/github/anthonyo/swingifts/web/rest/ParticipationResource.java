@@ -90,6 +90,7 @@ public class ParticipationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of participations in body.
      */
     @GetMapping("/participations/by-event-id/{eventId}")
+    @JsonView(JsonViews.ParticipationGet.class)
     public List<Participation> getParticipationsByEventId(@PathVariable Long eventId) {
         log.debug("REST request to get all Participations");
         return participationService.findByEventId(eventId, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
