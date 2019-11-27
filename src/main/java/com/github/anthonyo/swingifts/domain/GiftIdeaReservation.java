@@ -1,5 +1,7 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,15 +20,18 @@ public class GiftIdeaReservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.GiftIdeaGet.class)
     private Long id;
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
+    @JsonView(JsonViews.GiftIdeaGet.class)
     private Instant creationDate;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("giftIdeaReservations")
+    @JsonView(JsonViews.GiftIdeaGet.class)
     private Participation participation;
 
     @ManyToOne(optional = false)

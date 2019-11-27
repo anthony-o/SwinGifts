@@ -23,8 +23,9 @@
       "giftIdeaReservation": "Gift Idea Reservation",
       "creator": "Creator",
       "recipient": "Recipient",
+      "reservations": "Reservations",
       "action": {
-        "take": "Take this idea",
+        "reserve": "Reserve this idea",
         "release": "Let this idea for someone else"
       }
     }

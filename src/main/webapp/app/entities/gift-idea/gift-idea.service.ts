@@ -72,9 +72,9 @@ export class GiftIdeaService {
     return res;
   }
 
-  take(id: number) {
+  reserve(id: number) {
     return this.http
-      .post<IGiftIdea>(`${this.resourceUrl}/${id}/take`, null, { observe: 'response' })
+      .post<IGiftIdea>(`${this.resourceUrl}/${id}/reserve`, null, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

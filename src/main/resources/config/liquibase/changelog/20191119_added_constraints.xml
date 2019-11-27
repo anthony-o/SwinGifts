@@ -6,6 +6,7 @@
 
     <changeSet id="20191119_added_constraints" author="anthony-o">
         <addUniqueConstraint constraintName="ux_participation_user_id_event_id" tableName="participation" columnNames="user_id, event_id" />
+        <addUniqueConstraint constraintName="ux_gift_idea_reservation_participation_id_gift_idea_id" tableName="gift_idea_reservation" columnNames="participation_id, gift_idea_id" />
     </changeSet>
 
 </databaseChangeLog>

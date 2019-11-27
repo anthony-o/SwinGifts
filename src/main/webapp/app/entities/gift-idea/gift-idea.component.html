@@ -24,11 +24,12 @@
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.reservations">Reservations</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let giftIdea of giftIdeas; let giftIdeaIndex = index; trackBy: trackId">
+            <tr *ngFor="let giftIdea of giftIdeas; trackBy: trackId">
                 <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.description}}</a></td>
                 <td>{{giftIdea.url}}</td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
@@ -41,6 +42,13 @@
                 <td>
                     <div *ngIf="giftIdea.recipient">
                         <a [routerLink]="['/participation', giftIdea.recipient?.id, 'view' ]" >{{giftIdea.recipient?.userAlias}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="giftIdea.giftIdeaReservations">
+                        <span class="badge badge-secondary" *ngFor="let reservation of giftIdea.giftIdeaReservations; trackBy: trackId" placement="top" ngbTooltip="{{reservation.creationDate | date:'medium'}}">
+                            <a [routerLink]="['/participation', reservation.participation.id, 'view' ]" >{{reservation.participation.userAlias}}</a>
+                        </span>
                     </div>
                 </td>
                 <td class="text-right">
@@ -58,15 +66,15 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                *ngIf="!isRecipientIsMe(giftIdea) && !giftIdea.taker"
-                                (click)="take(giftIdea, giftIdeaIndex)"
+                                *ngIf="!isRecipientIsMe(giftIdea) && !isReservedByMe(giftIdea)"
+                                (click)="reserve(giftIdea)"
                                 class="btn btn-primary btn-sm">
                             <fa-icon icon="hand-paper"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="swinGiftsApp.giftIdea.action.take">Take</span>
+                            <span class="d-none d-md-inline" jhiTranslate="swinGiftsApp.giftIdea.action.reserve">Reserve</span>
                         </button>
                         <button type="submit"
-                                *ngIf="!isRecipientIsMe(giftIdea) && isTakerIsMe(giftIdea)"
-                                (click)="release(giftIdea, giftIdeaIndex)"
+                                *ngIf="!isRecipientIsMe(giftIdea) && isReservedByMe(giftIdea)"
+                                (click)="release(giftIdea)"
                                 class="btn btn-primary btn-sm">
                             <fa-icon icon="hand-holding"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="swinGiftsApp.giftIdea.action.release">Release</span>

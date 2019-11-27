@@ -7,10 +7,13 @@ import { IGiftIdea } from 'app/shared/model/gift-idea.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { GiftIdeaService } from './gift-idea.service';
 import { ActivatedRoute } from '@angular/router';
+import { GiftIdeaReservationService } from 'app/entities/gift-idea-reservation/gift-idea-reservation.service';
+import { GiftIdeaReservation } from 'app/shared/model/gift-idea-reservation.model';
 
 @Component({
   selector: 'swg-gift-idea',
-  templateUrl: './gift-idea.component.html'
+  templateUrl: './gift-idea.component.html',
+  styleUrls: ['./gift-idea.component.scss']
 })
 export class GiftIdeaComponent implements OnInit, OnDestroy {
   giftIdeas: IGiftIdea[];
@@ -21,7 +24,8 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
     protected giftIdeaService: GiftIdeaService,
     protected eventManager: JhiEventManager,
     protected accountService: AccountService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected giftIdeaReservationService: GiftIdeaReservationService
   ) {}
 
   loadAll() {
@@ -64,18 +68,24 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
     this.eventSubscriber = this.eventManager.subscribe('giftIdeaListModification', response => this.loadAll());
   }
 
-  take(giftIdea: IGiftIdea, giftIdeaIndex: number) {
-    this.giftIdeaService
-      .take(giftIdea.id)
-      .pipe(
-        filter(res => res.ok),
-        map(res => res.body)
-      )
-      .subscribe(modifiedGiftIdea => (this.giftIdeas[giftIdeaIndex] = modifiedGiftIdea));
+  isReservedByMe(giftIdea: IGiftIdea) {
+    return this.getMyGiftIdeaReservation(giftIdea);
   }
 
-  isTakerIsMe(giftIdea: IGiftIdea) {
-    return (giftIdea.taker && giftIdea.taker.user.id) === (this.currentAccount && this.currentAccount.id);
+  private getMyGiftIdeaReservation(giftIdea: IGiftIdea) {
+    const reservations = giftIdea.giftIdeaReservations;
+    const reservationIndex = this.getMyGiftIdeaReservationIndex(reservations);
+    if (reservationIndex !== -1) {
+      return reservations[reservationIndex];
+    } else {
+      return null;
+    }
+  }
+
+  private getMyGiftIdeaReservationIndex(reservations) {
+    return reservations.findIndex(
+      giftIdeaReservation => giftIdeaReservation.participation.user.id === (this.currentAccount && this.currentAccount.id)
+    );
   }
 
   isRecipientIsMe(giftIdea: IGiftIdea) {
@@ -84,13 +94,25 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
     );
   }
 
-  release(giftIdea: IGiftIdea, giftIdeaIndex: number) {
-    this.giftIdeaService
-      .release(giftIdea.id)
+  reserve(giftIdea: IGiftIdea) {
+    this.giftIdeaReservationService
+      .create(new GiftIdeaReservation(null, null, null, giftIdea))
       .pipe(
         filter(res => res.ok),
         map(res => res.body)
       )
-      .subscribe(modifiedGiftIdea => (this.giftIdeas[giftIdeaIndex] = modifiedGiftIdea));
+      .subscribe(giftIdeaReservation => giftIdea.giftIdeaReservations.push(giftIdeaReservation));
+  }
+
+  release(giftIdea: IGiftIdea) {
+    const reservations = giftIdea.giftIdeaReservations;
+    const reservationIndex = this.getMyGiftIdeaReservationIndex(reservations);
+    this.giftIdeaReservationService
+      .delete(reservations[reservationIndex].id)
+      .pipe(
+        filter(res => res.ok),
+        map(res => res.body)
+      )
+      .subscribe(() => reservations.splice(reservationIndex, 1));
   }
 }

@@ -6,7 +6,6 @@ import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.GiftIdeaService;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
-
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -19,9 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * REST controller for managing {@link com.github.anthonyo.swingifts.domain.GiftIdea}.
@@ -90,7 +88,7 @@ public class GiftIdeaResource {
      */
     @GetMapping("/gift-ideas/by-recipient-id/{participationId}")
     @JsonView(JsonViews.GiftIdeaGet.class)
-    public Stream<GiftIdea> getGiftIdeasByRecipientId(@PathVariable Long participationId) {
+    public List<GiftIdea> getGiftIdeasByRecipientId(@PathVariable Long participationId) {
         log.debug("REST request to get the giftIdeas for the given \"participationId\" recipient : {}", participationId);
         return giftIdeaService.findByRecipientIdForRequesterUserLogin(participationId, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
     }
@@ -120,25 +118,5 @@ public class GiftIdeaResource {
         log.debug("REST request to delete GiftIdea : {}", id);
         giftIdeaService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    @PostMapping("/gift-ideas/{id}/take")
-    @JsonView(JsonViews.GiftIdeaGet.class)
-    public ResponseEntity<GiftIdea> takeById(@PathVariable Long id) throws URISyntaxException, EntityNotFoundException {
-        log.debug("REST request to take GiftIdea : {}", id);
-        GiftIdea result = giftIdeaService.takeById(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .body(result);
-    }
-
-    @PostMapping("/gift-ideas/{id}/release")
-    @JsonView(JsonViews.GiftIdeaGet.class)
-    public ResponseEntity<GiftIdea> releaseById(@PathVariable Long id) throws URISyntaxException, EntityNotFoundException {
-        log.debug("REST request to release GiftIdea : {}", id);
-        GiftIdea result = giftIdeaService.releaseById(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .body(result);
     }
 }

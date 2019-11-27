@@ -215,7 +215,7 @@ public class GiftIdeaReservationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(giftIdeaReservation.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getGiftIdeaReservation() throws Exception {
@@ -242,7 +242,7 @@ public class GiftIdeaReservationResourceIT {
     @Transactional
     public void updateGiftIdeaReservation() throws Exception {
         // Initialize the database
-        giftIdeaReservationService.save(giftIdeaReservation);
+        giftIdeaReservationService.save(giftIdeaReservation, "alice");
 
         int databaseSizeBeforeUpdate = giftIdeaReservationRepository.findAll().size();
 
@@ -287,7 +287,7 @@ public class GiftIdeaReservationResourceIT {
     @Transactional
     public void deleteGiftIdeaReservation() throws Exception {
         // Initialize the database
-        giftIdeaReservationService.save(giftIdeaReservation);
+        giftIdeaReservationService.save(giftIdeaReservation, "alice");
 
         int databaseSizeBeforeDelete = giftIdeaReservationRepository.findAll().size();
 
