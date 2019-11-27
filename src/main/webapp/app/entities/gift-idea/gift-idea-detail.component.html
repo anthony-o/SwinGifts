@@ -21,20 +21,10 @@
                 <dd>
                     <span>{{giftIdea.modificationDate}}</span>
                 </dd>
-                <dt><span jhiTranslate="swinGiftsApp.giftIdea.takenDate">Taken Date</span></dt>
-                <dd>
-                    <span>{{giftIdea.takenDate}}</span>
-                </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></dt>
                 <dd>
                     <div *ngIf="giftIdea.creator">
                         <a [routerLink]="['/participation', giftIdea.creator?.id, 'view']">{{giftIdea.creator?.userAlias}}</a>
-                    </div>
-                </dd>
-                <dt><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></dt>
-                <dd>
-                    <div *ngIf="giftIdea.taker">
-                        <a [routerLink]="['/participation', giftIdea.taker?.id, 'view']">{{giftIdea.taker?.userAlias}}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></dt>

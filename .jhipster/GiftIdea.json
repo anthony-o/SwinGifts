@@ -28,26 +28,21 @@
         {
             "fieldName": "modificationDate",
             "fieldType": "Instant"
-        },
-        {
-            "fieldName": "takenDate",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "giftIdeaReservation",
+            "otherEntityRelationshipName": "giftIdea",
+            "relationshipName": "giftIdeaReservation"
+        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "participation",
             "otherEntityRelationshipName": "giftIdea",
             "relationshipValidateRules": "required",
             "relationshipName": "creator",
-            "otherEntityField": "userAlias"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "participation",
-            "otherEntityRelationshipName": "giftIdea",
-            "relationshipName": "taker",
             "otherEntityField": "userAlias"
         },
         {

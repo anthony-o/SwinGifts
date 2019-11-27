@@ -14,12 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="participation"/>
 
-        <addForeignKeyConstraint baseColumnNames="taker_id"
-                                 baseTableName="gift_idea"
-                                 constraintName="fk_gift_idea_taker_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="participation"/>
-
         <addForeignKeyConstraint baseColumnNames="recipient_id"
                                  baseTableName="gift_idea"
                                  constraintName="fk_gift_idea_recipient_id"
