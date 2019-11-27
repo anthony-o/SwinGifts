@@ -19,7 +19,7 @@
             <column name="creation_date" type="datetime">
                 <constraints nullable="false" />
             </column>
-            <column name="participant_id" type="bigint">
+            <column name="participation_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="gift_idea_id" type="bigint">
@@ -50,7 +50,7 @@
                   tableName="gift_idea_reservation">
             <column name="id" type="numeric"/>
             <column name="creation_date" type="datetime"/>
-            <column name="participant_id" type="numeric"/>
+            <column name="participation_id" type="numeric"/>
             <column name="gift_idea_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

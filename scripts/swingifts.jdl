@@ -69,7 +69,7 @@ relationship OneToMany {
     GiftIdea to GiftIdeaReservation{giftIdea(description) required}
 }
 relationship ManyToOne {
-    GiftIdeaReservation{participant(userAlias) required} to Participation
+    GiftIdeaReservation{participation(userAlias) required} to Participation
 }
 
 @skipClient

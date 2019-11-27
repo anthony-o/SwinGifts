@@ -15,7 +15,7 @@
             "otherEntityName": "participation",
             "otherEntityRelationshipName": "giftIdeaReservation",
             "relationshipValidateRules": "required",
-            "relationshipName": "participant",
+            "relationshipName": "participation",
             "otherEntityField": "userAlias"
         },
         {
