@@ -38,6 +38,7 @@ relationship OneToMany {
 	Event{participations(userAlias)} to Participation{event(name) required}
 }
 
+@skipClient
 entity GiftDrawing {}
 relationship OneToMany {
     Participation to GiftDrawing{donor(userAlias) required},
@@ -52,16 +53,26 @@ entity GiftIdea {
     url String maxlength(2048),
     creationDate Instant required,
     modificationDate Instant,
-    takenDate Instant
 }
 relationship OneToMany {
     Participation to GiftIdea{recipient(userAlias) required}
 }
 relationship ManyToOne {
-	GiftIdea{creator(userAlias) required} to Participation,
-    GiftIdea{taker(userAlias)} to Participation
+	GiftIdea{creator(userAlias) required} to Participation
 }
 
+@skipClient
+entity GiftIdeaReservation {
+    creationDate Instant required
+}
+relationship OneToMany {
+    GiftIdea to GiftIdeaReservation{giftIdea(description) required}
+}
+relationship ManyToOne {
+    GiftIdeaReservation{participant(userAlias) required} to Participation
+}
+
+@skipClient
 entity DrawingExclusionGroup
 relationship OneToMany {
 	Event to DrawingExclusionGroup{event(name) required}
