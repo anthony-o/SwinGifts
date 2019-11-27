@@ -96,7 +96,7 @@ public class GiftIdeaReservationResourceIT {
         } else {
             participation = TestUtil.findAll(em, Participation.class).get(0);
         }
-        giftIdeaReservation.setParticipant(participation);
+        giftIdeaReservation.setParticipation(participation);
         // Add required entity
         GiftIdea giftIdea;
         if (TestUtil.findAll(em, GiftIdea.class).isEmpty()) {
@@ -127,7 +127,7 @@ public class GiftIdeaReservationResourceIT {
         } else {
             participation = TestUtil.findAll(em, Participation.class).get(0);
         }
-        giftIdeaReservation.setParticipant(participation);
+        giftIdeaReservation.setParticipation(participation);
         // Add required entity
         GiftIdea giftIdea;
         if (TestUtil.findAll(em, GiftIdea.class).isEmpty()) {

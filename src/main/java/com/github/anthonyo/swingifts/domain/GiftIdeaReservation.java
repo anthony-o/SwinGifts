@@ -27,7 +27,7 @@ public class GiftIdeaReservation implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("giftIdeaReservations")
-    private Participation participant;
+    private Participation participation;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -56,17 +56,17 @@ public class GiftIdeaReservation implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public Participation getParticipant() {
-        return participant;
+    public Participation getParticipation() {
+        return participation;
     }
 
-    public GiftIdeaReservation participant(Participation participation) {
-        this.participant = participation;
+    public GiftIdeaReservation participation(Participation participation) {
+        this.participation = participation;
         return this;
     }
 
-    public void setParticipant(Participation participation) {
-        this.participant = participation;
+    public void setParticipation(Participation participation) {
+        this.participation = participation;
     }
 
     public GiftIdea getGiftIdea() {
