@@ -1,0 +1,43 @@
+{
+    "name": "GiftIdeaReservation",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "participation",
+            "otherEntityRelationshipName": "giftIdeaReservation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "participant",
+            "otherEntityField": "userAlias"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "giftIdea",
+            "otherEntityRelationshipName": "giftIdeaReservation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "giftIdea",
+            "otherEntityField": "description"
+        }
+    ],
+    "changelogDate": "20191127093056",
+    "entityTableName": "gift_idea_reservation",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": [
+        "SwinGifts"
+    ],
+    "skipClient": true
+}

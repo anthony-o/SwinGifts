@@ -24,9 +24,7 @@ export class GiftIdeaUpdateComponent implements OnInit {
     url: [null, [Validators.maxLength(2048)]],
     creationDate: [],
     modificationDate: [],
-    takenDate: [],
     creator: [],
-    taker: [],
     recipient: [null, Validators.required]
   });
 
@@ -52,9 +50,7 @@ export class GiftIdeaUpdateComponent implements OnInit {
       url: giftIdea.url,
       creationDate: giftIdea.creationDate != null ? giftIdea.creationDate.format(DATE_TIME_FORMAT) : null,
       modificationDate: giftIdea.modificationDate != null ? giftIdea.modificationDate.format(DATE_TIME_FORMAT) : null,
-      takenDate: giftIdea.takenDate != null ? giftIdea.takenDate.format(DATE_TIME_FORMAT) : null,
       creator: giftIdea.creator,
-      taker: giftIdea.taker,
       recipient: giftIdea.recipient
     });
   }
@@ -85,10 +81,7 @@ export class GiftIdeaUpdateComponent implements OnInit {
         this.editForm.get(['modificationDate']).value != null
           ? moment(this.editForm.get(['modificationDate']).value, DATE_TIME_FORMAT)
           : undefined,
-      takenDate:
-        this.editForm.get(['takenDate']).value != null ? moment(this.editForm.get(['takenDate']).value, DATE_TIME_FORMAT) : undefined,
       creator: this.editForm.get(['creator']).value,
-      taker: this.editForm.get(['taker']).value,
       recipient: this.editForm.get(['recipient']).value
     };
   }

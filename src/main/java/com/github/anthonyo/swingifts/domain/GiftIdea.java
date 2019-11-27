@@ -8,6 +8,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A GiftIdea.
@@ -38,16 +40,12 @@ public class GiftIdea implements Serializable {
     @Column(name = "modification_date")
     private Instant modificationDate;
 
-    @Column(name = "taken_date")
-    private Instant takenDate;
+    @OneToMany(mappedBy = "giftIdea")
+    private Set<GiftIdeaReservation> giftIdeaReservations = new HashSet<>();
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("giftIdeas")
     private Participation creator;
-
-    @ManyToOne
-    @JsonIgnoreProperties("giftIdeas")
-    private Participation taker;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -115,17 +113,29 @@ public class GiftIdea implements Serializable {
         this.modificationDate = modificationDate;
     }
 
-    public Instant getTakenDate() {
-        return takenDate;
+    public Set<GiftIdeaReservation> getGiftIdeaReservations() {
+        return giftIdeaReservations;
     }
 
-    public GiftIdea takenDate(Instant takenDate) {
-        this.takenDate = takenDate;
+    public GiftIdea giftIdeaReservations(Set<GiftIdeaReservation> giftIdeaReservations) {
+        this.giftIdeaReservations = giftIdeaReservations;
         return this;
     }
 
-    public void setTakenDate(Instant takenDate) {
-        this.takenDate = takenDate;
+    public GiftIdea addGiftIdeaReservation(GiftIdeaReservation giftIdeaReservation) {
+        this.giftIdeaReservations.add(giftIdeaReservation);
+        giftIdeaReservation.setGiftIdea(this);
+        return this;
+    }
+
+    public GiftIdea removeGiftIdeaReservation(GiftIdeaReservation giftIdeaReservation) {
+        this.giftIdeaReservations.remove(giftIdeaReservation);
+        giftIdeaReservation.setGiftIdea(null);
+        return this;
+    }
+
+    public void setGiftIdeaReservations(Set<GiftIdeaReservation> giftIdeaReservations) {
+        this.giftIdeaReservations = giftIdeaReservations;
     }
 
     public Participation getCreator() {
@@ -139,19 +149,6 @@ public class GiftIdea implements Serializable {
 
     public void setCreator(Participation participation) {
         this.creator = participation;
-    }
-
-    public Participation getTaker() {
-        return taker;
-    }
-
-    public GiftIdea taker(Participation participation) {
-        this.taker = participation;
-        return this;
-    }
-
-    public void setTaker(Participation participation) {
-        this.taker = participation;
     }
 
     public Participation getRecipient() {
@@ -192,7 +189,6 @@ public class GiftIdea implements Serializable {
             ", url='" + getUrl() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             ", modificationDate='" + getModificationDate() + "'" +
-            ", takenDate='" + getTakenDate() + "'" +
             "}";
     }
 }

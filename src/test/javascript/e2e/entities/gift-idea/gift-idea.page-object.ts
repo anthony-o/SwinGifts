@@ -30,9 +30,7 @@ export class GiftIdeaUpdatePage {
   urlInput = element(by.id('field_url'));
   creationDateInput = element(by.id('field_creationDate'));
   modificationDateInput = element(by.id('field_modificationDate'));
-  takenDateInput = element(by.id('field_takenDate'));
   creatorSelect = element(by.id('field_creator'));
-  takerSelect = element(by.id('field_taker'));
   recipientSelect = element(by.id('field_recipient'));
 
   async getPageTitle() {
@@ -71,14 +69,6 @@ export class GiftIdeaUpdatePage {
     return await this.modificationDateInput.getAttribute('value');
   }
 
-  async setTakenDateInput(takenDate) {
-    await this.takenDateInput.sendKeys(takenDate);
-  }
-
-  async getTakenDateInput() {
-    return await this.takenDateInput.getAttribute('value');
-  }
-
   async creatorSelectLastOption(timeout?: number) {
     await this.creatorSelect
       .all(by.tagName('option'))
@@ -96,25 +86,6 @@ export class GiftIdeaUpdatePage {
 
   async getCreatorSelectedOption() {
     return await this.creatorSelect.element(by.css('option:checked')).getText();
-  }
-
-  async takerSelectLastOption(timeout?: number) {
-    await this.takerSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
-  }
-
-  async takerSelectOption(option) {
-    await this.takerSelect.sendKeys(option);
-  }
-
-  getTakerSelect(): ElementFinder {
-    return this.takerSelect;
-  }
-
-  async getTakerSelectedOption() {
-    return await this.takerSelect.element(by.css('option:checked')).getText();
   }
 
   async recipientSelectLastOption(timeout?: number) {

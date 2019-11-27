@@ -38,5 +38,6 @@
     "clientRootFolder": "",
     "applications": [
         "SwinGifts"
-    ]
+    ],
+    "skipClient": true
 }

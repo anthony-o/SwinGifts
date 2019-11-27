@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { IGiftIdeaReservation } from 'app/shared/model/gift-idea-reservation.model';
 import { IParticipation } from 'app/shared/model/participation.model';
 
 export interface IGiftIdea {
@@ -7,9 +8,8 @@ export interface IGiftIdea {
   url?: string;
   creationDate?: Moment;
   modificationDate?: Moment;
-  takenDate?: Moment;
+  giftIdeaReservations?: IGiftIdeaReservation[];
   creator?: IParticipation;
-  taker?: IParticipation;
   recipient?: IParticipation;
 }
 
@@ -20,9 +20,8 @@ export class GiftIdea implements IGiftIdea {
     public url?: string,
     public creationDate?: Moment,
     public modificationDate?: Moment,
-    public takenDate?: Moment,
+    public giftIdeaReservations?: IGiftIdeaReservation[],
     public creator?: IParticipation,
-    public taker?: IParticipation,
     public recipient?: IParticipation
   ) {}
 }

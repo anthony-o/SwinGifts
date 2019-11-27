@@ -10,8 +10,6 @@
         "event": "Event",
         "participation": "Participation",
         "giftIdea": "Gift Idea",
-        "drawingExclusionGroup": "Drawing Exclusion Group",
-        "giftDrawing": "Gift Drawing",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

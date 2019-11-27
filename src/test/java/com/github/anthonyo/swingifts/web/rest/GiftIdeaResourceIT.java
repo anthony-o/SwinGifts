@@ -49,9 +49,6 @@ public class GiftIdeaResourceIT {
     private static final Instant DEFAULT_MODIFICATION_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_MODIFICATION_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Instant DEFAULT_TAKEN_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_TAKEN_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
     @Autowired
     private GiftIdeaRepository giftIdeaRepository;
 
@@ -100,8 +97,7 @@ public class GiftIdeaResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .url(DEFAULT_URL)
             .creationDate(DEFAULT_CREATION_DATE)
-            .modificationDate(DEFAULT_MODIFICATION_DATE)
-            .takenDate(DEFAULT_TAKEN_DATE);
+            .modificationDate(DEFAULT_MODIFICATION_DATE);
         // Add required entity
         Participation participation;
         if (TestUtil.findAll(em, Participation.class).isEmpty()) {
@@ -127,8 +123,7 @@ public class GiftIdeaResourceIT {
             .description(UPDATED_DESCRIPTION)
             .url(UPDATED_URL)
             .creationDate(UPDATED_CREATION_DATE)
-            .modificationDate(UPDATED_MODIFICATION_DATE)
-            .takenDate(UPDATED_TAKEN_DATE);
+            .modificationDate(UPDATED_MODIFICATION_DATE);
         // Add required entity
         Participation participation;
         if (TestUtil.findAll(em, Participation.class).isEmpty()) {
@@ -168,7 +163,6 @@ public class GiftIdeaResourceIT {
         assertThat(testGiftIdea.getUrl()).isEqualTo(DEFAULT_URL);
         assertThat(testGiftIdea.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testGiftIdea.getModificationDate()).isEqualTo(DEFAULT_MODIFICATION_DATE);
-        assertThat(testGiftIdea.getTakenDate()).isEqualTo(DEFAULT_TAKEN_DATE);
     }
 
     @Test
@@ -241,8 +235,7 @@ public class GiftIdeaResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].modificationDate").value(hasItem(DEFAULT_MODIFICATION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].takenDate").value(hasItem(DEFAULT_TAKEN_DATE.toString())));
+            .andExpect(jsonPath("$.[*].modificationDate").value(hasItem(DEFAULT_MODIFICATION_DATE.toString())));
     }
 
     @Test
@@ -259,8 +252,7 @@ public class GiftIdeaResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.url").value(DEFAULT_URL))
             .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()))
-            .andExpect(jsonPath("$.modificationDate").value(DEFAULT_MODIFICATION_DATE.toString()))
-            .andExpect(jsonPath("$.takenDate").value(DEFAULT_TAKEN_DATE.toString()));
+            .andExpect(jsonPath("$.modificationDate").value(DEFAULT_MODIFICATION_DATE.toString()));
     }
 
     @Test
@@ -287,8 +279,7 @@ public class GiftIdeaResourceIT {
             .description(UPDATED_DESCRIPTION)
             .url(UPDATED_URL)
             .creationDate(UPDATED_CREATION_DATE)
-            .modificationDate(UPDATED_MODIFICATION_DATE)
-            .takenDate(UPDATED_TAKEN_DATE);
+            .modificationDate(UPDATED_MODIFICATION_DATE);
 
         restGiftIdeaMockMvc.perform(put("/api/gift-ideas")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -303,7 +294,6 @@ public class GiftIdeaResourceIT {
         assertThat(testGiftIdea.getUrl()).isEqualTo(UPDATED_URL);
         assertThat(testGiftIdea.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testGiftIdea.getModificationDate()).isEqualTo(UPDATED_MODIFICATION_DATE);
-        assertThat(testGiftIdea.getTakenDate()).isEqualTo(UPDATED_TAKEN_DATE);
     }
 
     @Test

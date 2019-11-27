@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new GiftIdea(0, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate, currentDate);
+      elemDefault = new GiftIdea(0, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -32,8 +32,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT),
-            takenDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -52,16 +51,14 @@ describe('Service Tests', () => {
           {
             id: 0,
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT),
-            takenDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
             creationDate: currentDate,
-            modificationDate: currentDate,
-            takenDate: currentDate
+            modificationDate: currentDate
           },
           returnedFromService
         );
@@ -80,8 +77,7 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             url: 'BBBBBB',
             creationDate: currentDate.format(DATE_TIME_FORMAT),
-            modificationDate: currentDate.format(DATE_TIME_FORMAT),
-            takenDate: currentDate.format(DATE_TIME_FORMAT)
+            modificationDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -89,8 +85,7 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             creationDate: currentDate,
-            modificationDate: currentDate,
-            takenDate: currentDate
+            modificationDate: currentDate
           },
           returnedFromService
         );
@@ -103,37 +98,35 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      // it('should return a list of GiftIdea', () => {
-      //   const returnedFromService = Object.assign(
-      //     {
-      //       description: 'BBBBBB',
-      //       url: 'BBBBBB',
-      //       creationDate: currentDate.format(DATE_TIME_FORMAT),
-      //       modificationDate: currentDate.format(DATE_TIME_FORMAT),
-      //       takenDate: currentDate.format(DATE_TIME_FORMAT)
-      //     },
-      //     elemDefault
-      //   );
-      //   const expected = Object.assign(
-      //     {
-      //       creationDate: currentDate,
-      //       modificationDate: currentDate,
-      //       takenDate: currentDate
-      //     },
-      //     returnedFromService
-      //   );
-      //   service
-      //     .query(expected)
-      //     .pipe(
-      //       take(1),
-      //       map(resp => resp.body)
-      //     )
-      //     .subscribe(body => (expectedResult = body));
-      //   const req = httpMock.expectOne({ method: 'GET' });
-      //   req.flush([returnedFromService]);
-      //   httpMock.verify();
-      //   expect(expectedResult).toContainEqual(expected);
-      // });
+      it('should return a list of GiftIdea', () => {
+        const returnedFromService = Object.assign(
+          {
+            description: 'BBBBBB',
+            url: 'BBBBBB',
+            creationDate: currentDate.format(DATE_TIME_FORMAT),
+            modificationDate: currentDate.format(DATE_TIME_FORMAT)
+          },
+          elemDefault
+        );
+        const expected = Object.assign(
+          {
+            creationDate: currentDate,
+            modificationDate: currentDate
+          },
+          returnedFromService
+        );
+        service
+          .query(expected)
+          .pipe(
+            take(1),
+            map(resp => resp.body)
+          )
+          .subscribe(body => (expectedResult = body));
+        const req = httpMock.expectOne({ method: 'GET' });
+        req.flush([returnedFromService]);
+        httpMock.verify();
+        expect(expectedResult).toContainEqual(expected);
+      });
 
       it('should delete a GiftIdea', () => {
         service.delete(123).subscribe(resp => (expectedResult = resp.ok));

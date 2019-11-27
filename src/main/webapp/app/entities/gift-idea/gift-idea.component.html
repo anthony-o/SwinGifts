@@ -22,9 +22,7 @@
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.takenDate">Taken Date</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.taker">Taker</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
             <th scope="col"></th>
             </tr>
@@ -35,15 +33,9 @@
                 <td>{{giftIdea.url}}</td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
                 <td>{{giftIdea.modificationDate | date:'medium'}}</td>
-                <td>{{giftIdea.takenDate | date:'medium'}}</td>
                 <td>
                     <div *ngIf="giftIdea.creator">
                         <a [routerLink]="['/participation', giftIdea.creator?.id, 'view' ]" >{{giftIdea.creator?.userAlias}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="giftIdea.taker">
-                        <a [routerLink]="['/participation', giftIdea.taker?.id, 'view' ]" >{{giftIdea.taker?.userAlias}}</a>
                     </div>
                 </td>
                 <td>

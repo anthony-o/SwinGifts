@@ -30,5 +30,6 @@
     "applications": [
         "SwinGifts"
     ],
-    "readOnly": false
+    "readOnly": false,
+    "skipClient": true
 }

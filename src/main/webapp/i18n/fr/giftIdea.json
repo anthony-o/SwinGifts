@@ -20,9 +20,8 @@
       "url": "Url",
       "creationDate": "Creation Date",
       "modificationDate": "Modification Date",
-      "takenDate": "Taken Date",
+      "giftIdeaReservation": "Gift Idea Reservation",
       "creator": "Creator",
-      "taker": "Taker",
       "recipient": "Recipient",
       "action": {
         "take": "Prendre cette idée",
