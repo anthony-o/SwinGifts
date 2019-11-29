@@ -131,7 +131,7 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: SwinGifts@localhost
+    from: ${JHIPSTER_MAIL_FROM:SwinGifts@localhost}
   swagger:
     default-include-pattern: /api/.*
     title: SwinGifts API
