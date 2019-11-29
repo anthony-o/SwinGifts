@@ -1,0 +1,19 @@
+version: '2'
+services:
+  swingifts-app:
+    image: swingifts
+    build:
+      context: ../../../
+      dockerfile: ./src/main/docker/Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://swingifts-mysql:3306/swingifts?useUnicode=true&characterEncoding=utf8&useSSL=false
+      - JHIPSTER_SLEEP=5 # gives time for other services to boot before the application
+    ports:
+      - 8080:8080
+  swingifts-mysql:
+    extends:
+      file: mysql.yml
+      service: swingifts-mysql
