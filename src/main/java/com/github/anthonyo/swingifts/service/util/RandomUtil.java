@@ -15,7 +15,7 @@ public final class RandomUtil {
 
     private static final SecureRandom SECURE_RANDOM;
 
-    private static final SecureRandom STRONG_SECURE_RANDOM;
+//    private static final SecureRandom STRONG_SECURE_RANDOM;
 
     private static final int EVENT_PUBLIC_KEY_RANDOM_BYTES_COUNT = 24;
 
@@ -23,11 +23,11 @@ public final class RandomUtil {
         SECURE_RANDOM = new SecureRandom();
         SECURE_RANDOM.nextBytes(new byte[64]);
 
-        try {
-            STRONG_SECURE_RANDOM = SecureRandom.getInstanceStrong(); // Generate strong random bytes thanks to https://stackoverflow.com/a/34912596/535203
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("Can't initialize a strong SecureRandom", e);
-        }
+//        try {
+//            STRONG_SECURE_RANDOM = SecureRandom.getInstanceStrong(); // Generate strong random bytes thanks to https://stackoverflow.com/a/34912596/535203 // not used because it is too long to generate random
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new IllegalStateException("Can't initialize a strong SecureRandom", e);
+//        }
     }
 
     private RandomUtil() {
@@ -66,7 +66,7 @@ public final class RandomUtil {
 
     public static String generateEventPublicKey() {
         byte[] bytes = new byte[EVENT_PUBLIC_KEY_RANDOM_BYTES_COUNT];
-        STRONG_SECURE_RANDOM.nextBytes(bytes);
+        SECURE_RANDOM.nextBytes(bytes);
         return Base64.getUrlEncoder().encodeToString(bytes);
     }
 }

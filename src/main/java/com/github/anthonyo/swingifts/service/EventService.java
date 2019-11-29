@@ -191,10 +191,12 @@ public class EventService {
         // First every participation can donate to every others
         for (Participation participation : event.getParticipations()) {
             // Only target the ones that want to give gifts
-            if (participation.getNbOfGiftToDonate() != null && participation.getNbOfGiftToDonate() > 0) {
+            if (participation.getNbOfGiftToDonate() != null && participation.getNbOfGiftToDonate() > 0) { // Only the participant who want to donate
                 for (Participation otherParticipation : event.getParticipations()) {
-                    if (otherParticipation.getNbOfGiftToReceive() != null && otherParticipation.getNbOfGiftToReceive() > 0) {
-                        // Only target the ones that want to receive gifts
+                    if (
+                        !participation.equals(otherParticipation) // One can't draw a gift for oneself
+                            && otherParticipation.getNbOfGiftToReceive() != null && otherParticipation.getNbOfGiftToReceive() > 0 // Only target the ones that want to receive gifts
+                    ) {
                         participationToParticipationToDonateGiftsTo.computeIfAbsent(participation, participationKey -> Sets.newLinkedHashSet()).add(otherParticipation);
                     }
                 }

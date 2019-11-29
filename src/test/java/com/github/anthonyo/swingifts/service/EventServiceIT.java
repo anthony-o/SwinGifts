@@ -59,6 +59,8 @@ public class EventServiceIT {
                 if (giftDrawing.getDonor().getUser().getLogin().equals(USER_BOB_LOGIN)) {
                     assertThat(giftDrawing.getRecipient().getUser().getLogin()).isNotEqualTo(USER_ALICE_LOGIN);
                 }
+                // Check that we can't draw a gift to myself
+                assertThat(giftDrawing.getRecipient()).isNotEqualTo(giftDrawing.getDonor());
             }
 
             eventService.drawGifts(EVENT_BOBS_EVENT_ID, USER_BOB_LOGIN);
@@ -73,6 +75,8 @@ public class EventServiceIT {
                 if (giftDrawing.getDonor().getUser().getLogin().equals(USER_CHARLOTTE_LOGIN)) {
                     assertThat(giftDrawing.getRecipient().getUser().getLogin()).isNotEqualTo(USER_ALICE_LOGIN);
                 }
+                // Check that we can't draw a gift to myself
+                assertThat(giftDrawing.getRecipient()).isNotEqualTo(giftDrawing.getDonor());
             }
 
             eventService.drawGifts(EVENT_CHARLOTTES_EVENT_ID, USER_CHARLOTTE_LOGIN);

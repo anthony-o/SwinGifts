@@ -56,6 +56,7 @@ public class Event implements Serializable {
 
     @OneToMany(mappedBy = "event")
     @JsonView(JsonViews.EventPublicGet.class)
+    @JsonIgnoreProperties("event")
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "event")

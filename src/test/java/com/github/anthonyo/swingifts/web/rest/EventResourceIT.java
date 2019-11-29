@@ -138,8 +138,14 @@ public class EventResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void createEvent() throws Exception {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
+
+        Event event = new Event()
+            .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
+            .publicKeyEnabled(true);
 
         // Create the Event
         restEventMockMvc.perform(post("/api/events")
@@ -153,8 +159,8 @@ public class EventResourceIT {
         Event testEvent = eventList.get(eventList.size() - 1);
         assertThat(testEvent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testEvent.getPublicKey()).isEqualTo(DEFAULT_PUBLIC_KEY);
-        assertThat(testEvent.isPublicKeyEnabled()).isEqualTo(DEFAULT_PUBLIC_KEY_ENABLED);
+        assertThat(testEvent.getPublicKey()).isNotNull();
+        assertThat(testEvent.isPublicKeyEnabled()).isTrue();
     }
 
     @Test
@@ -197,6 +203,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void getAllEvents() throws Exception {
         // Initialize the database
         eventRepository.saveAndFlush(event);
@@ -251,6 +258,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void getNonExistingEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", Long.MAX_VALUE))
@@ -310,6 +318,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void deleteEvent() throws Exception {
         // Initialize the database
         eventService.save(event, "alice");
