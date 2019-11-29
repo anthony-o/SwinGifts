@@ -31,7 +31,7 @@ describe('Component Tests', () => {
 
     it('should send the current identity upon save', () => {
       // GIVEN
-      const accountValues: Account = {
+      const accountValuesToSave: Account = {
         firstName: 'John',
         lastName: 'Doe',
 
@@ -40,8 +40,10 @@ describe('Component Tests', () => {
         langKey: 'fr',
         login: 'john',
         authorities: [],
-        imageUrl: '',
-
+        imageUrl: ''
+      };
+      const accountValues: Account = {
+        ...accountValuesToSave,
         id: 1
       };
       mockAuth.setIdentityResponse(accountValues);
@@ -52,8 +54,8 @@ describe('Component Tests', () => {
 
       // THEN
       expect(mockAuth.identitySpy).toHaveBeenCalled();
-      expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValues);
-      expect(comp.settingsForm.value).toEqual(accountValues);
+      expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValuesToSave);
+      expect(comp.settingsForm.value).toEqual(accountValuesToSave);
     });
 
     it('should notify of success upon successful save', () => {

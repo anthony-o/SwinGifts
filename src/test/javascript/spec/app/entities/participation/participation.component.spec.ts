@@ -6,6 +6,7 @@ import { SwinGiftsTestModule } from '../../../test.module';
 import { ParticipationComponent } from 'app/entities/participation/participation.component';
 import { ParticipationService } from 'app/entities/participation/participation.service';
 import { Participation } from 'app/shared/model/participation.model';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('Component Tests', () => {
   describe('Participation Management Component', () => {
@@ -17,7 +18,12 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [SwinGiftsTestModule],
         declarations: [ParticipationComponent],
-        providers: []
+        providers: [
+          {
+            provide: ActivatedRoute,
+            useValue: { paramMap: of(convertToParamMap({ eventId: 1 })) } // mock eventId paramMap thanks to https://stackoverflow.com/a/46830024/535203
+          }
+        ]
       })
         .overrideTemplate(ParticipationComponent, '')
         .compileComponents();
@@ -30,7 +36,7 @@ describe('Component Tests', () => {
     it('Should call load all on init', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      spyOn(service, 'query').and.returnValue(
+      spyOn(service, 'findByEventId').and.returnValue(
         of(
           new HttpResponse({
             body: [new Participation(123)],
@@ -43,7 +49,7 @@ describe('Component Tests', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(service.query).toHaveBeenCalled();
+      expect(service.findByEventId).toHaveBeenCalled();
       expect(comp.participations[0]).toEqual(jasmine.objectContaining({ id: 123 }));
     });
   });

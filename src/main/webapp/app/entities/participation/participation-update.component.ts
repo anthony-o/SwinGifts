@@ -8,7 +8,6 @@ import { IParticipation, Participation } from 'app/shared/model/participation.mo
 import { ParticipationService } from './participation.service';
 import { IUser } from 'app/core/user/user.model';
 import { IEvent } from 'app/shared/model/event.model';
-import { EventService } from 'app/entities/event/event.service';
 import { IDrawingExclusionGroup } from 'app/shared/model/drawing-exclusion-group.model';
 
 @Component({
@@ -34,7 +33,6 @@ export class ParticipationUpdateComponent implements OnInit {
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected participationService: ParticipationService,
-    protected eventService: EventService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
