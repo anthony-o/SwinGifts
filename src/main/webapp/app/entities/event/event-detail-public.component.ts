@@ -10,6 +10,8 @@ import { EventSelectParticipationDialogComponent } from 'app/entities/event/even
 import { FormBuilder, Validators } from '@angular/forms';
 import { ParticipationService } from 'app/entities/participation/participation.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
+import { EventService } from 'app/entities/event/event.service';
+import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/errorhandler.interceptor';
 
 @Component({
   selector: 'swg-event-detail-public',
@@ -32,14 +34,31 @@ export class EventDetailPublicComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     protected participationService: ParticipationService,
     private router: Router,
-    private loginModalService: LoginModalService
+    private loginModalService: LoginModalService,
+    private eventService: EventService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.event = event;
+
+      this.accountService.getAuthenticationState().subscribe(account => this.setCurrentAccountAndNavigateToEventIfAllowed(account, event));
+
+      this.accountService.identity().subscribe(account => (this.currentAccount = account));
     });
-    this.accountService.getAuthenticationState().subscribe(account => (this.currentAccount = account));
+  }
+
+  private setCurrentAccountAndNavigateToEventIfAllowed(account, event) {
+    this.currentAccount = account;
+    if (account) {
+      ErrorHandlerInterceptor.filterNextRequest(err => err.status !== 403); // If we don't have the rights to access this event (error 403), don't display it to the user
+      this.eventService.find(event.id).subscribe(res => {
+        if (res.ok) {
+          // Current user is already a participant of this event, redirect to the event
+          this.router.navigate(['/event', event.id, 'view']);
+        }
+      });
+    }
   }
 
   previousState() {

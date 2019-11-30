@@ -25,7 +25,8 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView({
         JsonViews.EventGet.class,
-        JsonViews.ParticipationGet.class
+        JsonViews.ParticipationGet.class,
+        JsonViews.EventPublicGet.class
     })
     private Long id;
 
