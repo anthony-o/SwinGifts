@@ -58,7 +58,7 @@ public class EventResource {
         }
         Event result = eventService.save(event, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getName()))
             .body(result);
     }
 
@@ -78,7 +78,7 @@ public class EventResource {
         }
         Event result = eventService.save(event, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, event.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getName()))
             .body(result);
     }
 
@@ -116,23 +116,10 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/events/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) throws EntityNotFoundException {
         log.debug("REST request to delete Event : {}", id);
-        eventService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code GET  /events/:id/with-eager-relationships} : get the "id" event.
-     *
-     * @param id the id of the event to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/events/{id}/with-eager-relationships")
-    public ResponseEntity<Event> getEventWithEagerRelationships(@PathVariable Long id) {
-        log.debug("REST request to get Event : {}", id);
-        Optional<Event> event = eventService.findOneWithEagerRelationships(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
-        return ResponseUtil.wrapOrNotFound(event);
+        final Event result = eventService.delete(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, result.getName())).build();
     }
 
     @PostMapping("/events/{id}/draw-gifts") // POST as this is not an idempotent action: it changes data, see https://softwareengineering.stackexchange.com/a/261675/119279

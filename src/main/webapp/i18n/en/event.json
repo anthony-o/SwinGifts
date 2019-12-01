@@ -3,15 +3,15 @@
     "event": {
       "home": {
         "title": "Events",
-        "createLabel": "Create a new Event",
-        "createOrEditLabel": "Create or edit a Event",
-        "notFound": "No Events found"
+        "createLabel": "Create a new event",
+        "createOrEditLabel": "Create or edit a event",
+        "notFound": "No events found"
       },
-      "created": "A new Event is created with identifier {{ param }}",
-      "updated": "A Event is updated with identifier {{ param }}",
-      "deleted": "A Event is deleted with identifier {{ param }}",
+      "created": "A new event is created: \"{{ param }}\"",
+      "updated": "The event \"{{ param }}\" was updated",
+      "deleted": "The event \"{{ param }}\" was deleted",
       "delete": {
-        "question": "Are you sure you want to delete Event {{ id }}?"
+        "question": "Are you sure you want to delete event {{ id }}?"
       },
       "detail": {
         "title": "Event",
@@ -36,7 +36,7 @@
       "name": "Name",
       "description": "Description",
       "publicKey": "Public Key",
-      "publicKeyEnabled": "Public Key Enabled",
+      "publicKeyEnabled": "Share the event?",
       "publicUrl": "Public sharing URL",
       "participations": "Participations",
       "giftDrawing": "Gift Drawing",

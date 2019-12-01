@@ -79,7 +79,7 @@ public class EventService {
         if (isCreating) {
             // Add the admin as a participant
             event.addParticipations(participationRepository.save(
-                new Participation().userAlias(currentUser.getLogin()).event(event)
+                new Participation().userAlias(currentUser.getLogin()).event(event).user(currentUser)
             ));
         }
         return savedEvent;
@@ -134,26 +134,16 @@ public class EventService {
     /**
      * Delete the event by id.
      *
+     * @param requesterUserLogin
      * @param id the id of the entity.
+     * @return
      */
-    public void delete(Long id) {
+    public Event delete(Long id, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to delete Event : {}", id);
+        Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        checkRequesterUserLoginIsEventAdmin(event, requesterUserLogin); // Only admin can do this
         eventRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Event> findOneWithEagerRelationships(Long id, String requesterUserLogin) {
-        return eventRepository.findById(id).map(event -> {
-            for (Participation participation : event.getParticipations()) {
-                // Filter gift ideas : must be either the ones of the requester or not concerning the requester
-                participation.setGiftIdeas(
-                    GiftIdeaService.filterGiftIdeaStream(participation.getGiftIdeas().stream(), requesterUserLogin)
-                        .collect(Collectors.toUnmodifiableSet())
-                );
-            }
-            entityManager.detach(event);
-            return event;
-        });
+        return event;
     }
 
     /**

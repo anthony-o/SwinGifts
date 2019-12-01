@@ -12,6 +12,8 @@ public class TestConstants {
     public static long EVENT_CHARLOTTES_EVENT_ID = 3L;
     public static long EVENT_DAVES_EVENT_ID = 4L;
 
+    public static long PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID = 1L;
+
     public static long GIFT_IDEA_ALICE_S_IDEA_FOR_ALICE = 1L;
     public static long GIFT_IDEA_DAVE_S_IDEA_FOR_ALICE = 5L;
 }

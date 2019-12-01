@@ -239,26 +239,6 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getEventWithEagerRelationships() throws Exception {
-        // WHEN
-        final Event event = TestUtil.convertJsonBytesToObject(
-            restEventMockMvc.perform(get("/api/events/{id}/with-eager-relationships", TestConstants.EVENT_ALICES_EVENT_ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id").value(TestConstants.EVENT_ALICES_EVENT_ID))
-                .andReturn().getResponse().getContentAsByteArray(),
-            Event.class);
-
-        // THEN
-        final Set<GiftIdea> allGiftIdeas = event.getParticipations().stream().flatMap(participation -> participation.getGiftIdeas().stream()).collect(Collectors.toUnmodifiableSet());
-        assertThat(allGiftIdeas).hasSize(4);
-        assertThat(allGiftIdeas.stream().map(GiftIdea::getId)).contains(GIFT_IDEA_ALICE_S_IDEA_FOR_ALICE);
-        assertThat(allGiftIdeas.stream().map(GiftIdea::getId)).doesNotContain(GIFT_IDEA_DAVE_S_IDEA_FOR_ALICE);
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("alice")
     public void getNonExistingEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", Long.MAX_VALUE))

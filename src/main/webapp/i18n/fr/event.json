@@ -7,9 +7,9 @@
         "createOrEditLabel": "Créer ou éditer un évènement",
         "notFound": "Aucun évènement trouvé"
       },
-      "created": "Un nouvel évènement a été créé avec l'identifiant {{ param }}",
-      "updated": "L'évènement avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "L'évènement avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouvel évènement a été créé : \"{{ param }}\"",
+      "updated": "L'évènement \"{{ param }}\" a été mis à jour",
+      "deleted": "L'évènement \"{{ param }}\" a été supprimé",
       "delete": {
         "question": "Êtes-vous certain de vouloir supprimer l'évènement {{ id }} ?"
       },
