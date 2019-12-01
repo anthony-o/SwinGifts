@@ -3,15 +3,15 @@
     "giftIdea": {
       "home": {
         "title": "Gift Ideas",
-        "createLabel": "Create a new Gift Idea",
-        "createOrEditLabel": "Create or edit a Gift Idea",
-        "notFound": "No Gift Ideas found"
+        "createLabel": "Create a new gift idea",
+        "createOrEditLabel": "Create or edit a gift idea",
+        "notFound": "No gift idea found"
       },
-      "created": "A new Gift Idea is created with identifier {{ param }}",
-      "updated": "A Gift Idea is updated with identifier {{ param }}",
-      "deleted": "A Gift Idea is deleted with identifier {{ param }}",
+      "created": "A new gift idea was created: \"{{ param }}\"",
+      "updated": "The gift idea \"{{ param }}\" was updated",
+      "deleted": "The gift idea \"{{ param }}\" was deleted",
       "delete": {
-        "question": "Are you sure you want to delete Gift Idea {{ id }}?"
+        "question": "Are you sure you want to delete gift idea {{ id }}?"
       },
       "detail": {
         "title": "Gift Idea"

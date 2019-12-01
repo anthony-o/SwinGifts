@@ -2,28 +2,28 @@
   "swinGiftsApp": {
     "participation": {
       "home": {
-        "title": "Participations",
-        "createLabel": "Créer un nouveau Participation",
-        "createOrEditLabel": "Créer ou éditer un Participation",
-        "notFound": "Aucun Participation trouvé"
+        "title": "Participants",
+        "createLabel": "Créer un nouveau participant",
+        "createOrEditLabel": "Créer ou éditer un participant",
+        "notFound": "Aucun participant trouvé"
       },
-      "created": "Un nouveau Participation a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Participation avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Participation avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouveau participant a été créé : \"{{ param }}\"",
+      "updated": "Le participant \"{{ param }}\" a été mis à jour",
+      "deleted": "Le participant \"{{ param }}\" a été supprimé",
       "delete": {
-        "question": "Etes-vous certain de vouloir supprimer le Participation {{ id }} ?"
+        "question": "Etes-vous certain de vouloir supprimer le participant {{ id }} ?"
       },
       "detail": {
-        "title": "Participation"
+        "title": "Participant"
       },
-      "nbOfGiftToReceive": "Nb Of Gift To Receive",
-      "nbOfGiftToDonate": "Nb Of Gift To Donate",
-      "userAlias": "User Alias",
+      "nbOfGiftToReceive": "Nb de cadeaux à recevoir",
+      "nbOfGiftToDonate": "Nb de cadeaux à donner",
+      "userAlias": "Nom",
       "giftDrawing": "Gift Drawing",
       "giftIdea": "Gift Idea",
-      "user": "Utilisateur lié",
-      "user.login": "Login de l'utilisateur lié",
-      "user.email": "Email de l'utilisateur lié",
+      "user": "Utilisateur à rattacher (remplir seulement si connu), saisir login ou email",
+      "user.login": "Login",
+      "user.email": "Email",
       "event": "Event",
       "drawingExclusionGroup": "Drawing Exclusion Group"
     }

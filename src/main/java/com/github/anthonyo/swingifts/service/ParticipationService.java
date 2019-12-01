@@ -105,22 +105,30 @@ public class ParticipationService {
      * Get one participation by id.
      *
      * @param id the id of the entity.
+     * @param requesterUserLogin
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Participation> findOne(Long id) {
+    public Optional<Participation> findOne(Long id, String requesterUserLogin) {
         log.debug("Request to get Participation : {}", id);
+        checkParticipationIdAllowedForRequesterUserLogin(id, requesterUserLogin);
         return participationRepository.findById(id);
     }
 
     /**
      * Delete the participation by id.
-     *
-     * @param id the id of the entity.
+     *  @param id the id of the entity.
+     * @param requesterUserLogin
+     * @return
      */
-    public void delete(Long id) {
+    public Participation delete(Long id, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to delete Participation : {}", id);
+        final Participation dbParticipation = participationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Participation not found"));
+        if (!requesterUserLogin.equals(dbParticipation.getEvent().getAdmin().getLogin())) {
+            throw new AccessDeniedException("User is not admin of this event"); // Only admin of the event can do this
+        }
         participationRepository.deleteById(id);
+        return dbParticipation;
     }
 
     public void checkParticipationIdAllowedForRequesterUserLogin(Long participationId, String requesterUserLogin) {

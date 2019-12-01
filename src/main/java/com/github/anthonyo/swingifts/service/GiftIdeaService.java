@@ -115,10 +115,16 @@ public class GiftIdeaService {
      * Delete the giftIdea by id.
      *
      * @param id the id of the entity.
+     * @return
      */
-    public void delete(Long id) {
+    public GiftIdea delete(Long id, String requesterUserLogin) throws EntityNotFoundException {
         log.debug("Request to delete GiftIdea : {}", id);
+        final GiftIdea dbGiftIdea = giftIdeaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Gift idea not found"));
+        if (!dbGiftIdea.getCreator().getUser().getLogin().equals(requesterUserLogin) && getRequesterParticipationOrThrowAccessDeniedException(dbGiftIdea, requesterUserLogin) == null) {
+            throw new AccessDeniedException("User not allowed to delete this gift idea");
+        }
         giftIdeaRepository.deleteById(id);
+        return dbGiftIdea;
     }
 
     static boolean filterRequesterUserLoginNotRecipientOrCreator(GiftIdea giftIdea, String requesterUserLogin) {

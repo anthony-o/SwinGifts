@@ -59,7 +59,7 @@ public class ParticipationResource {
         }
         Participation result = participationService.save(participation, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/participations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getUserAlias()))
             .body(result);
     }
 
@@ -79,7 +79,7 @@ public class ParticipationResource {
         }
         Participation result = participationService.save(participation, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, participation.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, participation.getUserAlias()))
             .body(result);
     }
 
@@ -106,7 +106,7 @@ public class ParticipationResource {
     @JsonView(JsonViews.ParticipationGet.class)
     public ResponseEntity<Participation> getParticipation(@PathVariable Long id) {
         log.debug("REST request to get Participation : {}", id);
-        Optional<Participation> participation = participationService.findOne(id);
+        Optional<Participation> participation = participationService.findOne(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseUtil.wrapOrNotFound(participation);
     }
 
@@ -117,10 +117,10 @@ public class ParticipationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/participations/{id}")
-    public ResponseEntity<Void> deleteParticipation(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteParticipation(@PathVariable Long id) throws EntityNotFoundException {
         log.debug("REST request to delete Participation : {}", id);
-        participationService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        final Participation participation = participationService.delete(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, participation.getUserAlias())).build();
     }
 
     @PostMapping("/public/participations")

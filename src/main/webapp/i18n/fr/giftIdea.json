@@ -2,27 +2,27 @@
   "swinGiftsApp": {
     "giftIdea": {
       "home": {
-        "title": "GiftIdeas",
-        "createLabel": "Créer un nouveau Gift Idea",
-        "createOrEditLabel": "Créer ou éditer un Gift Idea",
-        "notFound": "Aucun Gift Idea trouvé"
+        "title": "Idées de cadeau",
+        "createLabel": "Créer une nouvelle idée de cadeau",
+        "createOrEditLabel": "Créer ou éditer une idée de cadeau",
+        "notFound": "Aucune idée de cadeau trouvée"
       },
-      "created": "Un nouveau Gift Idea a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Gift Idea avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Gift Idea avec l'identifiant {{ param }} a été supprimé",
+      "created": "Une nouvelle idée de cadeau a été créée : \"{{ param }}\"",
+      "updated": "L'idée de cadeau \"{{ param }}\" a été mise à jour",
+      "deleted": "L'idée de cadeau \"{{ param }}\" a été supprimée",
       "delete": {
-        "question": "Etes-vous certain de vouloir supprimer le Gift Idea {{ id }} ?"
+        "question": "Êtes-vous certain de vouloir supprimer l'idée de cadeau {{ id }} ?"
       },
       "detail": {
-        "title": "Gift Idea"
+        "title": "Idée de cadeau"
       },
       "description": "Description",
       "url": "Url",
-      "creationDate": "Creation Date",
-      "modificationDate": "Modification Date",
+      "creationDate": "Date de création",
+      "modificationDate": "Date de modification",
       "giftIdeaReservation": "Gift Idea Reservation",
-      "creator": "Creator",
-      "recipient": "Recipient",
+      "creator": "Créateur",
+      "recipient": "Destinataire",
       "reservations": "Réservations",
       "action": {
         "reserve": "Réserver cette idée",

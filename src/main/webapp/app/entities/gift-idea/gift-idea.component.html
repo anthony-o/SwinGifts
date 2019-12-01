@@ -31,7 +31,7 @@
             <tbody>
             <tr *ngFor="let giftIdea of giftIdeas; trackBy: trackId">
                 <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.description}}</a></td>
-                <td>{{giftIdea.url}}</td>
+                <td><a [href]="giftIdea.url">{{giftIdea.url}}</a></td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
                 <td>{{giftIdea.modificationDate | date:'medium'}}</td>
                 <td>

@@ -56,7 +56,7 @@ public class GiftIdeaResource {
         }
         GiftIdea result = giftIdeaService.save(giftIdea, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.created(new URI("/api/gift-ideas/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getDescription()))
             .body(result);
     }
 
@@ -76,7 +76,7 @@ public class GiftIdeaResource {
         }
         GiftIdea result = giftIdeaService.save(giftIdea, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, giftIdea.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, giftIdea.getDescription()))
             .body(result);
     }
 
@@ -114,9 +114,9 @@ public class GiftIdeaResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/gift-ideas/{id}")
-    public ResponseEntity<Void> deleteGiftIdea(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGiftIdea(@PathVariable Long id) throws EntityNotFoundException {
         log.debug("REST request to delete GiftIdea : {}", id);
-        giftIdeaService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        final GiftIdea giftIdea = giftIdeaService.delete(id, SecurityUtils.getCurrentUserLoginOrThrowBadCredentials());
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, giftIdea.getDescription())).build();
     }
 }

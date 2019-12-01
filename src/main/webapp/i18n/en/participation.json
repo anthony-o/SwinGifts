@@ -2,28 +2,28 @@
   "swinGiftsApp": {
     "participation": {
       "home": {
-        "title": "Participations",
-        "createLabel": "Create a new Participation",
-        "createOrEditLabel": "Create or edit a Participation",
-        "notFound": "No Participations found"
+        "title": "Participants",
+        "createLabel": "Create a new participant",
+        "createOrEditLabel": "Create or edit a participant",
+        "notFound": "No participant found"
       },
-      "created": "A new Participation is created with identifier {{ param }}",
-      "updated": "A Participation is updated with identifier {{ param }}",
-      "deleted": "A Participation is deleted with identifier {{ param }}",
+      "created": "A new participant was created: \"{{ param }}\"",
+      "updated": "The participant \"{{ param }}\" was updated",
+      "deleted": "The participant \"{{ param }}\" was deleted",
       "delete": {
-        "question": "Are you sure you want to delete Participation {{ id }}?"
+        "question": "Are you sure you want to delete participant {{ id }}?"
       },
       "detail": {
-        "title": "Participation"
+        "title": "Participant"
       },
       "nbOfGiftToReceive": "Nb Of Gift To Receive",
       "nbOfGiftToDonate": "Nb Of Gift To Donate",
-      "userAlias": "User Alias",
+      "userAlias": "Name",
       "giftDrawing": "Gift Drawing",
       "giftIdea": "Gift Idea",
-      "user": "User",
-      "user.login": "User's login",
-      "user.email": "User's email",
+      "user": "User to attach to (only fill in if known, fill in login or email)",
+      "user.login": "Login",
+      "user.email": "Email",
       "event": "Event",
       "drawingExclusionGroup": "Drawing Exclusion Group"
     }

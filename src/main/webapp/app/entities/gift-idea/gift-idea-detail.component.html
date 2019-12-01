@@ -11,15 +11,15 @@
                 </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.url">Url</span></dt>
                 <dd>
-                    <span>{{giftIdea.url}}</span>
+                    <a [href]="giftIdea.url">{{giftIdea.url}}</a>
                 </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></dt>
                 <dd>
-                    <span>{{giftIdea.creationDate}}</span>
+                    <span>{{giftIdea.creationDate | date:'medium'}}</span>
                 </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></dt>
                 <dd>
-                    <span>{{giftIdea.modificationDate}}</span>
+                    <span>{{giftIdea.modificationDate | date:'medium'}}</span>
                 </dd>
                 <dt><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></dt>
                 <dd>

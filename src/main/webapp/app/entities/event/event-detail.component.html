@@ -12,7 +12,7 @@
                         <span>{{eventPublicUrl}}</span>
                     </dd>
                 </ng-container>
-                <dt><span jhiTranslate="swinGiftsApp.event.myGiftDrawingRecipients"></span></dt>
+                <dt *ngIf="event.myGiftDrawingRecipients.length > 0"><span jhiTranslate="swinGiftsApp.event.myGiftDrawingRecipients"></span></dt>
                 <dd>
                     <ul *ngFor="let recipient of event.myGiftDrawingRecipients">
                         {{recipient.userAlias}}
