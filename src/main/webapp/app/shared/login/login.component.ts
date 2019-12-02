@@ -17,7 +17,7 @@ export class SwgLoginModalComponent implements AfterViewInit {
   loginForm = this.fb.group({
     username: [''],
     password: [''],
-    rememberMe: [false]
+    rememberMe: [true]
   });
 
   constructor(
