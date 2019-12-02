@@ -158,7 +158,8 @@ ui bootstrap tweaks
 
 nav a {
   &.nav-link,
-  &.navbar-brand {
+  &.navbar-brand,
+  &.navbar-toggler {
     color: gray();
   }
 }
