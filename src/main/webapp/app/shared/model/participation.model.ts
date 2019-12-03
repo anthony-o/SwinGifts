@@ -14,6 +14,8 @@ export interface IParticipation {
   user?: IUser;
   event?: IEvent;
   drawingExclusionGroups?: IDrawingExclusionGroup[];
+  nbOfCreatedGiftIdeas?: number;
+  nbOfReservedGiftIdeas?: number;
 }
 
 export class Participation implements IParticipation {

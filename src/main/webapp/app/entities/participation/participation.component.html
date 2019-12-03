@@ -19,16 +19,18 @@
             <thead>
             <tr>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.userAlias">User Alias</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToReceive">Nb Of Gift To Receive</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftToDonate">Nb Of Gift To Donate</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfGiftIdeas">Nb Of Gift Ideas</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfCreatedGiftIdeas">Nb Of Created Gift Ideas</span></th>
+            <th scope="col" ><span jhiTranslate="swinGiftsApp.participation.nbOfReservedGiftIdeas">Nb Of Reserved Gift Ideas</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let participation of participations ;trackBy: trackId">
                 <td><a [routerLink]="['/participation', participation.id, 'view' ]">{{participation.userAlias}}</a></td>
-                <td>{{participation.nbOfGiftToReceive}}</td>
-                <td>{{participation.nbOfGiftToDonate}}</td>
+                <td><ng-container *ngIf="!isParticipationIsMe(participation)">{{participation.giftIdeas?.length}}</ng-container></td>
+                <td>{{participation.nbOfCreatedGiftIdeas}}</td>
+                <td><ng-container *ngIf="!isParticipationIsMe(participation)">{{participation.nbOfReservedGiftIdeas}}</ng-container></td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

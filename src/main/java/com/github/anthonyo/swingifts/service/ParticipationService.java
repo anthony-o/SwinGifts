@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Participation}.
@@ -98,7 +99,13 @@ public class ParticipationService {
     public List<Participation> findByEventId(Long eventId, String requesterUserLogin) {
         log.debug("Request to get all Participations");
         eventService.checkEventIdAllowedForRequesterUserLogin(eventId, requesterUserLogin);
-        return participationRepository.findByEventId(eventId);
+        return participationRepository.findByEventId(eventId).stream().map(participation ->
+            // load gift-ideas
+            participation.giftIdeas(
+                GiftIdeaService.filterGiftIdeaStream(participation.getGiftIdeas().stream(), requesterUserLogin)
+                .collect(Collectors.toSet())
+            )
+        ).collect(Collectors.toList());
     }
 
     /**

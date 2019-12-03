@@ -32,7 +32,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView({
         JsonViews.EventGet.class,
-        JsonViews.GiftIdeaGet.class
+        JsonViews.GiftIdeaGet.class,
+        JsonViews.ParticipationGet.class
     })
     private Long id;
 

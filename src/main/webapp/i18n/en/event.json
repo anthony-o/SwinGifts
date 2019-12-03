@@ -42,7 +42,7 @@
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",
       "admin": "Admin",
-      "myGiftDrawingRecipients": "My gift drawing recipients",
+      "myGiftDrawingRecipients": "The gift drawing has been done, here is the list of participants I should offer a gift:",
       "action": {
         "drawGifts": "Draw gifts"
       }

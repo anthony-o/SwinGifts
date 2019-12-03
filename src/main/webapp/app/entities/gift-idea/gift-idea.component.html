@@ -23,25 +23,19 @@
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creationDate">Creation Date</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.modificationDate">Modification Date</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.creator">Creator</span></th>
-            <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.recipient">Recipient</span></th>
             <th scope="col" ><span jhiTranslate="swinGiftsApp.giftIdea.reservations">Reservations</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let giftIdea of giftIdeas; trackBy: trackId">
-                <td><a [routerLink]="['/gift-idea', giftIdea.id, 'view' ]">{{giftIdea.description}}</a></td>
-                <td><a [href]="giftIdea.url">{{giftIdea.url}}</a></td>
+                <td>{{giftIdea.description}}</td>
+                <td><a [href]="giftIdea.url">{{giftIdea.url | shorter:20}}</a></td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
                 <td>{{giftIdea.modificationDate | date:'medium'}}</td>
                 <td>
                     <div *ngIf="giftIdea.creator">
                         <a [routerLink]="['/participation', giftIdea.creator?.id, 'view' ]" >{{giftIdea.creator?.userAlias}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="giftIdea.recipient">
-                        <a [routerLink]="['/participation', giftIdea.recipient?.id, 'view' ]" >{{giftIdea.recipient?.userAlias}}</a>
                     </div>
                 </td>
                 <td>

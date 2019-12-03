@@ -41,10 +41,18 @@ public class GiftIdea implements Serializable {
     private Instant modificationDate;
 
     @OneToMany(mappedBy = "giftIdea")
+    @JsonView({
+        JsonViews.ParticipationGet.class,
+        JsonViews.GiftIdeaGet.class
+    })
     private Set<GiftIdeaReservation> giftIdeaReservations = new HashSet<>();
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("giftIdeas")
+    @JsonView({
+        JsonViews.ParticipationGet.class,
+        JsonViews.GiftIdeaGet.class
+    })
     private Participation creator;
 
     @ManyToOne(optional = false)

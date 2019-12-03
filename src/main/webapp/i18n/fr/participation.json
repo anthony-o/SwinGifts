@@ -25,7 +25,10 @@
       "user.login": "Login",
       "user.email": "Email",
       "event": "Event",
-      "drawingExclusionGroup": "Drawing Exclusion Group"
+      "drawingExclusionGroup": "Drawing Exclusion Group",
+      "nbOfGiftIdeas": "Nb d'idées de cadeaux",
+      "nbOfCreatedGiftIdeas": "Nb d'idées de cadeaux créées par ce participant",
+      "nbOfReservedGiftIdeas": "Nb d'idées de cadeaux réservées"
     }
   }
 }

@@ -7,6 +7,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ActivatedRoute } from '@angular/router';
 import { ParticipationService } from 'app/entities/participation/participation.service';
 import { filter, map, switchMap } from 'rxjs/operators';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
   selector: 'swg-participation',
@@ -14,7 +15,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 })
 export class ParticipationComponent implements OnInit, OnDestroy {
   participations: IParticipation[];
-  currentAccount: any;
+  currentAccount: Account;
   eventSubscriber: Subscription;
 
   constructor(
@@ -40,7 +41,13 @@ export class ParticipationComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((res: IParticipation[]) => {
-        this.participations = res;
+        this.participations = res.map(participation => {
+          participation.nbOfCreatedGiftIdeas = participation.giftIdeas.filter(giftIdea => giftIdea.creator.id === participation.id).length;
+          participation.nbOfReservedGiftIdeas = participation.giftIdeas.filter(
+            giftIdea => giftIdea.giftIdeaReservations && giftIdea.giftIdeaReservations.length > 0
+          ).length;
+          return participation;
+        });
       });
   }
 
@@ -62,5 +69,9 @@ export class ParticipationComponent implements OnInit, OnDestroy {
 
   registerChangeInParticipations() {
     this.eventSubscriber = this.eventManager.subscribe('participationListModification', response => this.loadAll());
+  }
+
+  isParticipationIsMe(participation: IParticipation) {
+    return (participation.user && participation.user.id) === this.currentAccount.id;
   }
 }

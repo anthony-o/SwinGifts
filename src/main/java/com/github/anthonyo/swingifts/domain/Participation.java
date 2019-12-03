@@ -55,11 +55,16 @@ public class Participation implements Serializable {
     private Set<GiftDrawing> giftDrawings = new HashSet<>();
 
     @OneToMany(mappedBy = "recipient")
+    @JsonIgnoreProperties("recipient")
+    @JsonView(JsonViews.ParticipationGet.class)
     private Set<GiftIdea> giftIdeas = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("participations")
-    @JsonView(JsonViews.GiftIdeaGet.class)
+    @JsonView({
+        JsonViews.GiftIdeaGet.class,
+        JsonViews.ParticipationGet.class
+    })
     private User user;
 
     @ManyToOne(optional = false)

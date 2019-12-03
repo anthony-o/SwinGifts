@@ -5,10 +5,18 @@ import { SwgAlertComponent } from './alert/alert.component';
 import { SwgAlertErrorComponent } from './alert/alert-error.component';
 import { SwgLoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { ShorterPipe } from './util/shorter.pipe';
 
 @NgModule({
   imports: [SwinGiftsSharedLibsModule],
-  declarations: [FindLanguageFromKeyPipe, SwgAlertComponent, SwgAlertErrorComponent, SwgLoginModalComponent, HasAnyAuthorityDirective],
+  declarations: [
+    FindLanguageFromKeyPipe,
+    SwgAlertComponent,
+    SwgAlertErrorComponent,
+    SwgLoginModalComponent,
+    HasAnyAuthorityDirective,
+    ShorterPipe
+  ],
   entryComponents: [SwgLoginModalComponent],
   exports: [
     SwinGiftsSharedLibsModule,
@@ -16,7 +24,8 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     SwgAlertComponent,
     SwgAlertErrorComponent,
     SwgLoginModalComponent,
-    HasAnyAuthorityDirective
+    HasAnyAuthorityDirective,
+    ShorterPipe
   ]
 })
 export class SwinGiftsSharedModule {}

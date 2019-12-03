@@ -20,7 +20,10 @@ public class GiftIdeaReservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(JsonViews.GiftIdeaGet.class)
+    @JsonView({
+        JsonViews.GiftIdeaGet.class,
+        JsonViews.ParticipationGet.class
+    })
     private Long id;
 
     @NotNull

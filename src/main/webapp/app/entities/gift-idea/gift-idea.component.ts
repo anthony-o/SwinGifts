@@ -83,9 +83,11 @@ export class GiftIdeaComponent implements OnInit, OnDestroy {
   }
 
   private getMyGiftIdeaReservationIndex(reservations) {
-    return reservations.findIndex(
-      giftIdeaReservation => giftIdeaReservation.participation.user.id === (this.currentAccount && this.currentAccount.id)
-    );
+    return reservations
+      ? reservations.findIndex(
+          giftIdeaReservation => giftIdeaReservation.participation.user.id === (this.currentAccount && this.currentAccount.id)
+        )
+      : -1;
   }
 
   isRecipientIsMe(giftIdea: IGiftIdea) {

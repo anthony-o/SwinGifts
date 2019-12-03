@@ -42,7 +42,7 @@
       "giftDrawing": "Gift Drawing",
       "drawingExclusionGroup": "Drawing Exclusion Group",
       "admin": "Admin",
-      "myGiftDrawingRecipients": "Destinataires de mes cadeaux aléatoires",
+      "myGiftDrawingRecipients": "Les cadeaux aléatoires ont été piochés, voici les participants à qui je dois offrir des cadeaux:",
       "action": {
         "drawGifts": "Piocher les cadeaux"
       }
