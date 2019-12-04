@@ -111,10 +111,9 @@ public class EventService {
         log.debug("Request to get Event : {}", id);
         checkEventIdAllowedForRequesterUserLogin(id, requesterUserLogin);
         return eventRepository.findById(id).map(
-            event -> event.myGiftDrawingRecipients(
+            event -> event.myGiftDrawing(
                 event.getGiftDrawings().stream()
                     .filter(giftDrawing -> requesterUserLogin.equals(giftDrawing.getDonor().getUserLoginIgnoringNull()))
-                    .map(GiftDrawing::getRecipient)
                     .collect(Collectors.toSet()
                 )
             )
@@ -242,7 +241,7 @@ public class EventService {
             getParticipationContextOrCreate(donor, participationContexts).potentialReceivers = new LinkedHashSet<>(entry.getValue());
         }
         Set<Participation> donors = new HashSet<>(participationContexts.keySet());
-        Participation previousDonor = randomlyPickParticipation(
+        Participation previousReceiver = randomlyPickParticipation(
             donors,
             random);
         for (int i = 0; i < numberOfGiftsToDonate; i++) {
@@ -251,8 +250,8 @@ public class EventService {
                 return null; // No more donors available
             }
             Participation donor;
-            if (previousDonor.getNbOfGiftToDonate() != null && previousDonor.getNbOfGiftToDonate() > 1) {
-                donor = previousDonor; // as the current receiver can donate, let him / her to be the next donor
+            if (donors.contains(previousReceiver)) {
+                donor = previousReceiver; // as the previous receiver can donate, let him / her to be the next donor
             } else {
                 donor = randomlyPickParticipation(
                     donors,
@@ -282,7 +281,7 @@ public class EventService {
                     getParticipationContextOrCreate(otherDonor, participationContexts).potentialReceivers.remove(receiver);
                 }
             }
-            previousDonor = donor;
+            previousReceiver = receiver;
         }
         // There is one solution, convert it to the expected result format
         Map<Participation, List<Participation>> result = new HashMap<>();

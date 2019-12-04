@@ -1,7 +1,6 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
@@ -76,7 +75,7 @@ public class Event implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
     @Transient
-    private Set<Participation> myGiftDrawingRecipients = new HashSet<>();
+    private Set<GiftDrawing> myGiftDrawings = new HashSet<>();
 
 
     public Long getId() {
@@ -229,16 +228,16 @@ public class Event implements Serializable {
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @JsonView(JsonViews.EventGet.class)
-    public Set<Participation> getMyGiftDrawingRecipients() {
-        return myGiftDrawingRecipients;
+    public Set<GiftDrawing> getMyGiftDrawings() {
+        return myGiftDrawings;
     }
 
-    public void setMyGiftDrawingRecipients(Set<Participation> myGiftDrawingRecipients) {
-        this.myGiftDrawingRecipients = myGiftDrawingRecipients;
+    public void setMyGiftDrawings(Set<GiftDrawing> myGiftDrawings) {
+        this.myGiftDrawings = myGiftDrawings;
     }
 
-    public Event myGiftDrawingRecipients(Set<Participation> myGiftDrawingRecipients) {
-        this.myGiftDrawingRecipients = myGiftDrawingRecipients;
+    public Event myGiftDrawing(Set<GiftDrawing> myGiftDrawingRecipients) {
+        this.myGiftDrawings = myGiftDrawingRecipients;
         return this;
     }
 

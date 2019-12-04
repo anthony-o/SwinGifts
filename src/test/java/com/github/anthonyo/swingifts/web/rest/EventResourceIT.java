@@ -349,8 +349,8 @@ public class EventResourceIT {
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.myGiftDrawingRecipients.length()").value(1))
-            .andExpect(jsonPath("$.myGiftDrawingRecipients.[0].id").value(alicesGiftDrawingRecipient.getId().intValue()))
-            .andExpect(jsonPath("$.myGiftDrawingRecipients.[0].userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));
+            .andExpect(jsonPath("$.myGiftDrawings.length()").value(1))
+            .andExpect(jsonPath("$.myGiftDrawings.[0].id").value(alicesGiftDrawingRecipient.getId().intValue()))
+            .andExpect(jsonPath("$.myGiftDrawings.[0].userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));
     }
 }

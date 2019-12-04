@@ -1,5 +1,7 @@
 package com.github.anthonyo.swingifts.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -22,6 +24,7 @@ public class GiftDrawing implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("giftDrawings")
+    @JsonView(JsonViews.EventGet.class)
     private Participation recipient;
 
     @ManyToOne(optional = false)

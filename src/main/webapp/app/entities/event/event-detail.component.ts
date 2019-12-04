@@ -27,12 +27,16 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ event }) => {
-      this.event = event;
-      this.eventPublicUrl = event.publicKeyEnabled
-        ? window.location.origin + this.platformLocation.getBaseHrefFromDOM() + 'event/public/' + event.publicKey
-        : null;
+      this.setEvent(event);
     });
     this.accountService.identity().subscribe(account => (this.account = account));
+  }
+
+  private setEvent(event) {
+    this.event = event;
+    this.eventPublicUrl = event.publicKeyEnabled
+      ? window.location.origin + this.platformLocation.getBaseHrefFromDOM() + 'event/public/' + event.publicKey
+      : null;
   }
 
   previousState() {
@@ -41,9 +45,10 @@ export class EventDetailComponent implements OnInit {
 
   drawGifts() {
     this.eventService.drawGifts(this.event.id).subscribe(() => {
-      this.eventManager.broadcast({
-        name: 'eventGiftsDrawn',
-        content: "Event's gifts have been drawn."
+      this.eventService.find(this.event.id).subscribe(result => {
+        if (result.ok) {
+          this.setEvent(result.body);
+        }
       });
     });
   }

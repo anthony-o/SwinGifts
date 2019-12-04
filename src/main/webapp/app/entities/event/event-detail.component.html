@@ -12,11 +12,11 @@
                         <span>{{eventPublicUrl}}</span>
                     </dd>
                 </ng-container>
-                <div class="alert alert-warning" role="alert" *ngIf="event.myGiftDrawingRecipients.length > 0">
+                <div class="alert alert-warning" role="alert" *ngIf="event.myGiftDrawings.length > 0">
                     <span jhiTranslate="swinGiftsApp.event.myGiftDrawingRecipients"></span>
                     <ul>
-                        <li *ngFor="let recipient of event.myGiftDrawingRecipients">
-                            <strong>{{recipient.userAlias}}</strong>
+                        <li *ngFor="let giftDrawing of event.myGiftDrawings">
+                            <strong>{{giftDrawing.recipient?.userAlias}}</strong>
                         </li>
                     </ul>
                 </div>

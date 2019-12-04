@@ -13,7 +13,7 @@ export interface IEvent {
   giftDrawings?: IGiftDrawing[];
   drawingExclusionGroups?: IDrawingExclusionGroup[];
   admin?: IUser;
-  myGiftDrawingRecipients?: IParticipation[];
+  myGiftDrawings?: IGiftDrawing[];
 }
 
 export class Event implements IEvent {
@@ -27,7 +27,7 @@ export class Event implements IEvent {
     public giftDrawings?: IGiftDrawing[],
     public drawingExclusionGroups?: IDrawingExclusionGroup[],
     public admin?: IUser,
-    public myGiftDrawingRecipients?: IParticipation[]
+    public myGiftDrawings?: IGiftDrawing[]
   ) {
     this.publicKeyEnabled = this.publicKeyEnabled || false;
   }
