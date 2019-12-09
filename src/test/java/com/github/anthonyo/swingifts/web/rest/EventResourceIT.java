@@ -5,6 +5,7 @@ import com.github.anthonyo.swingifts.TestConstants;
 import com.github.anthonyo.swingifts.domain.*;
 import com.github.anthonyo.swingifts.repository.EventRepository;
 import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
+import com.github.anthonyo.swingifts.repository.UserRepository;
 import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ import static com.github.anthonyo.swingifts.TestConstants.*;
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,6 +63,9 @@ public class EventResourceIT {
 
     @Autowired
     private GiftDrawingRepository giftDrawingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -205,35 +211,31 @@ public class EventResourceIT {
     @Transactional
     @WithMockUser("alice")
     public void getAllEvents() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
         // Get all the eventList
         restEventMockMvc.perform(get("/api/events?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].publicKey").value(hasItem(DEFAULT_PUBLIC_KEY)))
-            .andExpect(jsonPath("$.[*].publicKeyEnabled").value(hasItem(DEFAULT_PUBLIC_KEY_ENABLED.booleanValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasSize(4)))
+            .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_ALICES_EVENT_ID)))
+            .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_BOBS_EVENT_ID)))
+            .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_CHARLOTTES_EVENT_ID)))
+            .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_DAVES_EVENT_ID)))
+        ;
     }
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void getEvent() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
         // Get the event
-        restEventMockMvc.perform(get("/api/events/{id}", event.getId()))
+        restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(event.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.publicKey").value(DEFAULT_PUBLIC_KEY))
-            .andExpect(jsonPath("$.publicKeyEnabled").value(DEFAULT_PUBLIC_KEY_ENABLED.booleanValue()));
+            .andExpect(jsonPath("$.id").value((int) EVENT_ALICES_EVENT_ID))
+            .andExpect(jsonPath("$.name").value("Alice's event"))
+            .andExpect(jsonPath("$.description").isEmpty())
+            .andExpect(jsonPath("$.publicKey").isEmpty())
+            .andExpect(jsonPath("$.publicKeyEnabled").isEmpty());
     }
 
     @Test
@@ -242,26 +244,27 @@ public class EventResourceIT {
     public void getNonExistingEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isForbidden());
     }
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void updateEvent() throws Exception {
-        // Initialize the database
-        eventService.save(event, "alice");
-
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Update the event
-        Event updatedEvent = eventRepository.findById(event.getId()).get();
+        Event updatedEvent = eventRepository.findById(EVENT_ALICES_EVENT_ID).get();
         // Disconnect from session so that the updates on updatedEvent are not directly saved in db
         em.detach(updatedEvent);
+        // Remove all the one to many relationships
+        updatedEvent.setParticipations(new HashSet<>());
+        updatedEvent.setGiftDrawings(new HashSet<>());
+        updatedEvent.setDrawingExclusionGroups(new HashSet<>());
         updatedEvent
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .publicKey(UPDATED_PUBLIC_KEY)
-            .publicKeyEnabled(UPDATED_PUBLIC_KEY_ENABLED);
+            .publicKeyEnabled(true);
 
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -271,11 +274,11 @@ public class EventResourceIT {
         // Validate the Event in the database
         List<Event> eventList = eventRepository.findAll();
         assertThat(eventList).hasSize(databaseSizeBeforeUpdate);
-        Event testEvent = eventList.get(eventList.size() - 1);
+        Event testEvent = eventRepository.findById(EVENT_ALICES_EVENT_ID).get();
         assertThat(testEvent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testEvent.getPublicKey()).isEqualTo(UPDATED_PUBLIC_KEY);
-        assertThat(testEvent.isPublicKeyEnabled()).isEqualTo(UPDATED_PUBLIC_KEY_ENABLED);
+        assertThat(testEvent.getPublicKey()).isNotNull();
+        assertThat(testEvent.isPublicKeyEnabled()).isTrue();
     }
 
     @Test
@@ -301,7 +304,8 @@ public class EventResourceIT {
     @WithMockUser("alice")
     public void deleteEvent() throws Exception {
         // Initialize the database
-        eventService.save(event, "alice");
+        event.setAdmin(userRepository.findById(USER_ALICE_ID).get());
+        event = eventRepository.save(event);
 
         int databaseSizeBeforeDelete = eventRepository.findAll().size();
 
@@ -349,8 +353,8 @@ public class EventResourceIT {
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.myGiftDrawings.length()").value(1))
-            .andExpect(jsonPath("$.myGiftDrawings.[0].id").value(alicesGiftDrawingRecipient.getId().intValue()))
-            .andExpect(jsonPath("$.myGiftDrawings.[0].userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));
+            .andExpect(jsonPath("$.myGiftDrawings.[*].recipient").value(hasSize(1)))
+            .andExpect(jsonPath("$.myGiftDrawings.[*].recipient.id").value(alicesGiftDrawingRecipient.getId().intValue()))
+            .andExpect(jsonPath("$.myGiftDrawings.[*].recipient.userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));
     }
 }

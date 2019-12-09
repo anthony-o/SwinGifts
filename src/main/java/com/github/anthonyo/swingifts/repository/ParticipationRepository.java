@@ -24,7 +24,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
         " where participation.id = :id and (event.admin.login = :login or eventParticipation.user.login = :login)")
     boolean existsByIdAndEventParticipationsUserLoginOrEventAdminLogin(@Param("id") Long id, @Param("login") String login);
 
-    @Query("select count(*) > 0 from Participation where id = :id and (user.login = :login or event.admin.login = :login)")
+    @Query("select count(participation) > 0 from Participation participation left join participation.user user where participation.id = :id and (user.login = :login or participation.event.admin.login = :login)")
     boolean existsByIdAndUserLoginOrEventAdminLogin(@Param("id") Long id, @Param("login") String login);
 
     Optional<Participation> findByEventIdAndUserLogin(Long eventId, String userLogin);
