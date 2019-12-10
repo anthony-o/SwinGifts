@@ -1,14 +1,12 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
-import com.github.anthonyo.swingifts.TestConstants;
-import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.Event;
+import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -98,14 +96,8 @@ public class ParticipationResourceIT {
             .nbOfGiftToDonate(DEFAULT_NB_OF_GIFT_TO_DONATE)
             .userAlias(DEFAULT_USER_ALIAS);
         // Add required entity
-        Event event;
-        if (TestUtil.findAll(em, Event.class).isEmpty()) {
-            event = EventResourceIT.createEntity(em);
-            em.persist(event);
-            em.flush();
-        } else {
-            event = TestUtil.findAll(em, Event.class).get(0);
-        }
+        Event event = new Event();
+        event.setId(EVENT_ALICES_EVENT_ID);
         participation.setEvent(event);
         return participation;
     }
@@ -140,10 +132,14 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void createParticipation() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
+        final Event event = new Event();
+        event.setId(EVENT_ALICES_EVENT_ID);
+        participation.setEvent(event);
         restParticipationMockMvc.perform(post("/api/participations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(participation)))
@@ -181,6 +177,7 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void checkUserAliasIsRequired() throws Exception {
         int databaseSizeBeforeTest = participationRepository.findAll().size();
         // set the field null
@@ -214,7 +211,7 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("alice")
+    @WithMockUser("bob")
     public void getParticipation() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
@@ -229,6 +226,29 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
+    public void getParticipationAsAdmin() throws Exception {
+        // Get the participation
+        restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value((int) PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
+            .andExpect(jsonPath("$.nbOfGiftToReceive").value(1))
+            .andExpect(jsonPath("$.nbOfGiftToDonate").value(1))
+            .andExpect(jsonPath("$.userAlias").value("Al'"));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("frank")
+    public void getParticipationWithoutRights() throws Exception {
+        // Get the participation
+        restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("alice")
     public void getNonExistingParticipation() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", Long.MAX_VALUE))
@@ -237,6 +257,7 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
     public void updateNonExistingParticipation() throws Exception {
         int databaseSizeBeforeUpdate = participationRepository.findAll().size();
 

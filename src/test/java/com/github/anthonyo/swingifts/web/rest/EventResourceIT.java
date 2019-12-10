@@ -225,7 +225,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("alice")
+    @WithMockUser("bob")
     public void getEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
@@ -236,6 +236,30 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.description").isEmpty())
             .andExpect(jsonPath("$.publicKey").isEmpty())
             .andExpect(jsonPath("$.publicKeyEnabled").isEmpty());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("alice")
+    public void getEventAsAdmin() throws Exception {
+        // Get the event
+        restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value((int) EVENT_ALICES_EVENT_ID))
+            .andExpect(jsonPath("$.name").value("Alice's event"))
+            .andExpect(jsonPath("$.description").isEmpty())
+            .andExpect(jsonPath("$.publicKey").isEmpty())
+            .andExpect(jsonPath("$.publicKeyEnabled").isEmpty());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("frank")
+    public void getEventWithoutRights() throws Exception {
+        // Get the event
+        restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
+            .andExpect(status().isForbidden());
     }
 
     @Test
