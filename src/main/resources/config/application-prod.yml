@@ -62,6 +62,10 @@ spring:
     port: ${SPRING_MAIL_PORT:25}
     username: ${SPRING_MAIL_USERNAME:}
     password: ${SPRING_MAIL_PASSWORD:}
+    properties.mail.smtp:
+      auth: ${SPRING_MAIL_AUTH:}
+      starttls.enable: ${SPRING_MAIL_STARTTLS_ENABLE:}
+      starttls.required: ${SPRING_MAIL_STARTTLS_REQUIRED:}
   thymeleaf:
     cache: true
 
