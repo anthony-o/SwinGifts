@@ -28,7 +28,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let giftIdea of giftIdeas; trackBy: trackId">
+            <tr *ngFor="let giftIdea of giftIdeas; trackBy: trackId" [class.table-primary]="giftIdea.giftIdeaReservations?.length">
                 <td>{{giftIdea.description}}</td>
                 <td><a [href]="giftIdea.url">{{giftIdea.url | shorter:20}}</a></td>
                 <td>{{giftIdea.creationDate | date:'medium'}}</td>
@@ -40,7 +40,7 @@
                 </td>
                 <td>
                     <div *ngIf="giftIdea.giftIdeaReservations">
-                        <span class="badge badge-secondary" *ngFor="let reservation of giftIdea.giftIdeaReservations; trackBy: trackId" placement="top" ngbTooltip="{{reservation.creationDate | date:'medium'}}">
+                        <span class="badge badge-warning" *ngFor="let reservation of giftIdea.giftIdeaReservations; trackBy: trackId" placement="top" ngbTooltip="{{reservation.creationDate | date:'medium'}}">
                             <a [routerLink]="['/participation', reservation.participation.id, 'view' ]" >{{reservation.participation.userAlias}}</a>
                         </span>
                     </div>

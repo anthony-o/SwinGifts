@@ -36,7 +36,8 @@ import {
   faDice,
   faHandPaper,
   faHandHolding,
-  faCheck
+  faCheck,
+  faGifts
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAwesomeIcons = [
@@ -77,5 +78,6 @@ export const fontAwesomeIcons = [
   faDice,
   faHandPaper,
   faHandHolding,
-  faCheck
+  faCheck,
+  faGifts
 ];

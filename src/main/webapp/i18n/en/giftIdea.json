@@ -26,7 +26,7 @@
       "reservations": "Reservations",
       "action": {
         "reserve": "Reserve this idea",
-        "release": "Let this idea for someone else"
+        "release": "Cancel the reservation"
       }
     }
   }

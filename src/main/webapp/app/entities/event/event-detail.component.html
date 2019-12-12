@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-md">
         <div *ngIf="event">
             <h2>{{event.name}}</h2>
             <hr>
@@ -16,7 +16,7 @@
                     <span jhiTranslate="swinGiftsApp.event.myGiftDrawingRecipients"></span>
                     <ul>
                         <li *ngFor="let giftDrawing of event.myGiftDrawings">
-                            <strong>{{giftDrawing.recipient?.userAlias}}</strong>
+                            <strong><a [routerLink]="['/participation', giftDrawing.recipient?.id, 'view' ]" >{{giftDrawing.recipient?.userAlias}}</a></strong>
                         </li>
                     </ul>
                 </div>
