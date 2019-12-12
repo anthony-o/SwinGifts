@@ -69,15 +69,18 @@ public class ParticipationService {
             if (user != null) {
                 if (user.getId() != null) {
                     userRepository.findById(user.getId())
+                        .filter(User::getActivated)
                         .ifPresent(dbUser -> participation.setUser(dbUser));
                 } else {
                     if (user.getLogin() != null) {
                         userRepository.findOneByLogin(user.getLogin().toLowerCase())
+                            .filter(User::getActivated)
                             .ifPresent(dbUser -> participation.setUser(dbUser));
                     }
                     if (user.getEmail() != null && (participation.getUser() == null || participation.getUser().getId() == null)) {
                         // An email has been defined and the user was still not found, let's try by email
                         userRepository.findOneByEmailIgnoreCase(user.getEmail())
+                            .filter(User::getActivated)
                             .ifPresent(dbUser -> participation.setUser(dbUser));
                     }
                 }
