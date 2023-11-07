@@ -6,7 +6,6 @@ import com.github.anthonyo.swingifts.security.SecurityUtils;
 import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.web.rest.errors.BadRequestAlertException;
-
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +50,7 @@ public class ParticipationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/participations")
+    @JsonView(JsonViews.ParticipationGet.class)
     public ResponseEntity<Participation> createParticipation(@Valid @RequestBody Participation participation) throws URISyntaxException, EntityNotFoundException {
         log.debug("REST request to save Participation : {}", participation);
         if (participation.getId() != null) {
@@ -72,6 +71,7 @@ public class ParticipationResource {
      * or with status {@code 500 (Internal Server Error)} if the participation couldn't be updated.
      */
     @PutMapping("/participations")
+    @JsonView(JsonViews.ParticipationGet.class)
     public ResponseEntity<Participation> updateParticipation(@Valid @RequestBody Participation participation) throws EntityNotFoundException {
         log.debug("REST request to update Participation : {}", participation);
         if (participation.getId() == null) {

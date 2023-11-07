@@ -18,7 +18,7 @@ spring:
     name: SwinGifts
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:SwinGifts;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
+    url: jdbc:h2:mem:SwinGifts;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     name:
     username:
     password:
@@ -32,7 +32,7 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
       hibernate.id.new_generator_mappings: true
@@ -44,6 +44,7 @@ spring:
       hibernate.jdbc.time_zone: UTC
   liquibase:
     contexts: test
+    change-log: classpath:/config/liquibase/master.xml
   mail:
     host: localhost
   main:
@@ -53,6 +54,8 @@ spring:
   mvc:
     favicon:
       enabled: false
+    pathmatch:
+      matching-strategy: ant_path_matcher
   task:
     execution:
       thread-name-prefix: swin-gifts-task-
@@ -83,11 +86,6 @@ jhipster:
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format
-    logstash:
-      enabled: false
-      host: localhost
-      port: 5000
-      queue-size: 512
   mail:
     from: test@localhost
     base-url: http://127.0.0.1:8080
@@ -98,10 +96,6 @@ jhipster:
         base64-secret: NGVkY2NmMTAxMDFhMTBjMjQ5NTAxYjFmZmQ1Nzc2MmJhMTQ0YmI5MWYxMDY2M2EzYTY5ZWM1YWViZmMxMWJiMDY2MmRiNDA3ODJiOGQ5NjliNmM5YjAzZDVlYmJkMjRmODc1ZmJkOTg4NzMxZDM4MTRiMGE0N2VjMDA4MWMzMGU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: true
-      report-frequency: 60 # in seconds
 
 # ===================================================================
 # Application specific properties

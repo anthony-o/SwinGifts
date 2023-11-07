@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for the UTC Hibernate configuration.
  */
 @SpringBootTest(classes = SwinGiftsApp.class)
-public class HibernateTimeZoneIT {
+class HibernateTimeZoneIT {
 
     @Autowired
     private DateTimeWrapperRepository dateTimeWrapperRepository;
@@ -34,7 +34,7 @@ public class HibernateTimeZoneIT {
     private DateTimeFormatter dateFormatter;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         dateTimeWrapper = new DateTimeWrapper();
         dateTimeWrapper.setInstant(Instant.parse("2014-11-12T05:50:00.0Z"));
         dateTimeWrapper.setLocalDateTime(LocalDateTime.parse("2014-11-12T07:50:00.0"));
@@ -58,7 +58,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeInstantWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+    void storeInstantWithUtcConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("instant", dateTimeWrapper.getId());
@@ -70,7 +70,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+    void storeLocalDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_date_time", dateTimeWrapper.getId());
@@ -85,7 +85,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeOffsetDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+    void storeOffsetDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("offset_date_time", dateTimeWrapper.getId());
@@ -99,7 +99,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeZoneDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+    void storeZoneDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("zoned_date_time", dateTimeWrapper.getId());
@@ -113,7 +113,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
+    void storeLocalTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_time", dateTimeWrapper.getId());
@@ -129,7 +129,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeOffsetTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
+    void storeOffsetTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("offset_time", dateTimeWrapper.getId());
@@ -146,7 +146,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalDateWithUtcConfigShouldBeStoredWithoutTransformation() {
+    void storeLocalDateWithUtcConfigShouldBeStoredWithoutTransformation() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_date", dateTimeWrapper.getId());

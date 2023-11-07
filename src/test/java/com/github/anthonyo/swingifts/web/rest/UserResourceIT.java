@@ -25,11 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -91,7 +94,7 @@ public class UserResourceIT {
     private User user;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         UserResource userResource = new UserResource(userService, userRepository, mailService);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
@@ -121,7 +124,7 @@ public class UserResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -129,7 +132,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void createUser() throws Exception {
+    void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
@@ -163,7 +166,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void createUserWithExistingId() throws Exception {
+    void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -191,7 +194,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void createUserWithExistingLogin() throws Exception {
+    void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
@@ -220,7 +223,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void createUserWithExistingEmail() throws Exception {
+    void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
@@ -249,7 +252,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void getAllUsers() throws Exception {
+    void getAllUsers() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
 
@@ -257,7 +260,7 @@ public class UserResourceIT {
         restUserMockMvc.perform(get("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
@@ -268,14 +271,14 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void getUser() throws Exception {
+    void getUser() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
@@ -287,14 +290,14 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void getNonExistingUser() throws Exception {
+    void getNonExistingUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/unknown"))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateUser() throws Exception {
+    void updateUser() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
@@ -336,7 +339,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void updateUserLogin() throws Exception {
+    void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
@@ -379,7 +382,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void updateUserExistingEmail() throws Exception {
+    void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.saveAndFlush(user);
 
@@ -421,7 +424,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void updateUserExistingLogin() throws Exception {
+    void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
 
@@ -463,7 +466,7 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void deleteUser() throws Exception {
+    void deleteUser() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeDelete = userRepository.findAll().size();
@@ -480,19 +483,19 @@ public class UserResourceIT {
 
     @Test
     @Transactional
-    public void getAllAuthorities() throws Exception {
+    void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities")
             .accept(TestUtil.APPLICATION_JSON_UTF8)
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
 
     @Test
     @Transactional
-    public void testUserEquals() throws Exception {
+    void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();
         user1.setId(1L);
@@ -506,7 +509,7 @@ public class UserResourceIT {
     }
 
     @Test
-    public void testUserDTOtoUser() {
+    void testUserDTOtoUser() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
@@ -537,7 +540,7 @@ public class UserResourceIT {
     }
 
     @Test
-    public void testUserToUserDTO() {
+    void testUserToUserDTO() {
         user.setId(DEFAULT_ID);
         user.setCreatedBy(DEFAULT_LOGIN);
         user.setCreatedDate(Instant.now());
@@ -568,7 +571,7 @@ public class UserResourceIT {
     }
 
     @Test
-    public void testAuthorityEquals() {
+    void testAuthorityEquals() {
         Authority authorityA = new Authority();
         assertThat(authorityA).isEqualTo(authorityA);
         assertThat(authorityA).isNotEqualTo(null);

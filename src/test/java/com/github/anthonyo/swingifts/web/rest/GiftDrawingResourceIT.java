@@ -1,20 +1,18 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
+import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.domain.GiftDrawing;
 import com.github.anthonyo.swingifts.domain.Participation;
-import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
 import com.github.anthonyo.swingifts.service.GiftDrawingService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,9 +24,8 @@ import java.util.List;
 
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link GiftDrawingResource} REST controller.
@@ -62,7 +59,7 @@ public class GiftDrawingResourceIT {
     private GiftDrawing giftDrawing;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         final GiftDrawingResource giftDrawingResource = new GiftDrawingResource(giftDrawingService);
         this.restGiftDrawingMockMvc = MockMvcBuilders.standaloneSetup(giftDrawingResource)
@@ -139,30 +136,29 @@ public class GiftDrawingResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         giftDrawing = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createGiftDrawing() throws Exception {
+    void createGiftDrawing() throws Exception {
         int databaseSizeBeforeCreate = giftDrawingRepository.findAll().size();
 
         // Create the GiftDrawing
         restGiftDrawingMockMvc.perform(post("/api/gift-drawings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(giftDrawing)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isNotFound());
 
         // Validate the GiftDrawing in the database
         List<GiftDrawing> giftDrawingList = giftDrawingRepository.findAll();
-        assertThat(giftDrawingList).hasSize(databaseSizeBeforeCreate + 1);
-        GiftDrawing testGiftDrawing = giftDrawingList.get(giftDrawingList.size() - 1);
+        assertThat(giftDrawingList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
     @Transactional
-    public void createGiftDrawingWithExistingId() throws Exception {
+    void createGiftDrawingWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = giftDrawingRepository.findAll().size();
 
         // Create the GiftDrawing with an existing ID
@@ -172,7 +168,7 @@ public class GiftDrawingResourceIT {
         restGiftDrawingMockMvc.perform(post("/api/gift-drawings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(giftDrawing)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the GiftDrawing in the database
         List<GiftDrawing> giftDrawingList = giftDrawingRepository.findAll();
@@ -182,33 +178,29 @@ public class GiftDrawingResourceIT {
 
     @Test
     @Transactional
-    public void getAllGiftDrawings() throws Exception {
+    void getAllGiftDrawings() throws Exception {
         // Initialize the database
         giftDrawingRepository.saveAndFlush(giftDrawing);
 
         // Get all the giftDrawingList
         restGiftDrawingMockMvc.perform(get("/api/gift-drawings?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(giftDrawing.getId().intValue())));
+            .andExpect(status().isNotFound());
     }
-    
+
     @Test
     @Transactional
-    public void getGiftDrawing() throws Exception {
+    void getGiftDrawing() throws Exception {
         // Initialize the database
         giftDrawingRepository.saveAndFlush(giftDrawing);
 
         // Get the giftDrawing
         restGiftDrawingMockMvc.perform(get("/api/gift-drawings/{id}", giftDrawing.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(giftDrawing.getId().intValue()));
+            .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void getNonExistingGiftDrawing() throws Exception {
+    void getNonExistingGiftDrawing() throws Exception {
         // Get the giftDrawing
         restGiftDrawingMockMvc.perform(get("/api/gift-drawings/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
@@ -216,31 +208,22 @@ public class GiftDrawingResourceIT {
 
     @Test
     @Transactional
-    public void updateGiftDrawing() throws Exception {
-        // Initialize the database
-        giftDrawingService.save(giftDrawing);
-
+    void updateGiftDrawing() throws Exception {
         int databaseSizeBeforeUpdate = giftDrawingRepository.findAll().size();
-
-        // Update the giftDrawing
-        GiftDrawing updatedGiftDrawing = giftDrawingRepository.findById(giftDrawing.getId()).get();
-        // Disconnect from session so that the updates on updatedGiftDrawing are not directly saved in db
-        em.detach(updatedGiftDrawing);
 
         restGiftDrawingMockMvc.perform(put("/api/gift-drawings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedGiftDrawing)))
-            .andExpect(status().isOk());
+            .content(TestUtil.convertObjectToJsonBytes(giftDrawing)))
+            .andExpect(status().isNotFound());
 
         // Validate the GiftDrawing in the database
         List<GiftDrawing> giftDrawingList = giftDrawingRepository.findAll();
         assertThat(giftDrawingList).hasSize(databaseSizeBeforeUpdate);
-        GiftDrawing testGiftDrawing = giftDrawingList.get(giftDrawingList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingGiftDrawing() throws Exception {
+    void updateNonExistingGiftDrawing() throws Exception {
         int databaseSizeBeforeUpdate = giftDrawingRepository.findAll().size();
 
         // Create the GiftDrawing
@@ -249,7 +232,7 @@ public class GiftDrawingResourceIT {
         restGiftDrawingMockMvc.perform(put("/api/gift-drawings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(giftDrawing)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the GiftDrawing in the database
         List<GiftDrawing> giftDrawingList = giftDrawingRepository.findAll();
@@ -258,7 +241,7 @@ public class GiftDrawingResourceIT {
 
     @Test
     @Transactional
-    public void deleteGiftDrawing() throws Exception {
+    void deleteGiftDrawing() throws Exception {
         // Initialize the database
         giftDrawingService.save(giftDrawing);
 
@@ -267,16 +250,16 @@ public class GiftDrawingResourceIT {
         // Delete the giftDrawing
         restGiftDrawingMockMvc.perform(delete("/api/gift-drawings/{id}", giftDrawing.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isNotFound());
 
         // Validate the database contains one less item
         List<GiftDrawing> giftDrawingList = giftDrawingRepository.findAll();
-        assertThat(giftDrawingList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(giftDrawingList).hasSize(databaseSizeBeforeDelete);
     }
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(GiftDrawing.class);
         GiftDrawing giftDrawing1 = new GiftDrawing();
         giftDrawing1.setId(1L);

@@ -12,12 +12,12 @@ import static com.github.anthonyo.swingifts.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = SwinGiftsApp.class)
-public class GiftIdeaServiceIT {
+class GiftIdeaServiceIT {
     @Autowired
     private GiftIdeaService giftIdeaService;
 
     @Test
-    public void testFindByRecipientIdForRequesterUserLoginForOneself() {
+    void testFindByRecipientIdForRequesterUserLoginForOneself() {
         // WHEN
         final List<GiftIdea> giftIdeas = giftIdeaService.findByRecipientIdForRequesterUserLogin(PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID, USER_ALICE_LOGIN);
         // THEN

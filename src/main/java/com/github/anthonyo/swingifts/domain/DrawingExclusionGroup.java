@@ -1,10 +1,9 @@
 package com.github.anthonyo.swingifts.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,11 +25,12 @@ public class DrawingExclusionGroup implements Serializable {
     @JoinTable(name = "drawing_exclusion_group_participation",
                joinColumns = @JoinColumn(name = "drawing_exclusion_group_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "participation_id", referencedColumnName = "id"))
+    @JsonIgnoreProperties({"drawingExclusionGroups", "giftIdeas", "event"})
     private Set<Participation> participations = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnore
+    @JsonIgnoreProperties("drawingExclusionGroups")
     private Event event;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

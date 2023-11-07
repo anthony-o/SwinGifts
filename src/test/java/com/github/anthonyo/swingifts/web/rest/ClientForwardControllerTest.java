@@ -1,9 +1,7 @@
 package com.github.anthonyo.swingifts.web.rest;
 
-import com.github.anthonyo.swingifts.SwinGiftsApp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -12,47 +10,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link ClientForwardController} REST controller.
+ * Unit tests for the {@link ClientForwardController} REST controller.
  */
-@SpringBootTest(classes = SwinGiftsApp.class)
-public class ClientForwardControllerIT {
+class ClientForwardControllerTest {
 
     private MockMvc restMockMvc;
 
     @BeforeEach
     public void setup() {
         ClientForwardController clientForwardController = new ClientForwardController();
-        this.restMockMvc = MockMvcBuilders
-            .standaloneSetup(clientForwardController, new TestController())
-            .build();
+        this.restMockMvc = MockMvcBuilders.standaloneSetup(clientForwardController, new TestController()).build();
     }
 
     @Test
-    public void getBackendEndpoint() throws Exception {
-        restMockMvc.perform(get("/test"))
+    void getBackendEndpoint() throws Exception {
+        restMockMvc
+            .perform(get("/test"))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN_VALUE))
             .andExpect(content().string("test"));
     }
 
     @Test
-    public void getClientEndpoint() throws Exception {
+    void getClientEndpoint() throws Exception {
         ResultActions perform = restMockMvc.perform(get("/non-existant-mapping"));
-        perform
-            .andExpect(status().isOk())
-            .andExpect(forwardedUrl("/"));
+        perform.andExpect(status().isOk()).andExpect(forwardedUrl("/"));
     }
 
     @Test
-    public void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/admin/user-management"))
-            .andExpect(status().isOk())
-            .andExpect(forwardedUrl("/"));
+    void getNestedClientEndpoint() throws Exception {
+        restMockMvc.perform(get("/admin/user-management")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
+    }
+
+    @Test
+    void getUnmappedDottedEndpoint() throws Exception {
+        restMockMvc.perform(get("/foo.js")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getUnmappedNestedDottedEndpoint() throws Exception {
+        restMockMvc.perform(get("/foo/bar.js")).andExpect(status().isNotFound());
     }
 
     @RestController

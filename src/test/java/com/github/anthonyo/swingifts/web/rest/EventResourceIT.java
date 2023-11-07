@@ -1,14 +1,14 @@
 package com.github.anthonyo.swingifts.web.rest;
 
 import com.github.anthonyo.swingifts.SwinGiftsApp;
-import com.github.anthonyo.swingifts.TestConstants;
-import com.github.anthonyo.swingifts.domain.*;
+import com.github.anthonyo.swingifts.domain.Event;
+import com.github.anthonyo.swingifts.domain.Participation;
+import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.EventRepository;
 import com.github.anthonyo.swingifts.repository.GiftDrawingRepository;
 import com.github.anthonyo.swingifts.repository.UserRepository;
 import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -26,8 +26,6 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.github.anthonyo.swingifts.TestConstants.*;
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
@@ -87,7 +85,7 @@ public class EventResourceIT {
     private Event event;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         final EventResource eventResource = new EventResource(eventService);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
@@ -138,14 +136,14 @@ public class EventResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         event = createEntity(em);
     }
 
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void createEvent() throws Exception {
+    void createEvent() throws Exception {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
         Event event = new Event()
@@ -171,7 +169,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
-    public void createEventWithExistingId() throws Exception {
+    void createEventWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
         // Create the Event with an existing ID
@@ -191,7 +189,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
+    void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setName(null);
@@ -210,11 +208,11 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getAllEvents() throws Exception {
+    void getAllEvents() throws Exception {
         // Get all the eventList
         restEventMockMvc.perform(get("/api/events?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasSize(4)))
             .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_ALICES_EVENT_ID)))
             .andExpect(jsonPath("$.[*].id", hasItem((int) EVENT_BOBS_EVENT_ID)))
@@ -226,11 +224,11 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("bob")
-    public void getEvent() throws Exception {
+    void getEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value((int) EVENT_ALICES_EVENT_ID))
             .andExpect(jsonPath("$.name").value("Alice's event"))
             .andExpect(jsonPath("$.description").isEmpty())
@@ -241,11 +239,11 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getEventAsAdmin() throws Exception {
+    void getEventAsAdmin() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value((int) EVENT_ALICES_EVENT_ID))
             .andExpect(jsonPath("$.name").value("Alice's event"))
             .andExpect(jsonPath("$.description").isEmpty())
@@ -256,7 +254,7 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("frank")
-    public void getEventWithoutRights() throws Exception {
+    void getEventWithoutRights() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isForbidden());
@@ -265,7 +263,7 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getNonExistingEvent() throws Exception {
+    void getNonExistingEvent() throws Exception {
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", Long.MAX_VALUE))
             .andExpect(status().isForbidden());
@@ -274,7 +272,7 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void updateEvent() throws Exception {
+    void updateEvent() throws Exception {
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Update the event
@@ -307,7 +305,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
-    public void updateNonExistingEvent() throws Exception {
+    void updateNonExistingEvent() throws Exception {
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Create the Event
@@ -326,7 +324,7 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void deleteEvent() throws Exception {
+    void deleteEvent() throws Exception {
         // Initialize the database
         event.setAdmin(userRepository.findById(USER_ALICE_ID).get());
         event = eventRepository.save(event);
@@ -345,7 +343,7 @@ public class EventResourceIT {
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Event.class);
         Event event1 = new Event();
         event1.setId(1L);
@@ -361,7 +359,7 @@ public class EventResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void drawGiftsTest() throws Exception {
+    void drawGiftsTest() throws Exception {
         // GIVEN
         long giftDrawingCountBefore = giftDrawingRepository.count();
 
@@ -376,7 +374,7 @@ public class EventResourceIT {
         Participation alicesGiftDrawingRecipient = giftDrawingRepository.findAll().stream().filter(giftDrawing -> giftDrawing.getEvent().getId() == EVENT_ALICES_EVENT_ID && giftDrawing.getDonor().getUser().getId().equals(USER_ALICE_ID)).findFirst().get().getRecipient();
         restEventMockMvc.perform(get("/api/events/{id}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.myGiftDrawings.[*].recipient").value(hasSize(1)))
             .andExpect(jsonPath("$.myGiftDrawings.[*].recipient.id").value(alicesGiftDrawingRecipient.getId().intValue()))
             .andExpect(jsonPath("$.myGiftDrawings.[*].recipient.userAlias").value(alicesGiftDrawingRecipient.getUserAlias()));

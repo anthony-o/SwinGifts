@@ -4,6 +4,7 @@ import com.github.anthonyo.swingifts.SwinGiftsApp;
 import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.domain.GiftDrawing;
 import com.github.anthonyo.swingifts.repository.EventRepository;
+import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +12,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 import static com.github.anthonyo.swingifts.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = SwinGiftsApp.class)
-public class EventServiceIT {
+class EventServiceIT {
 
     @Autowired
     private EventService eventService;
 
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private ParticipationRepository participationRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     @Transactional
-    public void drawGiftsTest() throws EntityNotFoundException {
+    void drawGiftsTest() throws EntityNotFoundException {
         for (int i = 0; i < 50; i++) {
             // Check this 50 times because it is random
 
@@ -92,13 +100,48 @@ public class EventServiceIT {
 
     @Test
     @Transactional
-    public void drawGiftsNbOfGiftsToReceiveAndToDonateNotEqualTest() {
+    void drawGiftsTrioTest() throws Exception {
+        // GIVEN
+        // Update Dave's event in order that Alice, Bob & Dave would each of them give & receive 1 gift
+        var aliceSParticipationInDavesEvent = participationRepository.findById(PARTICIPATION_ALICE_IN_DAVE_S_EVENT_ID).get();
+        aliceSParticipationInDavesEvent.setNbOfGiftToDonate(1);
+        aliceSParticipationInDavesEvent.setNbOfGiftToReceive(1);
+        participationRepository.save(aliceSParticipationInDavesEvent);
+        var bobSParticipationInDavesEvent = participationRepository.findById(PARTICIPATION_BOB_IN_DAVE_S_EVENT_ID).get();
+        bobSParticipationInDavesEvent.setNbOfGiftToDonate(1);
+        bobSParticipationInDavesEvent.setNbOfGiftToReceive(1);
+        participationRepository.save(bobSParticipationInDavesEvent);
+
+        // WHEN
+        // We first draw
+        eventService.drawGifts(EVENT_DAVES_EVENT_ID, USER_DAVE_LOGIN);
+
+        var daveSEvent = eventRepository.findById(EVENT_DAVES_EVENT_ID).get();
+        var firstDaveSGiftDrawing = daveSEvent.getGiftDrawings().stream().filter(giftDrawing -> giftDrawing.getDonor().getUser().getId() == USER_DAVE_ID).findFirst().get();
+        entityManager.detach(firstDaveSGiftDrawing);
+
+        // THEN
+        // Try to make another draw different
+        for (int i = 0; i < 50; i++) {
+            eventService.drawGifts(EVENT_DAVES_EVENT_ID, USER_DAVE_LOGIN);
+            daveSEvent = eventRepository.findById(EVENT_DAVES_EVENT_ID).get();
+            var daveSGiftDrawing = daveSEvent.getGiftDrawings().stream().filter(giftDrawing -> giftDrawing.getDonor().getUser().getId() == USER_DAVE_ID).findFirst().get();
+            if (daveSGiftDrawing.getRecipient().getId() != firstDaveSGiftDrawing.getRecipient().getId()) {
+                return;
+            }
+        }
+        throw new Exception("In 50 draws, Dave always received the same recipient");
+    }
+
+    @Test
+    @Transactional
+    void drawGiftsNbOfGiftsToReceiveAndToDonateNotEqualTest() {
         assertThrows(IllegalStateException.class, () -> eventService.drawGifts(EVENT_DAVES_EVENT_ID, USER_DAVE_LOGIN));
     }
 
     @Test
     @Transactional
-    public void drawGiftsWrongAdminTest() {
+    void drawGiftsWrongAdminTest() {
         assertThrows(AccessDeniedException.class, () -> eventService.drawGifts(EVENT_ALICES_EVENT_ID, USER_BOB_LOGIN));
     }
 }

@@ -5,6 +5,7 @@ import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.domain.Participation;
 import com.github.anthonyo.swingifts.domain.User;
 import com.github.anthonyo.swingifts.repository.ParticipationRepository;
+import com.github.anthonyo.swingifts.service.EventService;
 import com.github.anthonyo.swingifts.service.ParticipationService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,12 +69,15 @@ public class ParticipationResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private EventService eventService;
+
     private MockMvc restParticipationMockMvc;
 
     private Participation participation;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         final ParticipationResource participationResource = new ParticipationResource(participationService);
         this.restParticipationMockMvc = MockMvcBuilders.standaloneSetup(participationResource)
@@ -126,14 +130,14 @@ public class ParticipationResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         participation = createEntity(em);
     }
 
     @Test
     @Transactional
     @WithMockUser("bob")
-    public void createParticipationAsBeingInEvent() throws Exception {
+    void createParticipationAsBeingInEvent() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -157,7 +161,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void createParticipationAsAdmin() throws Exception {
+    void createParticipationAsAdmin() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -180,8 +184,39 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("alice")
+    void createParticipationAsAdminAfterAGiftDrawings() throws Exception {
+        int databaseSizeBeforeCreate = participationRepository.findAll().size();
+
+        // Draw the gifts
+        eventService.drawGifts(EVENT_ALICES_EVENT_ID, "alice");
+
+        // Create the Participation
+        final Event event = new Event();
+        event.setId(EVENT_ALICES_EVENT_ID);
+        participation.setEvent(event);
+        restParticipationMockMvc.perform(post("/api/participations")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(participation)))
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.nbOfGiftToReceive").value(participation.getNbOfGiftToReceive()))
+            .andExpect(jsonPath("$.nbOfGiftToDonate").value(participation.getNbOfGiftToDonate()))
+            .andExpect(jsonPath("$.event.myGiftDrawings").doesNotExist());
+
+        // Validate the Participation in the database
+        List<Participation> participationList = participationRepository.findAll();
+        assertThat(participationList).hasSize(databaseSizeBeforeCreate + 1);
+        Participation testParticipation = participationList.get(participationList.size() - 1);
+        assertThat(testParticipation.getNbOfGiftToReceive()).isEqualTo(DEFAULT_NB_OF_GIFT_TO_RECEIVE);
+        assertThat(testParticipation.getNbOfGiftToDonate()).isEqualTo(DEFAULT_NB_OF_GIFT_TO_DONATE);
+        assertThat(testParticipation.getUserAlias()).isEqualTo(DEFAULT_USER_ALIAS);
+    }
+
+    @Test
+    @Transactional
     @WithMockUser("frank")
-    public void createParticipationWithoutBeingInTheEvent() throws Exception {
+    void createParticipationWithoutBeingInTheEvent() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -201,7 +236,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void createParticipationWithExistingId() throws Exception {
+    void createParticipationWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation with an existing ID
@@ -221,7 +256,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("bob")
-    public void createParticipationAttachingExistingUserByLogin() throws Exception {
+    void createParticipationAttachingExistingUserByLogin() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -250,7 +285,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("bob")
-    public void createParticipationAttachingExistingUserByEmail() throws Exception {
+    void createParticipationAttachingExistingUserByEmail() throws Exception {
         int databaseSizeBeforeCreate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -280,7 +315,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void checkUserAliasIsRequired() throws Exception {
+    void checkUserAliasIsRequired() throws Exception {
         int databaseSizeBeforeTest = participationRepository.findAll().size();
         // set the field null
         participation.setUserAlias(null);
@@ -299,11 +334,11 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getAllParticipationsByEventId() throws Exception {
+    void getAllParticipationsByEventId() throws Exception {
         // Get all the participationList
         restParticipationMockMvc.perform(get("/api/participations/by-event-id/{eventId}", EVENT_ALICES_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasSize(5)))
             .andExpect(jsonPath("$.[*].id").value(hasItem((int)PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID)))
             .andExpect(jsonPath("$.[0].nbOfGiftToReceive").value(1))
@@ -314,11 +349,11 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("bob")
-    public void getParticipation() throws Exception {
+    void getParticipation() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value((int) PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
             .andExpect(jsonPath("$.nbOfGiftToReceive").value(1))
             .andExpect(jsonPath("$.nbOfGiftToDonate").value(1))
@@ -328,11 +363,11 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getParticipationAsAdmin() throws Exception {
+    void getParticipationAsAdmin() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value((int) PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
             .andExpect(jsonPath("$.nbOfGiftToReceive").value(1))
             .andExpect(jsonPath("$.nbOfGiftToDonate").value(1))
@@ -342,7 +377,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("frank")
-    public void getParticipationWithoutRights() throws Exception {
+    void getParticipationWithoutRights() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", PARTICIPATION_ALICE_IN_ALICE_S_EVENT_ID))
             .andExpect(status().isForbidden());
@@ -351,7 +386,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void getNonExistingParticipation() throws Exception {
+    void getNonExistingParticipation() throws Exception {
         // Get the participation
         restParticipationMockMvc.perform(get("/api/participations/{id}", Long.MAX_VALUE))
             .andExpect(status().isForbidden());
@@ -360,7 +395,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void updateNonExistingParticipation() throws Exception {
+    void updateNonExistingParticipation() throws Exception {
         int databaseSizeBeforeUpdate = participationRepository.findAll().size();
 
         // Create the Participation
@@ -379,7 +414,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void deleteParticipation() throws Exception {
+    void deleteParticipation() throws Exception {
         int databaseSizeBeforeDelete = participationRepository.findAll().size();
 
         // Delete the participation
@@ -395,7 +430,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("frank")
-    public void deleteParticipationNotInEvent() throws Exception {
+    void deleteParticipationNotInEvent() throws Exception {
         int databaseSizeBeforeDelete = participationRepository.findAll().size();
 
         // Delete the participation
@@ -410,7 +445,7 @@ public class ParticipationResourceIT {
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Participation.class);
         Participation participation1 = new Participation();
         participation1.setId(1L);
@@ -426,7 +461,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("erin")
-    public void updateParticipationWithUserNull() throws Exception {
+    void updateParticipationWithUserNull() throws Exception {
         // Initialize the database
         int databaseSizeBeforeUpdate = participationRepository.findAll().size();
 
@@ -458,7 +493,7 @@ public class ParticipationResourceIT {
     @Test
     @Transactional
     @WithMockUser("alice")
-    public void updateParticipationWithUserNullNotInEvent() throws Exception {
+    void updateParticipationWithUserNullNotInEvent() throws Exception {
         // Update the participation
         Participation updatedParticipation = new Participation();
         updatedParticipation.setId(PARTICIPATION_USER_2_IN_ERIN_S_EVENT_ID);

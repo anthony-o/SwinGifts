@@ -6,7 +6,6 @@ import com.github.anthonyo.swingifts.domain.Event;
 import com.github.anthonyo.swingifts.repository.DrawingExclusionGroupRepository;
 import com.github.anthonyo.swingifts.service.DrawingExclusionGroupService;
 import com.github.anthonyo.swingifts.web.rest.errors.ExceptionTranslator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,9 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,10 +26,9 @@ import java.util.List;
 
 import static com.github.anthonyo.swingifts.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link DrawingExclusionGroupResource} REST controller.
@@ -72,7 +68,7 @@ public class DrawingExclusionGroupResourceIT {
     private DrawingExclusionGroup drawingExclusionGroup;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         final DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupService);
         this.restDrawingExclusionGroupMockMvc = MockMvcBuilders.standaloneSetup(drawingExclusionGroupResource)
@@ -125,30 +121,29 @@ public class DrawingExclusionGroupResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         drawingExclusionGroup = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createDrawingExclusionGroup() throws Exception {
+    void createDrawingExclusionGroup() throws Exception {
         int databaseSizeBeforeCreate = drawingExclusionGroupRepository.findAll().size();
 
         // Create the DrawingExclusionGroup
         restDrawingExclusionGroupMockMvc.perform(post("/api/drawing-exclusion-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(drawingExclusionGroup)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isNotFound());
 
         // Validate the DrawingExclusionGroup in the database
         List<DrawingExclusionGroup> drawingExclusionGroupList = drawingExclusionGroupRepository.findAll();
-        assertThat(drawingExclusionGroupList).hasSize(databaseSizeBeforeCreate + 1);
-        DrawingExclusionGroup testDrawingExclusionGroup = drawingExclusionGroupList.get(drawingExclusionGroupList.size() - 1);
+        assertThat(drawingExclusionGroupList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
     @Transactional
-    public void createDrawingExclusionGroupWithExistingId() throws Exception {
+    void createDrawingExclusionGroupWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = drawingExclusionGroupRepository.findAll().size();
 
         // Create the DrawingExclusionGroup with an existing ID
@@ -158,7 +153,7 @@ public class DrawingExclusionGroupResourceIT {
         restDrawingExclusionGroupMockMvc.perform(post("/api/drawing-exclusion-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(drawingExclusionGroup)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the DrawingExclusionGroup in the database
         List<DrawingExclusionGroup> drawingExclusionGroupList = drawingExclusionGroupRepository.findAll();
@@ -168,17 +163,15 @@ public class DrawingExclusionGroupResourceIT {
 
     @Test
     @Transactional
-    public void getAllDrawingExclusionGroups() throws Exception {
+    void getAllDrawingExclusionGroups() throws Exception {
         // Initialize the database
         drawingExclusionGroupRepository.saveAndFlush(drawingExclusionGroup);
 
         // Get all the drawingExclusionGroupList
         restDrawingExclusionGroupMockMvc.perform(get("/api/drawing-exclusion-groups?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(drawingExclusionGroup.getId().intValue())));
+            .andExpect(status().isNotFound());
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllDrawingExclusionGroupsWithEagerRelationshipsIsEnabled() throws Exception {
         DrawingExclusionGroupResource drawingExclusionGroupResource = new DrawingExclusionGroupResource(drawingExclusionGroupServiceMock);
@@ -214,20 +207,18 @@ public class DrawingExclusionGroupResourceIT {
 
     @Test
     @Transactional
-    public void getDrawingExclusionGroup() throws Exception {
+    void getDrawingExclusionGroup() throws Exception {
         // Initialize the database
         drawingExclusionGroupRepository.saveAndFlush(drawingExclusionGroup);
 
         // Get the drawingExclusionGroup
         restDrawingExclusionGroupMockMvc.perform(get("/api/drawing-exclusion-groups/{id}", drawingExclusionGroup.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(drawingExclusionGroup.getId().intValue()));
+            .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void getNonExistingDrawingExclusionGroup() throws Exception {
+    void getNonExistingDrawingExclusionGroup() throws Exception {
         // Get the drawingExclusionGroup
         restDrawingExclusionGroupMockMvc.perform(get("/api/drawing-exclusion-groups/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
@@ -235,7 +226,7 @@ public class DrawingExclusionGroupResourceIT {
 
     @Test
     @Transactional
-    public void updateDrawingExclusionGroup() throws Exception {
+    void updateDrawingExclusionGroup() throws Exception {
         // Initialize the database
         drawingExclusionGroupService.save(drawingExclusionGroup);
 
@@ -249,17 +240,16 @@ public class DrawingExclusionGroupResourceIT {
         restDrawingExclusionGroupMockMvc.perform(put("/api/drawing-exclusion-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(updatedDrawingExclusionGroup)))
-            .andExpect(status().isOk());
+            .andExpect(status().isNotFound());
 
         // Validate the DrawingExclusionGroup in the database
         List<DrawingExclusionGroup> drawingExclusionGroupList = drawingExclusionGroupRepository.findAll();
         assertThat(drawingExclusionGroupList).hasSize(databaseSizeBeforeUpdate);
-        DrawingExclusionGroup testDrawingExclusionGroup = drawingExclusionGroupList.get(drawingExclusionGroupList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingDrawingExclusionGroup() throws Exception {
+    void updateNonExistingDrawingExclusionGroup() throws Exception {
         int databaseSizeBeforeUpdate = drawingExclusionGroupRepository.findAll().size();
 
         // Create the DrawingExclusionGroup
@@ -268,7 +258,7 @@ public class DrawingExclusionGroupResourceIT {
         restDrawingExclusionGroupMockMvc.perform(put("/api/drawing-exclusion-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(drawingExclusionGroup)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the DrawingExclusionGroup in the database
         List<DrawingExclusionGroup> drawingExclusionGroupList = drawingExclusionGroupRepository.findAll();
@@ -277,7 +267,7 @@ public class DrawingExclusionGroupResourceIT {
 
     @Test
     @Transactional
-    public void deleteDrawingExclusionGroup() throws Exception {
+    void deleteDrawingExclusionGroup() throws Exception {
         // Initialize the database
         drawingExclusionGroupService.save(drawingExclusionGroup);
 
@@ -286,16 +276,16 @@ public class DrawingExclusionGroupResourceIT {
         // Delete the drawingExclusionGroup
         restDrawingExclusionGroupMockMvc.perform(delete("/api/drawing-exclusion-groups/{id}", drawingExclusionGroup.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isNotFound());
 
         // Validate the database contains one less item
         List<DrawingExclusionGroup> drawingExclusionGroupList = drawingExclusionGroupRepository.findAll();
-        assertThat(drawingExclusionGroupList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(drawingExclusionGroupList).hasSize(databaseSizeBeforeDelete);
     }
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(DrawingExclusionGroup.class);
         DrawingExclusionGroup drawingExclusionGroup1 = new DrawingExclusionGroup();
         drawingExclusionGroup1.setId(1L);

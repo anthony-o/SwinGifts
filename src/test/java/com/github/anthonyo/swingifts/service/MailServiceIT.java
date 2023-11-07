@@ -1,8 +1,7 @@
 package com.github.anthonyo.swingifts.service;
 
-import com.github.anthonyo.swingifts.config.Constants;
-
 import com.github.anthonyo.swingifts.SwinGiftsApp;
+import com.github.anthonyo.swingifts.config.Constants;
 import com.github.anthonyo.swingifts.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -41,7 +40,7 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @SpringBootTest(classes = SwinGiftsApp.class)
-public class MailServiceIT {
+class MailServiceIT {
 
     private static String languages[] = {
         "en",
@@ -69,14 +68,14 @@ public class MailServiceIT {
     private MailService mailService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
         mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine);
     }
 
     @Test
-    public void testSendEmail() throws Exception {
+    void testSendEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
@@ -89,7 +88,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendHtmlEmail() throws Exception {
+    void testSendHtmlEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, true);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
@@ -102,7 +101,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendMultipartEmail() throws Exception {
+    void testSendMultipartEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, false);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
@@ -119,7 +118,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendMultipartHtmlEmail() throws Exception {
+    void testSendMultipartHtmlEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, true);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
@@ -136,7 +135,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendEmailFromTemplate() throws Exception {
+    void testSendEmailFromTemplate() throws Exception {
         User user = new User();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -152,7 +151,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendActivationEmail() throws Exception {
+    void testSendActivationEmail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
@@ -167,7 +166,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testCreationEmail() throws Exception {
+    void testCreationEmail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
@@ -182,7 +181,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendPasswordResetMail() throws Exception {
+    void testSendPasswordResetMail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
@@ -197,13 +196,13 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendEmailWithException() throws Exception {
+    void testSendEmailWithException() throws Exception {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
     }
 
     @Test
-    public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
+    void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
         User user = new User();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");

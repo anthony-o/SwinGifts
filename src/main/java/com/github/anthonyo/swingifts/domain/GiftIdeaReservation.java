@@ -1,4 +1,5 @@
 package com.github.anthonyo.swingifts.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.anthonyo.swingifts.web.rest.vm.JsonViews;
@@ -33,7 +34,7 @@ public class GiftIdeaReservation implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("giftIdeaReservations")
+    @JsonIgnoreProperties({"giftIdeaReservations", "giftIdeas", "event"})
     @JsonView(JsonViews.GiftIdeaGet.class)
     private Participation participation;
 

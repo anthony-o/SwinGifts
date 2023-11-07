@@ -2,6 +2,7 @@ package com.github.anthonyo.swingifts;
 
 public class TestConstants {
     public static final long USER_ALICE_ID = 5L;
+    public static final long USER_DAVE_ID = 8L;
     public static final long USER_FRANK_ID = 10L;
     public static final String USER_ALICE_LOGIN = "alice";
     public static final String USER_BOB_LOGIN = "bob";
@@ -27,6 +28,8 @@ public class TestConstants {
     public static long PARTICIPATION_ALICE_IN_BOB_S_EVENT_ID = 7L;
     public static long PARTICIPATION_CHARLOTTE_IN_BOB_S_EVENT_ID = 8L;
     public static long PARTICIPATION_DAVE_IN_BOB_S_EVENT_ID = 9L;
+    public static long PARTICIPATION_ALICE_IN_DAVE_S_EVENT_ID = 15L;
+    public static long PARTICIPATION_BOB_IN_DAVE_S_EVENT_ID = 16L;
     public static long PARTICIPATION_ERIN_IN_ERIN_S_EVENT_ID = 18L;
     public static long PARTICIPATION_USER_2_IN_ERIN_S_EVENT_ID = 19L;
     public static long PARTICIPATION_USER_3_IN_ERIN_S_EVENT_ID = 20L;

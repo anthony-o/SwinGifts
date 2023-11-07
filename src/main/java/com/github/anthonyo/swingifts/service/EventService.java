@@ -7,7 +7,6 @@ import com.github.anthonyo.swingifts.repository.ParticipationRepository;
 import com.github.anthonyo.swingifts.repository.UserRepository;
 import com.github.anthonyo.swingifts.service.errors.EntityNotFoundException;
 import com.github.anthonyo.swingifts.service.util.RandomUtil;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,17 +28,14 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    private final EntityManager entityManager;
-
     private final GiftDrawingRepository giftDrawingRepository;
 
     private final UserRepository userRepository;
 
     private final ParticipationRepository participationRepository;
 
-    public EventService(EventRepository eventRepository, EntityManager entityManager, GiftDrawingRepository giftDrawingRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
+    public EventService(EventRepository eventRepository, GiftDrawingRepository giftDrawingRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
         this.eventRepository = eventRepository;
-        this.entityManager = entityManager;
         this.giftDrawingRepository = giftDrawingRepository;
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
@@ -186,7 +181,7 @@ public class EventService {
                         !participation.equals(otherParticipation) // One can't draw a gift for oneself
                             && otherParticipation.getNbOfGiftToReceive() != null && otherParticipation.getNbOfGiftToReceive() > 0 // Only target the ones that want to receive gifts
                     ) {
-                        participationToParticipationToDonateGiftsTo.computeIfAbsent(participation, participationKey -> Sets.newLinkedHashSet()).add(otherParticipation);
+                        participationToParticipationToDonateGiftsTo.computeIfAbsent(participation, participationKey -> new LinkedHashSet<>()).add(otherParticipation);
                     }
                 }
             }
@@ -310,7 +305,7 @@ public class EventService {
         if (participationIterable.size() == 1) {
             return participationIterable.iterator().next();
         } else {
-            return participationIterable.stream().skip(random.nextInt(participationIterable.size() - 1)).findFirst().get();
+            return participationIterable.stream().skip(random.nextInt(participationIterable.size())).findFirst().get();
         }
     }
 
